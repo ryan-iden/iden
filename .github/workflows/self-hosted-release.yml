@@ -1,0 +1,178 @@
+name: Self-hosted release
+
+on:
+  push:
+    branches:
+      - ryan-wong-coder-personal
+  workflow_dispatch:
+
+concurrency:
+  group: self-hosted-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate self-hosted build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node and pnpm
+        uses: silverhand-io/actions-node-pnpm-run-steps@v5
+        with:
+          pnpm-version: 10
+          node-version: ^22.14.0
+
+      - name: Build workspace packages
+        run: pnpm prepack
+
+      - name: Check types
+        run: pnpm -r check
+
+      - name: Lint changed feature packages
+        run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console lint
+
+      - name: Test changed feature packages
+        run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console test:ci
+
+  publish-image:
+    name: Publish immutable Harbor image
+    needs: validate
+    environment: self-hosted-production
+    runs-on: ${{ vars.RELEASE_RUNNER || 'ubuntu-24.04' }}
+    outputs:
+      image_repository: ${{ steps.image.outputs.repository }}
+      image_tag: ${{ steps.image.outputs.tag }}
+
+    env:
+      HARBOR_HOST: ${{ vars.HARBOR_HOST }}
+      HARBOR_PROJECT: ${{ vars.HARBOR_PROJECT }}
+      IMAGE_NAME: ${{ vars.IMAGE_NAME || 'logto' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release configuration
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${HARBOR_HOST:?Set the HARBOR_HOST repository variable}"
+          : "${HARBOR_PROJECT:?Set the HARBOR_PROJECT repository variable}"
+          : "${IMAGE_NAME:?Set the IMAGE_NAME repository variable}"
+          : "${HARBOR_USERNAME:?Set the HARBOR_USERNAME environment secret}"
+          : "${HARBOR_PASSWORD:?Set the HARBOR_PASSWORD environment secret}"
+
+      - name: Resolve immutable image name
+        id: image
+        run: |
+          set -euo pipefail
+          echo "repository=${HARBOR_HOST}/${HARBOR_PROJECT}/${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
+          echo "tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Configure ephemeral Harbor credentials
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          set -euo pipefail
+          docker_config_dir="${RUNNER_TEMP}/logto-docker-config"
+          mkdir -p "$docker_config_dir"
+          auth="$(printf '%s:%s' "$HARBOR_USERNAME" "$HARBOR_PASSWORD" | base64 | tr -d '\n')"
+          jq -n \
+            --arg registry "$HARBOR_HOST" \
+            --arg auth "$auth" \
+            '{auths: {($registry): {auth: $auth}}}' > "$docker_config_dir/config.json"
+          echo "DOCKER_CONFIG=$docker_config_dir" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx for the HTTP Harbor registry
+        uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-config-inline: |
+            [registry."${{ vars.HARBOR_HOST }}"]
+              http = true
+              insecure = true
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.image.outputs.repository }}:${{ steps.image.outputs.tag }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+          build-args: |
+            self_hosted_parity_enabled=true
+          cache-from: type=gha,scope=logto-self-hosted
+          cache-to: type=gha,mode=max,scope=logto-self-hosted
+
+  update-gitops:
+    name: Promote image through GitOps
+    needs: publish-image
+    environment: self-hosted-production
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out Argo CD configuration
+        uses: actions/checkout@v4
+        with:
+          repository: ryan-wong-coder/argo-config
+          ref: main
+          ssh-key: ${{ secrets.ARGO_CONFIG_SSH_KEY }}
+          path: argo-config
+
+      - name: Update Logto image
+        working-directory: argo-config
+        env:
+          IMAGE_REPOSITORY: ${{ needs.publish-image.outputs.image_repository }}
+          IMAGE_TAG: ${{ needs.publish-image.outputs.image_tag }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          path = Path('apps/logto/kustomization.yaml')
+          source = path.read_text()
+          source, repository_count = re.subn(
+              r'(?m)^(\s*newName:\s*).+$',
+              rf'\g<1>{os.environ["IMAGE_REPOSITORY"]}',
+              source,
+              count=1,
+          )
+          source, tag_count = re.subn(
+              r'(?m)^(\s*newTag:\s*).+$',
+              rf'\g<1>{os.environ["IMAGE_TAG"]}',
+              source,
+              count=1,
+          )
+          if repository_count != 1 or tag_count != 1:
+              raise SystemExit('Expected one newName and one newTag in the Logto kustomization')
+          path.write_text(source)
+          PY
+
+      - name: Commit deployment revision
+        working-directory: argo-config
+        env:
+          IMAGE_TAG: ${{ needs.publish-image.outputs.image_tag }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- apps/logto/kustomization.yaml; then
+            echo "GitOps already points to ${IMAGE_TAG}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/logto/kustomization.yaml
+          git commit -m "deploy(logto): ${IMAGE_TAG}"
+          git push origin HEAD:main
