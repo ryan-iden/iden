@@ -3,7 +3,7 @@ import { trySafe } from '@silverhand/essentials';
 import { useCallback, useContext, useMemo } from 'react';
 import { z } from 'zod';
 
-import { isCloud } from '@/consts/env';
+import { isTenantManagementEnabled } from '@/consts/env';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 
 import useCurrentUser from './use-current-user';
@@ -28,7 +28,7 @@ const useUserDefaultTenantId = () => {
 
   const defaultTenantId = useMemo(() => {
     // Directly return the default tenant ID for OSS because it's single tenant.
-    if (!isCloud) {
+    if (!isTenantManagementEnabled) {
       return ossDefaultTenantId;
     }
 
@@ -44,7 +44,7 @@ const useUserDefaultTenantId = () => {
   const updateDefaultTenantId = useCallback(
     async (tenantId: string) => {
       // No need for updating for OSS because it's single tenant.
-      if (!isCloud) {
+      if (!isTenantManagementEnabled) {
         return;
       }
 

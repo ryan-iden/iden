@@ -4,11 +4,12 @@
       "name": "Custom UI assets",
       "description": "Endpoints for uploading custom UI assets for the sign-in experience. Users can upload a zip file containing custom HTML, CSS, and JavaScript files to replace and fully customize the sign-in experience."
     },
-    { "name": "Cloud only" }
+    { "name": "Self-hosted parity" }
   ],
   "paths": {
     "/api/sign-in-exp/default/custom-ui-assets": {
       "post": {
+        "tags": ["Self-hosted parity"],
         "summary": "Upload custom UI assets",
         "description": "Upload a zip file containing custom web assets such as HTML, CSS, and JavaScript files, then replace the default sign-in experience with the custom UI assets.",
         "requestBody": {

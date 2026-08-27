@@ -24,6 +24,9 @@ import {
 } from '#src/libraries/sign-in-experience/index.js';
 import { validateMfa } from '#src/libraries/sign-in-experience/mfa.js';
 import koaGuard from '#src/middleware/koa-guard.js';
+import SystemContext from '#src/tenants/SystemContext.js';
+import { getConsoleLogFromContext } from '#src/utils/console.js';
+import { buildObjectStorage } from '#src/utils/storage/object-storage.js';
 
 import RequestError from '../../errors/RequestError/index.js';
 import assertThat from '../../utils/assert-that.js';
@@ -354,9 +357,9 @@ export default function signInExperiencesRoutes<T extends ManagementApiRouter>(
 
       // Guard the quota for BYUI if the hideLogtoBranding is set to true
       if (hideLogtoBranding) {
-        // Hide Logto branding is only available for Logto Cloud
+        // Self-hosted feature parity: allow operators to remove product branding.
         assertThat(
-          EnvSet.values.isCloud,
+          EnvSet.values.isCloud || EnvSet.values.isSelfHostedParityEnabled,
           new RequestError({
             code: 'request.invalid_input',
             details: 'Hide Logto branding is not supported in this environment',
@@ -365,7 +368,7 @@ export default function signInExperiencesRoutes<T extends ManagementApiRouter>(
       }
       if (hasCustomUiCsp) {
         assertThat(
-          EnvSet.values.isCloud,
+          EnvSet.values.isCloud || EnvSet.values.isSelfHostedParityEnabled,
           new RequestError({
             code: 'request.invalid_input',
             details: 'Custom UI CSP configuration is not available',
@@ -407,7 +410,30 @@ export default function signInExperiencesRoutes<T extends ManagementApiRouter>(
         ...conditional(verificationCodePolicy && { verificationCodePolicy }),
       };
 
-      ctx.body = await updateDefaultSignInExperience(payload);
+      const updatedSignInExperience = await updateDefaultSignInExperience(payload);
+      ctx.body = updatedSignInExperience;
+
+      const previousCustomUiAssetId = currentSettings.customUiAssets?.id;
+      const nextCustomUiAssetId = rest.customUiAssets?.id;
+      if (
+        EnvSet.values.isSelfHostedParityEnabled &&
+        rest.customUiAssets !== undefined &&
+        previousCustomUiAssetId &&
+        previousCustomUiAssetId !== nextCustomUiAssetId
+      ) {
+        const { experienceBlobsProviderConfig } = SystemContext.shared;
+        if (experienceBlobsProviderConfig) {
+          try {
+            await buildObjectStorage(experienceBlobsProviderConfig).deleteFilesByPrefix(
+              `${tenantId}/${previousCustomUiAssetId}/`
+            );
+          } catch (error: unknown) {
+            // The new configuration is already active; asset cleanup must not roll back a
+            // successful update or leave the Console reporting a false save failure.
+            getConsoleLogFromContext(ctx).error(error);
+          }
+        }
+      }
 
       void quota.reportSubscriptionUpdatesUsage('mfaEnabled');
 

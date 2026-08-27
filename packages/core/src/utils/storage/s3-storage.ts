@@ -1,4 +1,12 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  S3Client,
+  PutObjectCommand,
+} from '@aws-sdk/client-s3';
+import { z } from 'zod';
 
 import type { UploadFile } from './types.js';
 
@@ -86,5 +94,55 @@ export const buildS3Storage = ({
     };
   };
 
-  return { uploadFile };
+  const downloadFile = async (objectKey: string) => {
+    const result = await client.send(new GetObjectCommand({ Bucket: bucket, Key: objectKey }));
+    const data = Buffer.from((await result.Body?.transformToByteArray()) ?? []);
+
+    return {
+      data,
+      contentLength: result.ContentLength ?? data.byteLength,
+      contentType: result.ContentType,
+    };
+  };
+
+  const isFileExisted = async (objectKey: string) => {
+    try {
+      await client.send(new HeadObjectCommand({ Bucket: bucket, Key: objectKey }));
+      return true;
+    } catch (error: unknown) {
+      const status = z
+        .object({ $metadata: z.object({ httpStatusCode: z.number().optional() }) })
+        .safeParse(error).data?.$metadata.httpStatusCode;
+      if (status === 404) {
+        return false;
+      }
+
+      throw error;
+    }
+  };
+
+  const deleteFilesByPrefix = async (prefix: string) => {
+    const deletePage = async (continuationToken?: string): Promise<void> => {
+      const page = await client.send(
+        new ListObjectsV2Command({
+          Bucket: bucket,
+          Prefix: prefix,
+          ContinuationToken: continuationToken,
+        })
+      );
+      const objects = page.Contents?.flatMap(({ Key }) => (Key ? [{ Key }] : [])) ?? [];
+      if (objects.length > 0) {
+        await client.send(
+          new DeleteObjectsCommand({ Bucket: bucket, Delete: { Objects: objects } })
+        );
+      }
+      if (page.NextContinuationToken) {
+        await deletePage(page.NextContinuationToken);
+      }
+    };
+
+    await deletePage();
+  };
+
+  return { uploadFile, downloadFile, isFileExisted, deleteFilesByPrefix };
 };

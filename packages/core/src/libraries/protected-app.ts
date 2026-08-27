@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- Existing provider compatibility and the self-hosted adapter remain co-located to avoid parallel implementations. */
 import {
   ApplicationType,
   DomainStatus,
@@ -42,6 +43,13 @@ const localProtectedAppConfigProviderConfig: ProtectedAppConfigProviderData = {
 };
 
 const getProviderConfig = async () => {
+  if (EnvSet.values.isSelfHostedParityEnabled) {
+    return {
+      ...localProtectedAppConfigProviderConfig,
+      domain: EnvSet.values.protectedAppGatewayDomain,
+    };
+  }
+
   const { protectedAppConfigProviderConfig } = SystemContext.shared;
   if (protectedAppConfigProviderConfig) {
     return protectedAppConfigProviderConfig;
@@ -64,7 +72,11 @@ const getHostnameProviderConfig = async () => {
 };
 
 const deleteRemoteAppConfigs = async (host: string): Promise<void> => {
-  if (EnvSet.values.isIntegrationTest || EnvSet.values.isProtectedAppLocalDevEnabled) {
+  if (
+    EnvSet.values.isIntegrationTest ||
+    EnvSet.values.isProtectedAppLocalDevEnabled ||
+    EnvSet.values.isSelfHostedParityEnabled
+  ) {
     return;
   }
 
@@ -129,7 +141,7 @@ const buildProtectedAppData = async ({
 const addDomainToRemote = async (
   hostname: string
 ): Promise<NonNullable<ProtectedAppMetadata['customDomains']>[number]> => {
-  if (EnvSet.values.isProtectedAppLocalDevEnabled) {
+  if (EnvSet.values.isProtectedAppLocalDevEnabled || EnvSet.values.isSelfHostedParityEnabled) {
     return {
       domain: hostname,
       cloudflareData: null,
@@ -173,7 +185,7 @@ const addDomainToRemote = async (
  * Call Cloudflare API to delete the domain (custom hostname)
  */
 const deleteDomainFromRemote = async (id: string) => {
-  if (EnvSet.values.isProtectedAppLocalDevEnabled) {
+  if (EnvSet.values.isProtectedAppLocalDevEnabled || EnvSet.values.isSelfHostedParityEnabled) {
     return;
   }
 
@@ -206,7 +218,11 @@ export const createProtectedAppLibrary = (queries: Queries) => {
     sdkEndpointOverride?: string
   ): Promise<void> => {
     // Skip for integration test, we don't do third party call in integration test
-    if (EnvSet.values.isIntegrationTest || EnvSet.values.isProtectedAppLocalDevEnabled) {
+    if (
+      EnvSet.values.isIntegrationTest ||
+      EnvSet.values.isProtectedAppLocalDevEnabled ||
+      EnvSet.values.isSelfHostedParityEnabled
+    ) {
       return;
     }
 
@@ -287,7 +303,7 @@ export const createProtectedAppLibrary = (queries: Queries) => {
     const { protectedAppMetadata } = application;
     assertThat(protectedAppMetadata, 'application.protected_app_not_configured', 501);
 
-    if (EnvSet.values.isProtectedAppLocalDevEnabled) {
+    if (EnvSet.values.isProtectedAppLocalDevEnabled || EnvSet.values.isSelfHostedParityEnabled) {
       return {
         ...application,
         protectedAppMetadata,
@@ -364,3 +380,4 @@ export const createProtectedAppLibrary = (queries: Queries) => {
     syncAllAppConfigsToRemote,
   };
 };
+/* eslint-enable max-lines */

@@ -1,9 +1,14 @@
 import {
   CloudflareKey,
+  type EmailServiceConfig,
+  EmailServiceProvider,
+  EmailServiceProviderKey,
   type HostnameProviderData,
   type StorageProviderData,
   hostnameProviderDataGuard,
+  emailServiceConfigGuard,
   storageProviderDataGuard,
+  StorageProvider,
   StorageProviderKey,
   type SystemKey,
   type ProtectedAppConfigProviderData,
@@ -12,6 +17,7 @@ import {
 import type { CommonQueryMethods } from '@silverhand/slonik';
 import { type ZodType } from 'zod';
 
+import { EnvSet } from '#src/env-set/index.js';
 import { createSystemsQuery } from '#src/queries/system.js';
 import { devConsole } from '#src/utils/console.js';
 
@@ -23,6 +29,7 @@ export default class SystemContext {
   public hostnameProviderConfig?: HostnameProviderData;
   public protectedAppConfigProviderConfig?: ProtectedAppConfigProviderData;
   public protectedAppHostnameProviderConfig?: HostnameProviderData;
+  public emailServiceProviderConfig?: EmailServiceConfig;
 
   async loadProviderConfigs(pool: CommonQueryMethods) {
     await Promise.all([
@@ -68,7 +75,29 @@ export default class SystemContext {
           hostnameProviderDataGuard
         );
       })(),
+      (async () => {
+        this.emailServiceProviderConfig = await this.loadConfig(
+          pool,
+          EmailServiceProviderKey.EmailServiceProvider,
+          emailServiceConfigGuard
+        );
+      })(),
     ]);
+
+    if (EnvSet.values.isSelfHostedParityEnabled) {
+      const localExperienceStorage: StorageProviderData = {
+        provider: StorageProvider.LocalStorage,
+        rootPath: EnvSet.values.selfHostedDataPath,
+      };
+
+      this.experienceBlobsProviderConfig ??= localExperienceStorage;
+      this.experienceZipsProviderConfig ??= localExperienceStorage;
+      this.emailServiceProviderConfig ??= {
+        provider: EmailServiceProvider.LocalOutbox,
+        fromName: 'Logto',
+        fromEmail: 'no-reply@localhost',
+      };
+    }
   }
 
   private async loadConfig<T>(

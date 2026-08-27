@@ -1,5 +1,3 @@
-import { ossSamlApplicationsLimit } from '@/consts/application-limits';
-
 type ShouldListDynamicAppOptions = {
   readonly isThirdPartyTab: boolean;
   readonly isDynamicAppEnabled: boolean;
@@ -15,19 +13,3 @@ export const shouldListDynamicApp = ({
   isDynamicAppEnabled,
   page,
 }: ShouldListDynamicAppOptions) => isThirdPartyTab && isDynamicAppEnabled && page === 1;
-
-type ShouldShowSamlAppLimitNoticeOptions = {
-  readonly isCloud: boolean;
-  readonly isThirdPartyTab: boolean;
-  readonly samlAppTotalCount?: number;
-};
-
-export const shouldShowSamlAppLimitNotice = ({
-  isCloud,
-  isThirdPartyTab,
-  samlAppTotalCount,
-}: ShouldShowSamlAppLimitNoticeOptions) =>
-  !isCloud &&
-  !isThirdPartyTab &&
-  typeof samlAppTotalCount === 'number' &&
-  samlAppTotalCount >= ossSamlApplicationsLimit;

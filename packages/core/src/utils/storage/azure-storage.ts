@@ -73,6 +73,7 @@ export const buildAzureStorage = (
     options?: { throwOnTransientError?: boolean }
   ) => Promise<boolean>;
   getFileProperties: (objectKey: string) => Promise<BlobGetPropertiesResponse>;
+  deleteFilesByPrefix: (prefix: string) => Promise<void>;
 } => {
   const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(container);
@@ -127,5 +128,11 @@ export const buildAzureStorage = (
     return retryOnTransientAzureStorageError(async () => blockBlobClient.getProperties());
   };
 
-  return { uploadFile, downloadFile, isFileExisted, getFileProperties };
+  const deleteFilesByPrefix = async (prefix: string) => {
+    for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+      await containerClient.deleteBlob(blob.name);
+    }
+  };
+
+  return { uploadFile, downloadFile, isFileExisted, getFileProperties, deleteFilesByPrefix };
 };

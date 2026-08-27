@@ -22,9 +22,16 @@ import 'react-color-palette/css';
 
 import 'react-day-picker/dist/style.css';
 
+import SelfHostedAppRoutes from '@/SelfHostedAppRoutes';
 import CloudAppRoutes from '@/cloud/AppRoutes';
 import AppLoading from '@/components/AppLoading';
-import { isCloud, postHogHost, postHogUiHost, postHogKey } from '@/consts/env';
+import {
+  isCloud,
+  isTenantManagementEnabled,
+  postHogHost,
+  postHogUiHost,
+  postHogKey,
+} from '@/consts/env';
 import { cloudApi, getManagementApi, meApi } from '@/consts/resources';
 import { ConsoleRoutes } from '@/containers/ConsoleRoutes';
 
@@ -78,7 +85,7 @@ function Providers() {
   // For OSS, we directly call the tenant API with the default tenant API resource.
   const resources = useMemo(
     () =>
-      isCloud
+      isTenantManagementEnabled
         ? [cloudApi.indicator, meApi.indicator]
         : [getManagementApi(defaultTenantId).indicator, meApi.indicator],
     []
@@ -95,7 +102,7 @@ function Providers() {
       UserScope.OrganizationRoles,
       PredefinedScope.All,
       ...conditionalArray(
-        isCloud && [
+        isTenantManagementEnabled && [
           ...Object.values(TenantScope),
           cloudApi.scopes.CreateTenant,
           cloudApi.scopes.ManageTenantSelf,
@@ -214,15 +221,15 @@ function Content() {
    * If it's not Cloud (OSS), render the tenant app container directly since only default tenant is available;
    * if it's Cloud, render the tenant app container only when a tenant ID is available (in a tenant context).
    */
-  if (!isCloud || currentTenantId) {
+  if (!isTenantManagementEnabled || currentTenantId) {
     // Authenticated user should load onboarding data before rendering the app.
     // This looks weird and it can be refactored by merging the onboarding
     // routes with the console routes.
-    if (!tenantEndpoint || (isCloud && isAuthenticated && !isLoaded)) {
+    if (!tenantEndpoint || (isTenantManagementEnabled && isAuthenticated && !isLoaded)) {
       return <AppLoading />;
     }
     return <ConsoleRoutes />;
   }
 
-  return <CloudAppRoutes />;
+  return isCloud ? <CloudAppRoutes /> : <SelfHostedAppRoutes />;
 }

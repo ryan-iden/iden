@@ -10,15 +10,15 @@ export default function koaTenantGuard<StateT, ContextT extends IRouterParamCont
   { tenants }: Queries
 ): Middleware<StateT, ContextT, BodyT> {
   return async (ctx, next) => {
-    const { isCloud } = EnvSet.values;
+    const { isCloud, isSelfHostedParityEnabled } = EnvSet.values;
 
-    if (!isCloud) {
+    if (!isCloud && !isSelfHostedParityEnabled) {
       return next();
     }
 
-    const { isSuspended } = await tenants.findTenantMetadataById(tenantId);
+    const { isSuspended, deletedAt } = await tenants.findTenantMetadataById(tenantId);
 
-    if (isSuspended) {
+    if (isSuspended || deletedAt) {
       throw new RequestError('subscription.tenant_suspended', 403);
     }
 

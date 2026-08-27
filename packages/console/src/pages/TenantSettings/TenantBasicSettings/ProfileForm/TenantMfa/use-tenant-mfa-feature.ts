@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 
+import { isSelfHostedParityEnabled } from '@/consts/env';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import { isPaidPlan } from '@/utils/subscription';
@@ -15,9 +16,9 @@ const useTenantMfaFeature = () => {
   return {
     // Whether to show the paywall tag. Note: FeatureTag component handles dev tenant display
     // automatically, so we don't need to include isDevTenant here.
-    shouldShowPaywallTag: !isPaidTenant,
+    shouldShowPaywallTag: !isSelfHostedParityEnabled && !isPaidTenant,
     // Dev tenants can use all features for testing purposes
-    isFeatureAvailable: isDevTenant || isPaidTenant,
+    isFeatureAvailable: isSelfHostedParityEnabled || isDevTenant || isPaidTenant,
   };
 };
 

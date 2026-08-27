@@ -4,7 +4,7 @@ import { defaultConfig } from '../../tsup.shared.config.js';
 
 export const config = Object.freeze({
   ...defaultConfig,
-  entry: ['src/index.ts', 'src/workers/tasks/**/*.ts'],
+  entry: ['src/index.ts', 'src/protected-app-gateway.ts', 'src/workers/tasks/**/*.ts'],
   outDir: 'build',
   onSuccess: 'pnpm run copy:apidocs',
 } satisfies Options);

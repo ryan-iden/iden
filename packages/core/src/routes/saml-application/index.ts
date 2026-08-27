@@ -62,27 +62,29 @@ export default function samlApplicationRoutes<T extends ManagementApiRouter>(
     '/saml-applications',
     EnvSet.values.isCloud
       ? koaQuotaGuard({ key: 'samlApplicationsLimit', quota })
-      : // OSS can create at most 3 SAML apps.
-        async (ctx, next) => {
-          const { searchParams } = ctx.URL;
-          // This will only parse the `search` query param, other params will be ignored. Please use query guard to validate them.
-          const search = parseSearchParamsForSearch(searchParams);
-          const { count: samlAppCount } = await countApplications({
-            search,
-            types: [ApplicationType.SAML],
-          });
+      : EnvSet.values.isSelfHostedParityEnabled
+        ? async (_ctx, next) => next()
+        : // Legacy OSS behavior allows at most 3 SAML apps when parity features are disabled.
+          async (ctx, next) => {
+            const { searchParams } = ctx.URL;
+            // This will only parse the `search` query param, other params will be ignored. Please use query guard to validate them.
+            const search = parseSearchParamsForSearch(searchParams);
+            const { count: samlAppCount } = await countApplications({
+              search,
+              types: [ApplicationType.SAML],
+            });
 
-          assertThat(
-            samlAppCount < 3,
-            new RequestError({
-              code: 'application.saml.reach_oss_limit',
-              status: 403,
-              limit: 3,
-            })
-          );
+            assertThat(
+              samlAppCount < 3,
+              new RequestError({
+                code: 'application.saml.reach_oss_limit',
+                status: 403,
+                limit: 3,
+              })
+            );
 
-          return next();
-        },
+            return next();
+          },
     koaGuard({
       body: samlApplicationCreateGuard,
       response: samlApplicationResponseGuard,

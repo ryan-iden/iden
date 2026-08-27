@@ -1,7 +1,7 @@
 import type { SignInExperience } from '@logto/schemas';
 import { useEffect, useState, useMemo } from 'react';
 
-import { isCloud } from '@/consts/env';
+import { isCloud, isSelfHostedParityEnabled } from '@/consts/env';
 import useDebounce from '@/hooks/use-debounce';
 
 import { sieFormDataParser } from '../PageContent/utils/parser';
@@ -33,7 +33,7 @@ const usePreviewConfigs = (
         ...restFormData,
         customCss: debouncedCustomCss,
       },
-      { isCloud }
+      { isCloud: isCloud || isSelfHostedParityEnabled }
     );
   }, [restFormData, debouncedCustomCss, isDirty, data]);
 };

@@ -30,5 +30,26 @@ export const buildGoogleStorage = (projectId: string, keyFilename: string, bucke
     };
   };
 
-  return { uploadFile };
+  const downloadFile = async (objectKey: string) => {
+    const file = bucket.file(objectKey);
+    const [[data], [metadata]] = await Promise.all([file.download(), file.getMetadata()]);
+
+    return {
+      data,
+      contentLength: Number(metadata.size ?? data.byteLength),
+      contentType: metadata.contentType,
+    };
+  };
+
+  const isFileExisted = async (objectKey: string) => {
+    const [exists] = await bucket.file(objectKey).exists();
+    return exists;
+  };
+
+  const deleteFilesByPrefix = async (prefix: string) => {
+    const [files] = await bucket.getFiles({ prefix });
+    await Promise.all(files.map(async (file) => file.delete({ ignoreNotFound: true })));
+  };
+
+  return { uploadFile, downloadFile, isFileExisted, deleteFilesByPrefix };
 };

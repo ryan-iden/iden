@@ -6,7 +6,9 @@ import KeyboardArrowDown from '@/assets/icons/keyboard-arrow-down.svg?react';
 import PlusSign from '@/assets/icons/plus.svg?react';
 import { type TenantResponse } from '@/cloud/types/router';
 import CreateTenantModal from '@/components/CreateTenantModal';
+import SelfHostedCreateTenantModal from '@/components/SelfHostedCreateTenantModal';
 import TenantEnvTag from '@/components/TenantEnvTag';
+import { isCloud } from '@/consts/env';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import Divider from '@/ds-components/Divider';
 import Dropdown from '@/ds-components/Dropdown';
@@ -100,16 +102,29 @@ export default function TenantSelector() {
           <PlusSign />
         </button>
       </Dropdown>
-      <CreateTenantModal
-        isOpen={showCreateTenantModal}
-        onClose={async (tenant?: TenantResponse) => {
-          setShowCreateTenantModal(false);
-          if (tenant) {
-            prependTenant(tenant);
-            navigateTenant(tenant.id);
-          }
-        }}
-      />
+      {isCloud ? (
+        <CreateTenantModal
+          isOpen={showCreateTenantModal}
+          onClose={async (tenant?: TenantResponse) => {
+            setShowCreateTenantModal(false);
+            if (tenant) {
+              prependTenant(tenant);
+              navigateTenant(tenant.id);
+            }
+          }}
+        />
+      ) : (
+        <SelfHostedCreateTenantModal
+          isOpen={showCreateTenantModal}
+          onClose={async (tenant?: TenantResponse) => {
+            setShowCreateTenantModal(false);
+            if (tenant) {
+              prependTenant(tenant);
+              navigateTenant(tenant.id);
+            }
+          }}
+        />
+      )}
     </>
   );
 }

@@ -27,6 +27,26 @@ services:
       # Or, you can leverage it for local testing.
       - ENDPOINT
       - ADMIN_ENDPOINT
+      - SELF_HOSTED_PARITY_ENABLED
+      - SELF_HOSTED_DATA_PATH=/var/lib/logto
+      - PROTECTED_APP_GATEWAY_DOMAIN=${PROTECTED_APP_GATEWAY_DOMAIN:-protected-app.localhost}
+      - PROTECTED_APP_GATEWAY_SHARED_SECRET
+    volumes:
+      - logto-data:/var/lib/logto
+  protected-app-gateway:
+    profiles: ["protected-app"]
+    depends_on:
+      app:
+        condition: service_started
+    image: svhd/logto:${TAG-latest}
+    entrypoint: ["npm", "run", "--workspace=@logto/core", "start:protected-app-gateway"]
+    ports:
+      - 3004:3004
+    environment:
+      - PROTECTED_APP_GATEWAY_CORE_ENDPOINT=http://app:3002
+      - PROTECTED_APP_GATEWAY_SHARED_SECRET
+      - PROTECTED_APP_GATEWAY_SESSION_SECRET
+      - PROTECTED_APP_GATEWAY_PORT=3004
   postgres:
     image: postgres:17-alpine
     user: postgres
@@ -38,3 +58,5 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+volumes:
+  logto-data:

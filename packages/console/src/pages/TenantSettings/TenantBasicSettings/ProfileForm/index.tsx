@@ -2,6 +2,7 @@ import { ReservedPlanId } from '@logto/schemas';
 import { useFormContext } from 'react-hook-form';
 
 import FormCard from '@/components/FormCard';
+import { isCloud } from '@/consts/env';
 import CopyToClipboard from '@/ds-components/CopyToClipboard';
 import FormField from '@/ds-components/FormField';
 import TextInput from '@/ds-components/TextInput';
@@ -41,9 +42,11 @@ function ProfileForm({ currentTenantId }: Props) {
           error={Boolean(errors.profile?.name)}
         />
       </FormField>
-      <FormField title="tenants.settings.tenant_region">
-        <TenantRegion />
-      </FormField>
+      {isCloud && (
+        <FormField title="tenants.settings.tenant_region">
+          <TenantRegion />
+        </FormField>
+      )}
       <FormField title="tenants.settings.tenant_type">
         <TenantEnvironment tag={getValues('profile.tag')} />
       </FormField>
@@ -58,9 +61,11 @@ function ProfileForm({ currentTenantId }: Props) {
           <TenantMfa />
         </FormField>
       )}
-      <FormField title="tenants.settings.enterprise_sso">
-        <EnterpriseSso />
-      </FormField>
+      {isCloud && (
+        <FormField title="tenants.settings.enterprise_sso">
+          <EnterpriseSso />
+        </FormField>
+      )}
     </FormCard>
   );
 }

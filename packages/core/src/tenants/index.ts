@@ -8,6 +8,7 @@ import { redisCache } from '#src/caches/index.js';
 import { EnvSet } from '#src/env-set/index.js';
 
 import Tenant from './Tenant.js';
+import { registerTenantPoolAccess } from './pool-access.js';
 import { TenantNotFoundError } from './utils.js';
 
 const consoleLog = new ConsoleLog(chalk.magenta('tenant'));
@@ -92,6 +93,16 @@ class TenantPool {
    * `performance.now()`, which the expiry test cannot drive.
    */
   protected notFoundCache = new LRUCache<string, number>({ max: tenantNotFoundCacheSize });
+
+  /** Invalidate cached instances and negative lookups after a tenant lifecycle change. */
+  invalidate(tenantId: string) {
+    this.notFoundCache.delete(tenantId);
+    for (const key of this.cache.keys()) {
+      if (key.startsWith(`${tenantId}-`)) {
+        this.cache.delete(key);
+      }
+    }
+  }
 
   /**
    * Resolve a tenant instance and atomically reserve a request slot on it (see
@@ -304,5 +315,11 @@ class TenantPool {
 }
 
 export const tenantPool = new TenantPool();
+registerTenantPoolAccess(
+  async (tenantId) => tenantPool.get(tenantId),
+  (tenantId) => {
+    tenantPool.invalidate(tenantId);
+  }
+);
 
 export * from './utils.js';

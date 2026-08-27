@@ -14,6 +14,23 @@ import {
   Roles,
   PredefinedScope,
   getManagementApiResourceIndicator,
+  createAdminData,
+  createAdminDataInAdminTenant,
+  createDefaultAccountCenter,
+  createDefaultAdminConsoleConfig,
+  createDefaultIdTokenConfig,
+  createDefaultSignInExperience,
+  getTenantOrganizationCreateData,
+  getTenantOrganizationId,
+  getTenantRole,
+  OrganizationRoleUserRelations,
+  Organizations,
+  OrganizationUserRelations,
+  TenantRole,
+  type TenantTag,
+  AccountCenters,
+  LogtoConfigs,
+  SignInExperiences,
 } from '@logto/schemas';
 import { generateStandardId } from '@logto/shared';
 import { assert } from '@silverhand/essentials';
@@ -23,6 +40,9 @@ import { sql } from '@silverhand/slonik';
 import { insertInto } from '../../../database.js';
 import { getDatabaseName } from '../../../queries/database.js';
 import { consoleLog } from '../../../utils.js';
+
+import { seedOidcConfigs } from './oidc-config.js';
+import { seedPreConfiguredManagementApiAccessRole } from './roles.js';
 
 export const createTenant = async (pool: CommonQueryMethods, tenantId: string) => {
   const database = await getDatabaseName(pool, true);
@@ -39,6 +59,76 @@ export const createTenant = async (pool: CommonQueryMethods, tenantId: string) =
       password '${sql.raw(password)}'
       in role ${sql.identifier([parentRole])};
   `);
+};
+
+type ProvisionTenantOptions = {
+  id: string;
+  name: string;
+  tag: TenantTag;
+  creatorUserId: string;
+};
+
+/** Provision all records required by a runtime-created self-hosted tenant. */
+export const provisionTenant = async (
+  connection: DatabaseTransactionConnection,
+  { id, name, tag, creatorUserId }: ProvisionTenantOptions
+) => {
+  await createTenant(connection, id);
+  await connection.query(sql`
+    update tenants set name = ${name}, tag = ${tag} where id = ${id}
+  `);
+
+  await seedOidcConfigs(connection, id);
+  await seedAdminData(connection, createAdminData(id));
+  await seedPreConfiguredManagementApiAccessRole(connection, id);
+  await seedAdminData(connection, createAdminDataInAdminTenant(id));
+
+  const proxyApplication = getMapiProxyM2mApp(id);
+  await Promise.all([
+    connection.query(insertInto(createDefaultAdminConsoleConfig(id), LogtoConfigs.table)),
+    connection.query(insertInto(createDefaultIdTokenConfig(id), LogtoConfigs.table)),
+    connection.query(insertInto(createDefaultSignInExperience(id, false), SignInExperiences.table)),
+    connection.query(insertInto(createDefaultAccountCenter(id), AccountCenters.table)),
+    connection.query(
+      insertInto({ ...getTenantOrganizationCreateData(id), name }, Organizations.table)
+    ),
+    connection.query(insertInto(proxyApplication, Applications.table)),
+  ]);
+
+  await Promise.all([
+    connection.query(
+      insertInto(
+        {
+          tenantId: adminTenantId,
+          id: generateStandardId(),
+          applicationId: proxyApplication.id,
+          roleId: getMapiProxyRole(id).id,
+        },
+        ApplicationsRoles.table
+      )
+    ),
+    connection.query(
+      insertInto(
+        {
+          tenantId: adminTenantId,
+          userId: creatorUserId,
+          organizationId: getTenantOrganizationId(id),
+        },
+        OrganizationUserRelations.table
+      )
+    ),
+    connection.query(
+      insertInto(
+        {
+          tenantId: adminTenantId,
+          userId: creatorUserId,
+          organizationId: getTenantOrganizationId(id),
+          organizationRoleId: getTenantRole(TenantRole.Admin).id,
+        },
+        OrganizationRoleUserRelations.table
+      )
+    ),
+  ]);
 };
 
 export const seedAdminData = async (

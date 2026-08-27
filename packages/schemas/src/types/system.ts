@@ -23,6 +23,7 @@ export const alterationStateGuard: Readonly<{
 
 // Storage provider
 export enum StorageProvider {
+  LocalStorage = 'LocalStorage',
   AzureStorage = 'AzureStorage',
   S3Storage = 'S3Storage',
   GoogleStorage = 'GoogleStorage',
@@ -33,6 +34,11 @@ const basicConfig = {
 };
 
 export const storageProviderDataGuard = z.discriminatedUnion('provider', [
+  z.object({
+    provider: z.literal(StorageProvider.LocalStorage),
+    rootPath: z.string(),
+    ...basicConfig,
+  }),
   z.object({
     provider: z.literal(StorageProvider.AzureStorage),
     connectionString: z.string(),
@@ -82,14 +88,34 @@ export const storageProviderGuard: Readonly<{
 
 // Email service provider
 export enum EmailServiceProvider {
+  LocalOutbox = 'LocalOutbox',
+  Smtp = 'Smtp',
   SendGrid = 'SendGrid',
   Cloudflare = 'Cloudflare',
 }
 
+export const localOutboxEmailServiceConfigGuard = z.object({
+  provider: z.literal(EmailServiceProvider.LocalOutbox),
+  fromName: z.string(),
+  fromEmail: z.string().email(),
+});
+
+export const smtpEmailServiceConfigGuard = z.object({
+  provider: z.literal(EmailServiceProvider.Smtp),
+  host: z.string(),
+  port: z.number().int().positive(),
+  secure: z.boolean(),
+  user: z.string().optional(),
+  password: z.string().optional(),
+  fromName: z.string(),
+  fromEmail: z.string().email(),
+  replyTo: z.string().email().optional(),
+});
+
 export const sendgridEmailServiceConfigGuard = z.object({
   provider: z.literal(EmailServiceProvider.SendGrid),
   apiKey: z.string(),
-  templateId: z.string(),
+  templateId: z.string().optional(),
   fromName: z.string(),
   fromEmail: z.string(),
 });
@@ -107,6 +133,8 @@ export const cloudflareEmailServiceConfigGuard = z.object({
 export type CloudflareEmailServiceConfig = z.infer<typeof cloudflareEmailServiceConfigGuard>;
 
 export const emailServiceConfigGuard = z.discriminatedUnion('provider', [
+  localOutboxEmailServiceConfigGuard,
+  smtpEmailServiceConfigGuard,
   sendgridEmailServiceConfigGuard,
   cloudflareEmailServiceConfigGuard,
 ]);

@@ -4,16 +4,14 @@ import { Navigate, type RouteObject } from 'react-router-dom';
 import { safeLazy } from 'react-safe-lazy';
 
 import { TenantSettingsTabs } from '@/consts';
-import { isCloud } from '@/consts/env';
+import { isCloud, isTenantManagementEnabled } from '@/consts/env';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import useCurrentTenantScopes from '@/hooks/use-current-tenant-scopes';
 import NotFound from '@/pages/NotFound';
-import { shouldShowOssTenantMembersTab } from '@/pages/OssTenantSettings/utils';
 
 const TenantSettings = safeLazy(async () => import('@/pages/TenantSettings'));
 const OssTenantSettings = safeLazy(async () => import('@/pages/OssTenantSettings'));
-const OssTenantMembers = safeLazy(async () => import('@/pages/OssTenantSettings/Members'));
 const TenantBasicSettings = safeLazy(
   async () => import('@/pages/TenantSettings/TenantBasicSettings')
 );
@@ -62,9 +60,12 @@ const useCloudTenantSettings = () => {
             ...condArray(canInviteMember && [{ path: 'invitations', element: <Invitations /> }]),
           ],
         },
-        { path: TenantSettingsTabs.Domains, element: <TenantDomainSettings /> },
+        ...condArray(
+          isCloud && [{ path: TenantSettingsTabs.Domains, element: <TenantDomainSettings /> }]
+        ),
         { path: TenantSettingsTabs.OidcConfigs, element: <OidcConfigs /> },
-        !isDevTenant &&
+        isCloud &&
+          !isDevTenant &&
           canManageTenant && [
             { path: TenantSettingsTabs.Subscription, element: <Subscription /> },
             ...condArray(
@@ -84,8 +85,6 @@ const useCloudTenantSettings = () => {
 
 const useOssTenantSettings = (): RouteObject =>
   useMemo(() => {
-    const shouldShowMembersTab = shouldShowOssTenantMembersTab({ isCloud: false });
-
     return {
       path: 'tenant-settings',
       element: <OssTenantSettings />,
@@ -98,16 +97,10 @@ const useOssTenantSettings = (): RouteObject =>
           path: TenantSettingsTabs.OidcConfigs,
           element: <OidcConfigs />,
         },
-        ...condArray(
-          shouldShowMembersTab && [
-            {
-              path: TenantSettingsTabs.Members,
-              element: <OssTenantMembers />,
-            },
-          ]
-        ),
       ],
     };
   }, []);
 
-export const useTenantSettings = isCloud ? useCloudTenantSettings : useOssTenantSettings;
+export const useTenantSettings = isTenantManagementEnabled
+  ? useCloudTenantSettings
+  : useOssTenantSettings;

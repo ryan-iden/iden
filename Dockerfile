@@ -23,6 +23,9 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store pnpm i
 ARG dev_features_enabled
 ENV DEV_FEATURES_ENABLED=${dev_features_enabled}
 
+ARG self_hosted_parity_enabled
+ENV SELF_HOSTED_PARITY_ENABLED=${self_hosted_parity_enabled}
+
 ARG applicationinsights_connection_string
 ENV APPLICATIONINSIGHTS_CONNECTION_STRING=${applicationinsights_connection_string}
 
@@ -52,8 +55,10 @@ ARG private_key_rotation_grace_period=0
 # Default to empty so external survey relaying stays opt-in for controlled builds/environments.
 ENV LOGTO_OSS_SURVEY_ENDPOINT=${logto_oss_survey_endpoint}
 ENV PRIVATE_KEY_ROTATION_GRACE_PERIOD=${private_key_rotation_grace_period}
+ENV SELF_HOSTED_DATA_PATH=/var/lib/logto
 COPY --from=builder /etc/logto .
-RUN mkdir -p /etc/logto/packages/cli/alteration-scripts && chmod g+w /etc/logto/packages/cli/alteration-scripts
-EXPOSE 3001
+RUN mkdir -p /etc/logto/packages/cli/alteration-scripts /var/lib/logto && \
+  chmod g+w /etc/logto/packages/cli/alteration-scripts /var/lib/logto
+EXPOSE 3001 3002 3004
 ENTRYPOINT ["npm", "run"]
 CMD ["start"]

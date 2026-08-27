@@ -6,6 +6,7 @@ import ConvertToProductionModal from '@/components/ConvertToProductionModal';
 import LearnMore from '@/components/LearnMore';
 import TenantEnvTag from '@/components/TenantEnvTag';
 import { logtoCloudTenantSettings } from '@/consts';
+import { isCloud } from '@/consts/env';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import Button from '@/ds-components/Button';
 import DynamicT from '@/ds-components/DynamicT';
@@ -20,6 +21,10 @@ type Props = {
 function TenantEnvironment({ tag }: Props) {
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
   const { currentTenant, isDevTenant } = useContext(TenantsContext);
+
+  if (!isCloud) {
+    return <TenantEnvTag isAbbreviated={false} size="large" tag={tag} />;
+  }
 
   return (
     <div className={styles.container}>

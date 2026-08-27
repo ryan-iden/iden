@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 
 import SubmitFormChangesActionBar from '@/components/SubmitFormChangesActionBar';
 import UnsavedChangesAlertModal from '@/components/UnsavedChangesAlertModal';
-import { isCloud } from '@/consts/env';
+import { isCloud, isSelfHostedParityEnabled } from '@/consts/env';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
 import ConfirmModal from '@/ds-components/ConfirmModal';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
@@ -115,7 +115,7 @@ function PageContent({ data, onSignInExperienceUpdated, onAccountCenterUpdated }
       const updatedData = await api
         .patch('api/sign-in-exp', {
           json: sieFormDataParser.toSignInExperience(formValues, {
-            isCloud,
+            isCloud: isCloud || isSelfHostedParityEnabled,
             isCustomUiCspEnabled,
           }),
         })
@@ -168,11 +168,11 @@ function PageContent({ data, onSignInExperienceUpdated, onAccountCenterUpdated }
         }
 
         const formatted = sieFormDataParser.toSignInExperience(formData, {
-          isCloud,
+          isCloud: isCloud || isSelfHostedParityEnabled,
           isCustomUiCspEnabled,
         });
         const original = signInExperienceToUpdatedDataParser(data, {
-          isCloud,
+          isCloud: isCloud || isSelfHostedParityEnabled,
           isCustomUiCspEnabled,
         });
 

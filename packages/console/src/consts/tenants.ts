@@ -10,7 +10,7 @@ import {
 import { defaultRegionName } from '@/components/Region';
 import { LogtoSkuType } from '@/types/skus';
 
-import { adminEndpoint, isCloud } from './env';
+import { adminEndpoint, isCloud, isSelfHostedParityEnabled } from './env';
 
 const { tenantId, indicator } = defaultManagementApi.resource;
 
@@ -90,8 +90,8 @@ export const defaultLogtoSku: LogtoSkuResponse = {
     bringYourUiEnabled: true,
     collectUserProfileEnabled: true,
     passkeySignInEnabled: true,
-    idpInitiatedSsoEnabled: false,
-    samlApplicationsLimit: 3,
+    idpInitiatedSsoEnabled: isSelfHostedParityEnabled,
+    samlApplicationsLimit: isSelfHostedParityEnabled ? null : 3,
     securityFeaturesEnabled: true,
     customDomainsLimit: 2,
   },

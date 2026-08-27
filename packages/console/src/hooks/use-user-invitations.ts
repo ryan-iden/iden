@@ -22,7 +22,7 @@ const useUserInvitations = (
 } => {
   const cloudApi = useCloudApi({ hideErrorToast: true });
   const { data, isLoading, error } = useSWR<InvitationListResponse, RequestError>(
-    `/api/invitations}`,
+    '/api/invitations',
     async () => cloudApi.get('/api/invitations')
   );
 

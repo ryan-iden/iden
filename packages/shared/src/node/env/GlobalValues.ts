@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { BlockList, isIP } from 'node:net';
 
 import {
@@ -195,6 +196,24 @@ export default class GlobalValues {
 
   /** If the env explicitly indicates it's in the cloud environment. */
   public readonly isCloud = yes(getEnv('IS_CLOUD'));
+
+  /** Enables the self-hosted feature parity suite without enabling unrelated development features. */
+  public readonly isSelfHostedParityEnabled =
+    !this.isCloud && yes(getEnv('SELF_HOSTED_PARITY_ENABLED'));
+
+  public readonly selfHostedDataPath = getEnv('SELF_HOSTED_DATA_PATH', '.logto-data');
+
+  public readonly selfHostedServiceToken = getEnv(
+    'SELF_HOSTED_SERVICE_TOKEN',
+    randomBytes(32).toString('hex')
+  );
+
+  public readonly protectedAppGatewayDomain = getEnv(
+    'PROTECTED_APP_GATEWAY_DOMAIN',
+    'protected-app.localhost'
+  );
+
+  public readonly protectedAppGatewaySharedSecret = getEnv('PROTECTED_APP_GATEWAY_SHARED_SECRET');
 
   /**
    * Whether outbound requests to operator-supplied URLs are protected against SSRF. This covers

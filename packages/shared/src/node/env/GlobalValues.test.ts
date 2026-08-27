@@ -15,6 +15,33 @@ const unsetEnvironmentVariable = (key: string) => {
 /** The current name, and the narrower one it replaced, which stays supported. */
 const optOutVariables = ['SSRF_PROTECTION_DISABLED', 'OIDC_PROVIDER_SSRF_PROTECTION_DISABLED'];
 
+describe('self-hosted parity', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('is disabled by default', () => {
+    unsetEnvironmentVariable('IS_CLOUD');
+    unsetEnvironmentVariable('SELF_HOSTED_PARITY_ENABLED');
+
+    expect(createGlobalValues().isSelfHostedParityEnabled).toBe(false);
+  });
+
+  it('can be explicitly enabled for self-hosted deployments', () => {
+    unsetEnvironmentVariable('IS_CLOUD');
+    vi.stubEnv('SELF_HOSTED_PARITY_ENABLED', 'true');
+
+    expect(createGlobalValues().isSelfHostedParityEnabled).toBe(true);
+  });
+
+  it('is ignored in Cloud', () => {
+    vi.stubEnv('IS_CLOUD', 'true');
+    vi.stubEnv('SELF_HOSTED_PARITY_ENABLED', 'true');
+
+    expect(createGlobalValues().isSelfHostedParityEnabled).toBe(false);
+  });
+});
+
 describe('SSRF protection', () => {
   afterEach(() => {
     vi.unstubAllEnvs();

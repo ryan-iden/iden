@@ -16,7 +16,7 @@ import Skeleton from '@/components/DetailsPage/Skeleton';
 import Drawer from '@/components/Drawer';
 import PageMeta from '@/components/PageMeta';
 import { EnterpriseSsoDetailsTabs } from '@/consts';
-import { isCloud, isDevFeaturesEnabled } from '@/consts/env';
+import { isCloud, isDevFeaturesEnabled, isSelfHostedParityEnabled } from '@/consts/env';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
 import ConfirmModal from '@/ds-components/ConfirmModal';
 import DynamicT from '@/ds-components/DynamicT';
@@ -69,10 +69,9 @@ function EnterpriseSsoDetails() {
 
   const isIdpInitiatedAuthConfigEnabled = useMemo(
     () =>
-      isDevFeaturesEnabled &&
-      isCloud &&
       ssoConnector?.providerType === SsoProviderType.SAML &&
-      currentSubscriptionQuota.idpInitiatedSsoEnabled,
+      ((isCloud && isDevFeaturesEnabled && currentSubscriptionQuota.idpInitiatedSsoEnabled) ||
+        isSelfHostedParityEnabled),
     [ssoConnector, currentSubscriptionQuota]
   );
 

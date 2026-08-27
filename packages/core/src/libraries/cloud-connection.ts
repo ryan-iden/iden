@@ -1,12 +1,17 @@
 import type router from '@logto/cloud/routes';
-import { cloudConnectionDataGuard, CloudScope } from '@logto/schemas';
+import {
+  adminTenantId,
+  cloudConnectionDataGuard,
+  CloudScope,
+  defaultTenantId,
+} from '@logto/schemas';
 import { formUrlEncodedHeaders } from '@logto/shared';
 import { appendPath } from '@silverhand/essentials';
 import Client from '@withtyped/client';
 import ky from 'ky';
 import { z } from 'zod';
 
-import { EnvSet } from '#src/env-set/index.js';
+import { EnvSet, getTenantEndpoint } from '#src/env-set/index.js';
 import { safeParseJson } from '#src/utils/json.js';
 
 import { type LogtoConfigLibrary } from './logto-config.js';
@@ -60,7 +65,10 @@ export class CloudConnectionLibrary {
   /** The minted tokens by resource. Audiences differ, so they are never interchangeable. */
   private readonly accessTokenCache = new Map<string, MintedAccessToken>();
 
-  constructor(private readonly logtoConfigs: LogtoConfigLibrary) {}
+  constructor(
+    private readonly logtoConfigs: LogtoConfigLibrary,
+    private readonly tenantId: string
+  ) {}
 
   public getCloudConnectionData = async (): Promise<CloudConnection> => {
     const { getCloudConnectionData: getCloudServiceM2mCredentials } = this.logtoConfigs;
@@ -110,6 +118,17 @@ export class CloudConnectionLibrary {
    */
   public getClient = async (): Promise<Client<typeof router>> => {
     if (!this.client) {
+      if (EnvSet.values.isSelfHostedParityEnabled) {
+        this.client = new Client<typeof router>({
+          baseUrl: getTenantEndpoint(adminTenantId, EnvSet.values).href,
+          headers: {
+            'x-logto-internal-token': EnvSet.values.selfHostedServiceToken,
+            'x-logto-tenant-id': this.tenantId,
+          },
+        });
+        return this.client;
+      }
+
       const { endpoint } = await this.getCloudConnectionData();
 
       this.client = new Client<typeof router>({
@@ -182,6 +201,9 @@ export class CloudConnectionLibrary {
   };
 }
 
-export const createCloudConnectionLibrary = (logtoConfigs: LogtoConfigLibrary) => {
-  return new CloudConnectionLibrary(logtoConfigs);
+export const createCloudConnectionLibrary = (
+  logtoConfigs: LogtoConfigLibrary,
+  tenantId = defaultTenantId
+) => {
+  return new CloudConnectionLibrary(logtoConfigs, tenantId);
 };

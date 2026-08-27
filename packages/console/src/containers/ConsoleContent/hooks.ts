@@ -2,7 +2,7 @@ import { Prompt, useLogto } from '@logto/react';
 import { getTenantOrganizationId } from '@logto/schemas';
 import { useContext, useEffect, useState } from 'react';
 
-import { isCloud } from '@/consts/env';
+import { isTenantManagementEnabled } from '@/consts/env';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import useCurrentTenantScopes from '@/hooks/use-current-tenant-scopes';
 import useRedirectUri from '@/hooks/use-redirect-uri';
@@ -33,7 +33,7 @@ const useTenantScopeListener = () => {
   }, [currentTenantId, getOrganizationTokenClaims]);
 
   useEffect(() => {
-    if (isCloud && !isLoading && scopes?.length === 0) {
+    if (isTenantManagementEnabled && !isLoading && scopes?.length === 0) {
       // User has no access to the current tenant. Navigate to root and it will return to the
       // last visited tenant, or fallback to the page where the user can create a new tenant.
       removeTenant(currentTenantId);
@@ -42,7 +42,7 @@ const useTenantScopeListener = () => {
   }, [currentTenantId, isLoading, navigateTenant, removeTenant, scopes?.length]);
 
   useEffect(() => {
-    if (!isCloud || isLoading || tokenClaims === undefined) {
+    if (!isTenantManagementEnabled || isLoading || tokenClaims === undefined) {
       return;
     }
     const hasScopesGranted = scopes?.some((scope) => !tokenClaims.includes(scope));

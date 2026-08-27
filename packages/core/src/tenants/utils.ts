@@ -28,7 +28,7 @@ export const getTenantDatabaseDsn = async (tenantId: string) => {
   const { sharedPool, dbUrl } = EnvSet;
   const {
     tableName,
-    rawKeys: { id, dbUser, dbUserPassword },
+    rawKeys: { id, dbUser, dbUserPassword, deletedAt },
   } = Tenants;
 
   const identifier = (id: string) => sql.identifier([id]);
@@ -38,6 +38,7 @@ export const getTenantDatabaseDsn = async (tenantId: string) => {
     select ${identifier(dbUser)}, ${identifier(dbUserPassword)}
     from ${identifier(tableName)}
     where ${identifier(id)} = ${tenantId}
+      and ${identifier(deletedAt)} is null
   `);
 
   if (!rows[0]) {

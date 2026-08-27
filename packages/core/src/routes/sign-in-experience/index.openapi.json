@@ -24,7 +24,8 @@
                       "description": "The language detection policy for the sign-in page."
                     },
                     "hideLogtoBranding": {
-                      "description": "Cloud only. Whether to hide the Logto branding on hosted sign-in pages."
+                      "description": "Whether to hide the Logto branding on hosted sign-in pages.",
+                      "x-logto-self-hosted-parity": true
                     },
                     "signIn": {
                       "description": "Sign-in method settings."
@@ -53,7 +54,8 @@
                       "description": "Custom content to display on experience flow pages. the page pathname will be the config key, the content will be the config value."
                     },
                     "customUiCsp": {
-                      "description": "Cloud only. Additional Content Security Policy source expressions for Custom UI assets. These values are applied to the hosted sign-in page only when Custom UI assets are configured.",
+                      "description": "Additional Content Security Policy source expressions for Custom UI assets. These values are applied to the hosted sign-in page only when Custom UI assets are configured.",
+                      "x-logto-self-hosted-parity": true,
                       "properties": {
                         "scriptSrc": {
                           "description": "Additional source expressions appended to the `script-src` directive for scripts loaded by Custom UI assets. HTTPS sources are supported. HTTP localhost sources are allowed only outside production."
@@ -99,7 +101,7 @@
                       "description": "Define email restriction policies for registering or linking email addresses.",
                       "properties": {
                         "blockDisposableAddresses": {
-                          "description": "Cloud only.  Whether to block disposable email addresses. Once enabled, Logto will check the email domain against a list of known disposable email domains. If the domain is found in the list, the email address will be blocked."
+                          "description": "Whether to block disposable email addresses. Once enabled, Logto checks the email domain against a list of known disposable email domains and blocks matches."
                         },
                         "blockSubaddressing": {
                           "description": "Whether to block sub-addresses. (E.g., example+shopping@test.com)"
@@ -144,7 +146,8 @@
                     "description": "Control the language detection policy for the sign-in page."
                   },
                   "hideLogtoBranding": {
-                    "description": "Cloud only. Whether to hide the Logto branding on hosted sign-in pages."
+                    "description": "Whether to hide the Logto branding on hosted sign-in pages.",
+                    "x-logto-self-hosted-parity": true
                   },
                   "signIn": {
                     "description": "Sign-in method settings"
@@ -170,7 +173,8 @@
                     "description": "Custom content to display on experience flow pages. the page pathname will be the config key, the content will be the config value."
                   },
                   "customUiCsp": {
-                    "description": "Cloud only. Configure additional Content Security Policy source expressions for Custom UI assets. These values are applied to the hosted sign-in page only when Custom UI assets are configured.",
+                    "description": "Configure additional Content Security Policy source expressions for Custom UI assets. These values are applied to the hosted sign-in page only when Custom UI assets are configured.",
+                    "x-logto-self-hosted-parity": true,
                     "properties": {
                       "scriptSrc": {
                         "description": "Additional source expressions to append to the `script-src` directive for scripts loaded by Custom UI assets. Use HTTPS sources; HTTP localhost sources are allowed only outside production."
@@ -216,7 +220,7 @@
                     "description": "Define email restriction policies for registering or linking email addresses.",
                     "properties": {
                       "blockDisposableAddresses": {
-                        "description": "Cloud only.  Whether to block disposable email addresses. Once enabled, Logto will check the email domain against a list of known disposable email domains. If the domain is found in the list, the email address will be blocked."
+                        "description": "Whether to block disposable email addresses. Once enabled, Logto checks the email domain against a list of known disposable email domains and blocks matches."
                       },
                       "blockSubaddressing": {
                         "description": "Whether to block sub-addresses. (E.g., example+shopping@test.com)"

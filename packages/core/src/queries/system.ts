@@ -1,6 +1,7 @@
-import { type SystemKey, Systems } from '@logto/schemas';
+import { type systemGuards, type SystemKey, Systems } from '@logto/schemas';
 import type { CommonQueryMethods } from '@silverhand/slonik';
 import { sql } from '@silverhand/slonik';
+import { type z } from 'zod';
 
 import { convertToIdentifiers } from '#src/utils/sql.js';
 
@@ -13,7 +14,19 @@ export const createSystemsQuery = (pool: CommonQueryMethods) => {
       where ${fields.key} = ${key}
     `);
 
+  const upsertSystemByKey = async <T extends SystemKey>(
+    key: T,
+    value: z.infer<(typeof systemGuards)[T]>
+  ) =>
+    pool.one<Record<string, unknown>>(sql`
+      insert into ${table} (${fields.key}, ${fields.value})
+      values (${key}, ${sql.jsonb(value)})
+      on conflict (${fields.key}) do update set ${fields.value} = excluded.${fields.value}
+      returning ${fields.value}
+    `);
+
   return {
     findSystemByKey,
+    upsertSystemByKey,
   };
 };

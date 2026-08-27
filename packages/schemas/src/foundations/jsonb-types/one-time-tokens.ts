@@ -6,6 +6,8 @@ import { eventGuard, type InteractionEvent } from '../../types/interaction-event
 export type OneTimeTokenContext = {
   // Used for organization JIT provisioning.
   jitOrganizationIds?: string[];
+  // Links a console invitation to its single-use authentication token.
+  invitationId?: string;
   // Restricts this one-time token to a specific interaction event.
   interactionEvent?: InteractionEvent;
 };
@@ -13,6 +15,7 @@ export type OneTimeTokenContext = {
 export const oneTimeTokenContextGuard = z
   .object({
     jitOrganizationIds: z.string().array(),
+    invitationId: z.string(),
     interactionEvent: eventGuard,
   })
   .partial() satisfies ToZodObject<OneTimeTokenContext>;

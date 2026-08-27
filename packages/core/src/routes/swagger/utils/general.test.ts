@@ -7,14 +7,22 @@ import {
   devFeatureSchemaExtension,
   removeDevFeatureSchemaProperties,
   removeUnnecessaryOperations,
+  selfHostedParitySchemaExtension,
 } from './general.js';
 
 const originalIsCloud = EnvSet.values.isCloud;
 const originalIsDevFeaturesEnabled = EnvSet.values.isDevFeaturesEnabled;
+const originalIsSelfHostedParityEnabled = EnvSet.values.isSelfHostedParityEnabled;
 
 const setDevFeaturesEnabled = (isDevFeaturesEnabled: boolean) => {
   // eslint-disable-next-line @silverhand/fp/no-mutation -- Tests need to cover both dev-feature states.
   (EnvSet.values as { isDevFeaturesEnabled: boolean }).isDevFeaturesEnabled = isDevFeaturesEnabled;
+};
+
+const setSelfHostedParityEnabled = (isSelfHostedParityEnabled: boolean) => {
+  // eslint-disable-next-line @silverhand/fp/no-mutation -- Tests cover both parity states.
+  (EnvSet.values as { isSelfHostedParityEnabled: boolean }).isSelfHostedParityEnabled =
+    isSelfHostedParityEnabled;
 };
 
 const createDevFeatureBooleanSchema = () =>
@@ -70,6 +78,11 @@ const createDevFeatureOperationDocument = (): DeepPartial<OpenAPIV3.Document> =>
         tags: ['Dev feature'],
       },
     },
+    '/api/parity': {
+      get: {
+        tags: ['Dev feature', 'Self-hosted parity'],
+      },
+    },
   },
 });
 
@@ -77,6 +90,7 @@ describe('swagger general utils', () => {
   afterEach(() => {
     Reflect.set(EnvSet.values, 'isCloud', originalIsCloud);
     setDevFeaturesEnabled(originalIsDevFeaturesEnabled);
+    setSelfHostedParityEnabled(originalIsSelfHostedParityEnabled);
   });
 
   it('should remove dev feature schema properties when dev features are disabled', () => {
@@ -156,5 +170,50 @@ describe('swagger general utils', () => {
       },
     });
     expect(document.paths).not.toHaveProperty('/api/dev');
+    expect(document.paths).not.toHaveProperty('/api/parity');
+  });
+
+  it('should expose only explicitly tagged parity operations when parity is enabled', () => {
+    Reflect.set(EnvSet.values, 'isCloud', false);
+    setDevFeaturesEnabled(false);
+    setSelfHostedParityEnabled(true);
+
+    const document = removeUnnecessaryOperations(createDevFeatureOperationDocument());
+
+    expect(document.paths).toHaveProperty('/api/stable');
+    expect(document.paths).not.toHaveProperty('/api/dev');
+    expect(document.paths).toHaveProperty('/api/parity');
+  });
+
+  it('should prune parity schema properties when parity is disabled', () => {
+    Reflect.set(EnvSet.values, 'isCloud', false);
+    setSelfHostedParityEnabled(false);
+    const document = {
+      paths: {
+        '/api/mock': {
+          patch: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      parity: {
+                        type: 'boolean',
+                        [selfHostedParitySchemaExtension]: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    } as unknown as DeepPartial<OpenAPIV3.Document>;
+
+    removeDevFeatureSchemaProperties(document);
+
+    expect(JSON.stringify(document)).not.toContain('parity');
   });
 });

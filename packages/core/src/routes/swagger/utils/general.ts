@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- Swagger pruning rules are kept together to make feature exposure auditable. */
 import assert from 'node:assert';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -18,10 +19,14 @@ const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slic
 const cloudOnlyTag = 'Cloud only';
 /** The tag name is used in the supplement document to indicate that the corresponding API operation is a dev feature. */
 export const devFeatureTag = 'Dev feature';
+/** The tag used for operations that are available to Cloud or explicit self-hosted parity mode. */
+const selfHostedParityTag = 'Self-hosted parity';
 /** The OpenAPI schema extension that hides a schema property when dev features are disabled. */
 export const devFeatureSchemaExtension = 'x-logto-dev-feature';
+/** The OpenAPI extension that hides a schema property unless Cloud or self-hosted parity is active. */
+export const selfHostedParitySchemaExtension = 'x-logto-self-hosted-parity';
 
-const reservedTags = new Set([cloudOnlyTag, devFeatureTag]);
+const reservedTags = new Set([cloudOnlyTag, devFeatureTag, selfHostedParityTag]);
 
 /**
  * Get the root component name from the given absolute path.
@@ -147,7 +152,7 @@ const validateSupplementPaths = (
           !operation.tags.every((tag) => typeof tag === 'string' && reservedTags.has(tag))
         ) {
           throw new TypeError(
-            `Cannot use \`tags\` in supplement document on path \`${path}\` and operation \`${method}\` except for tag \`${cloudOnlyTag}\` and \`${devFeatureTag}\`. Define tags in the document root instead.`
+            `Cannot use \`tags\` in supplement document on path \`${path}\` and operation \`${method}\` except for reserved feature tags. Define regular tags in the document root instead.`
           );
         }
       }
@@ -272,7 +277,7 @@ export const validateSwaggerDocument = (document: OpenAPIV3.Document) => {
 export const removeUnnecessaryOperations = (
   document: DeepPartial<OpenAPIV3.Document>
 ): DeepPartial<OpenAPIV3.Document> => {
-  const { isCloud, isDevFeaturesEnabled } = EnvSet.values;
+  const { isCloud, isDevFeaturesEnabled, isSelfHostedParityEnabled } = EnvSet.values;
 
   if ((isCloud && isDevFeaturesEnabled) || !document.paths) {
     return document;
@@ -285,11 +290,22 @@ export const removeUnnecessaryOperations = (
 
     for (const method of Object.values(OpenAPIV3.HttpMethods)) {
       const tags = pathItem[method]?.tags;
-      const shouldRemoveCloudOnlyOperation = !isCloud && tags?.includes(cloudOnlyTag) === true;
+      const isSelfHostedParityOperation = tags?.includes(selfHostedParityTag) === true;
+      const isSelfHostedParityAvailable = isCloud || isSelfHostedParityEnabled;
+      const shouldRemoveCloudOnlyOperation =
+        !isCloud && !isSelfHostedParityOperation && tags?.includes(cloudOnlyTag) === true;
+      const shouldRemoveSelfHostedParityOperation =
+        isSelfHostedParityOperation && !isSelfHostedParityAvailable;
       const shouldRemoveDevFeatureOperation =
-        !isDevFeaturesEnabled && tags?.includes(devFeatureTag) === true;
+        !isDevFeaturesEnabled &&
+        !(isSelfHostedParityOperation && isSelfHostedParityEnabled) &&
+        tags?.includes(devFeatureTag) === true;
 
-      if (shouldRemoveCloudOnlyOperation || shouldRemoveDevFeatureOperation) {
+      if (
+        shouldRemoveCloudOnlyOperation ||
+        shouldRemoveSelfHostedParityOperation ||
+        shouldRemoveDevFeatureOperation
+      ) {
         // eslint-disable-next-line @silverhand/fp/no-delete, @typescript-eslint/no-dynamic-delete -- intended
         delete pathItem[method];
       }
@@ -327,19 +343,29 @@ const removeRequiredProperty = (
   schema.required = nextRequired;
 };
 
-const removeDevFeatureSchemaProperty = (
+// eslint-disable-next-line complexity -- Two feature markers must preserve Cloud and parity compatibility combinations.
+const removeFeatureSchemaProperty = (
   schema: Record<string, unknown>,
   properties: Record<string, unknown>,
   propertyName: string,
   propertySchema: unknown
 ) => {
   const isMarked = isRecord(propertySchema) && propertySchema[devFeatureSchemaExtension] === true;
+  const isSelfHostedParityMarked =
+    isRecord(propertySchema) && propertySchema[selfHostedParitySchemaExtension] === true;
 
-  if (!isMarked) {
+  if (!isMarked && !isSelfHostedParityMarked) {
     return false;
   }
 
-  if (!EnvSet.values.isDevFeaturesEnabled) {
+  const { isCloud, isDevFeaturesEnabled, isSelfHostedParityEnabled } = EnvSet.values;
+  const shouldRemove =
+    (isMarked &&
+      !isDevFeaturesEnabled &&
+      !(isSelfHostedParityMarked && isSelfHostedParityEnabled)) ||
+    (isSelfHostedParityMarked && !isCloud && !isSelfHostedParityEnabled);
+
+  if (shouldRemove) {
     Reflect.deleteProperty(properties, propertyName);
     removeRequiredProperty(schema, schema.required, propertyName);
 
@@ -348,6 +374,7 @@ const removeDevFeatureSchemaProperty = (
 
   if (isRecord(propertySchema)) {
     Reflect.deleteProperty(propertySchema, devFeatureSchemaExtension);
+    Reflect.deleteProperty(propertySchema, selfHostedParitySchemaExtension);
   }
 
   return false;
@@ -381,13 +408,14 @@ export const removeDevFeatureSchemaProperties = (value: unknown) => {
 
   if (isRecord(properties)) {
     for (const [propertyName, propertySchema] of Object.entries(properties)) {
-      if (removeDevFeatureSchemaProperty(schema, properties, propertyName, propertySchema)) {
+      if (removeFeatureSchemaProperty(schema, properties, propertyName, propertySchema)) {
         continue;
       }
     }
   }
 
   Reflect.deleteProperty(schema, devFeatureSchemaExtension);
+  Reflect.deleteProperty(schema, selfHostedParitySchemaExtension);
 
   for (const item of Object.values(schema)) {
     removeDevFeatureSchemaProperties(item);
@@ -433,3 +461,4 @@ export const isManagementApiRouter = ({ stack }: Router) =>
   stack
     .filter(({ path }) => !path.includes('.*'))
     .some(({ stack }) => stack.some((function_) => isKoaAuthMiddleware(function_)));
+/* eslint-enable max-lines */

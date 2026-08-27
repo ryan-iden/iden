@@ -1,7 +1,7 @@
 {
   "tags": [
     {
-      "name": "Cloud only"
+      "name": "Self-hosted parity"
     },
     {
       "name": "Dev feature"
@@ -10,6 +10,7 @@
   "paths": {
     "/api/sso-connectors/{id}/idp-initiated-auth-config": {
       "get": {
+        "tags": ["Dev feature", "Self-hosted parity"],
         "summary": "Get IdP initiated auth config",
         "description": "Get the IdP initiated authentication config of the given SAML SSO connector.",
         "responses": {
@@ -22,6 +23,7 @@
         }
       },
       "put": {
+        "tags": ["Dev feature", "Self-hosted parity"],
         "summary": "Set IdP initiated auth config",
         "description": "Set IdP initiated authentication config for a given SAML SSO connector. Any existing IdP initiated auth config will be overwritten.",
         "requestBody": {
@@ -62,6 +64,7 @@
         }
       },
       "delete": {
+        "tags": ["Dev feature", "Self-hosted parity"],
         "summary": "Delete IdP initiated auth config",
         "description": "Delete the IdP initiated authentication config of the given SAML SSO connector.",
         "responses": {

@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 
+import { isCloud } from '@/consts/env';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
 
 const useApplicationsUsage = () => {
@@ -7,20 +8,21 @@ const useApplicationsUsage = () => {
     useContext(SubscriptionDataContext);
 
   const hasMachineToMachineAppsReachedLimit =
-    hasReachedSubscriptionQuotaLimit('machineToMachineLimit');
+    isCloud && hasReachedSubscriptionQuotaLimit('machineToMachineLimit');
 
   const hasMachineToMachineAppsSurpassedLimit =
-    hasSurpassedSubscriptionQuotaLimit('machineToMachineLimit');
+    isCloud && hasSurpassedSubscriptionQuotaLimit('machineToMachineLimit');
 
-  const hasThirdPartyAppsReachedLimit = hasReachedSubscriptionQuotaLimit(
-    'thirdPartyApplicationsLimit'
-  );
+  const hasThirdPartyAppsReachedLimit =
+    isCloud && hasReachedSubscriptionQuotaLimit('thirdPartyApplicationsLimit');
 
-  const hasAppsReachedLimit = hasReachedSubscriptionQuotaLimit('applicationsLimit');
+  const hasAppsReachedLimit = isCloud && hasReachedSubscriptionQuotaLimit('applicationsLimit');
 
-  const hasSamlAppsReachedLimit = hasReachedSubscriptionQuotaLimit('samlApplicationsLimit');
+  const hasSamlAppsReachedLimit =
+    isCloud && hasReachedSubscriptionQuotaLimit('samlApplicationsLimit');
 
-  const hasSamlAppsSurpassedLimit = hasSurpassedSubscriptionQuotaLimit('samlApplicationsLimit');
+  const hasSamlAppsSurpassedLimit =
+    isCloud && hasSurpassedSubscriptionQuotaLimit('samlApplicationsLimit');
 
   return {
     hasMachineToMachineAppsReachedLimit,

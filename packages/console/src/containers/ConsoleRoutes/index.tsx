@@ -6,7 +6,12 @@ import { SWRConfig } from 'swr';
 
 import AppLoading from '@/components/AppLoading';
 import RedirectToAccountCenter from '@/components/RedirectToAccountCenter';
-import { isCloud, isDevFeaturesEnabled, isProduction } from '@/consts/env';
+import {
+  isCloud,
+  isDevFeaturesEnabled,
+  isProduction,
+  isTenantManagementEnabled,
+} from '@/consts/env';
 import AppBoundary from '@/containers/AppBoundary';
 import AppContent, { RedirectToFirstItem } from '@/containers/AppContent';
 import ConsoleContent from '@/containers/ConsoleContent';
@@ -45,7 +50,9 @@ export function ConsoleRoutes() {
          * navigate to the root path in frontend. In this case, we redirect it to the OSS
          * console path to trigger the console routes.
          */}
-        {!isCloud && <Route path="/" element={<Navigate to={ossConsolePath} />} />}
+        {!isTenantManagementEnabled && (
+          <Route path="/" element={<Navigate to={ossConsolePath} />} />
+        )}
         <Route path="/:tenantId" element={<Layout />}>
           <Route path="callback" element={<Callback />} />
           <Route path="welcome" element={<Welcome />} />

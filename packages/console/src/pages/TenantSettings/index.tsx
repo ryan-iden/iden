@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { logtoCloud, TenantSettingsTabs } from '@/consts';
+import { isCloud } from '@/consts/env';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import CardTitle from '@/ds-components/CardTitle';
@@ -27,23 +28,25 @@ function TenantSettings() {
         className={styles.cardTitle}
         title="tenants.title"
         subtitle="tenants.description"
-        learnMoreLink={{ href: logtoCloud }}
+        learnMoreLink={isCloud ? { href: logtoCloud } : undefined}
       />
       {isDevTenant && <DevTenantNotification className={styles.notification} />}
       <TabNav className={styles.tabs}>
         <TabNavItem href={`/tenant-settings/${TenantSettingsTabs.Settings}`}>
           <DynamicT forKey="tenants.tabs.settings" />
         </TabNavItem>
-        <TabNavItem href={`/tenant-settings/${TenantSettingsTabs.Domains}`}>
-          <DynamicT forKey="tenants.tabs.domains" />
-        </TabNavItem>
+        {isCloud && (
+          <TabNavItem href={`/tenant-settings/${TenantSettingsTabs.Domains}`}>
+            <DynamicT forKey="tenants.tabs.domains" />
+          </TabNavItem>
+        )}
         <TabNavItem href={`/tenant-settings/${TenantSettingsTabs.OidcConfigs}`}>
           <DynamicT forKey="tenants.tabs.oidc_configs" />
         </TabNavItem>
         <TabNavItem href={`/tenant-settings/${TenantSettingsTabs.Members}`}>
           <DynamicT forKey="tenants.tabs.members" />
         </TabNavItem>
-        {!isDevTenant && canManageTenant && (
+        {isCloud && !isDevTenant && canManageTenant && (
           <>
             <TabNavItem href={`/tenant-settings/${TenantSettingsTabs.Subscription}`}>
               <DynamicT forKey="tenants.tabs.subscription" />

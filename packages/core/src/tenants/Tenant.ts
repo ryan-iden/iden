@@ -35,7 +35,9 @@ import initOidc from '#src/oidc/init.js';
 import { mountCallbackRouter } from '#src/routes/callback.js';
 import initApis, { initPublicWellKnownApis } from '#src/routes/init.js';
 import initMeApis from '#src/routes-me/init.js';
+import { mountSelfHostedParityApis } from '#src/routes-self-hosted/mount.js';
 import BasicSentinel from '#src/sentinel/basic-sentinel.js';
+import { ensureSelfHostedEmailConnector } from '#src/services/ensure-self-hosted-email-connector.js';
 
 import { redisCache } from '../caches/index.js';
 import { SubscriptionLibrary } from '../libraries/subscription.js';
@@ -76,7 +78,9 @@ export default class Tenant implements TenantContext {
       // Custom endpoint is used for building OIDC issuer URL when the request is a custom domain
       await envSet.load(customDomain);
 
-      return new Tenant(envSet, id, customDomain, new WellKnownCache(id, redisCache));
+      const tenant = new Tenant(envSet, id, customDomain, new WellKnownCache(id, redisCache));
+      await ensureSelfHostedEmailConnector(tenant.queries);
+      return tenant;
     } catch (error) {
       consoleLog.error('Failed to create tenant:', id, error);
       throw error;
@@ -105,7 +109,7 @@ export default class Tenant implements TenantContext {
     public readonly wellKnownCache: WellKnownCache,
     public readonly queries = new Queries(envSet.pool, wellKnownCache),
     public readonly logtoConfigs = createLogtoConfigLibrary(queries),
-    public readonly cloudConnection = createCloudConnectionLibrary(logtoConfigs),
+    public readonly cloudConnection = createCloudConnectionLibrary(logtoConfigs, id),
     public readonly connectors = createConnectorLibrary(queries, cloudConnection),
     public readonly subscription = new SubscriptionLibrary(
       id,
@@ -168,6 +172,9 @@ export default class Tenant implements TenantContext {
 
     // Mount global well-known APIs
     app.use(mount('/.well-known', initPublicWellKnownApis(tenantContext)));
+
+    // Mount the self-hosted control plane before Management API routes when explicitly enabled.
+    mountSelfHostedParityApis(app, tenantContext);
 
     // Mount APIs
     app.use(mount('/api', initApis(tenantContext)));
