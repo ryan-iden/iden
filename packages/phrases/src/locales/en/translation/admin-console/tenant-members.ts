@@ -40,6 +40,8 @@ const tenant_members = {
   delete_user_confirm: 'Are you sure you want to remove this user from this tenant?',
   assign_admin_confirm:
     'Are you sure you want to make the selected user(s) admin? Granting admin access will give the user(s) the following permissions.<ul><li>Change the tenant billing plan</li><li>Add or remove collaborators</li><li>Delete the tenant</li></ul>',
+  assign_admin_confirm_self_hosted:
+    'Are you sure you want to make the selected user(s) admin? Granting admin access will give the user(s) the following permissions.<ul><li>Add or remove collaborators</li><li>Delete the tenant</li></ul>',
   revoke_invitation_confirm: 'Are you sure you want to revoke this invitation?',
   delete_invitation_confirm: 'Are you sure you want to delete this invitation record?',
   messages: {

@@ -41,11 +41,6 @@ const paywall = {
     '{{count, number}}の<planName/>ロールあたりの許可制限に達しました。追加のロールと権限を追加するにはプランをアップグレードしてください。<a>お問い合わせ</a>は何かお手伝いが必要な場合はお気軽にどうぞ.',
   scopes_per_role_other:
     '{{count, number}}個の<planName/>制限のロールあたりの許可に達しました。追加のロールおよび権限を追加するにはプランをアップグレードしてください。サポートが必要な場合は、お気軽に<a>お問い合わせ</a>ください。',
-  saml_applications_oss:
-    '追加の SAML アプリは Logto エンタープライズプランで利用可能です。サポートが必要な場合は、お問い合わせください。',
-  saml_applications_oss_limit_notice:
-    'オープンソース版のインスタンスでは、最大 {{limit}} 個の SAML アプリケーションを利用できます。追加の選択肢については、Logto Cloud を利用するか、お問い合わせください。',
-  logto_pricing_button_text: 'Logto クラウド価格設定',
   saml_applications:
     '追加の SAML アプリは Logto エンタープライズプランで利用可能です。サポートが必要な場合は、お問い合わせください。',
   saml_applications_add_on:

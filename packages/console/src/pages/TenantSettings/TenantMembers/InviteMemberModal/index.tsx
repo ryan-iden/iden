@@ -8,6 +8,7 @@ import ReactModal from 'react-modal';
 
 import { useAuthedCloudApi } from '@/cloud/hooks/use-cloud-api';
 import AddOnNoticeFooter from '@/components/AddOnNoticeFooter';
+import { isCloud } from '@/consts/env';
 import { addOnPricingExplanationLink } from '@/consts/external-links';
 import { latestProPlanId, tenantMembersAddOnUnitPrice } from '@/consts/subscriptions';
 import { SubscriptionDataContext } from '@/contexts/SubscriptionDataProvider';
@@ -88,7 +89,11 @@ function InviteMemberModal({ isOpen, onClose }: Props) {
       const [result] = await show({
         ModalContent: () => (
           <Trans components={{ ul: <ul className={styles.list} />, li: <li /> }}>
-            {t('tenant_members.assign_admin_confirm')}
+            {t(
+              isCloud
+                ? 'tenant_members.assign_admin_confirm'
+                : 'tenant_members.assign_admin_confirm_self_hosted'
+            )}
           </Trans>
         ),
         confirmButtonText: 'general.confirm',
@@ -126,13 +131,14 @@ function InviteMemberModal({ isOpen, onClose }: Props) {
     >
       <ModalLayout
         size="large"
-        title="tenant_members.invite_modal.title"
-        paywall={conditional(!isPaidTenant && latestProPlanId)}
-        hasAddOnTag={isPaidTenant && hasTenantMembersReachedLimit}
+        title={isCloud ? 'tenant_members.invite_modal.title' : 'tenant_members.invite_members'}
+        paywall={conditional(isCloud && !isPaidTenant && latestProPlanId)}
+        hasAddOnTag={isCloud && isPaidTenant && hasTenantMembersReachedLimit}
         subtitle="tenant_members.invite_modal.subtitle"
         footer={
           conditional(
-            hasTenantMembersReachedLimit &&
+            isCloud &&
+              hasTenantMembersReachedLimit &&
               // Just in case the enterprise plan has reached the resource limit, we still need to show charge notice.
               isPaidTenant &&
               !tenantMembersUpsellNoticeAcknowledged && (
