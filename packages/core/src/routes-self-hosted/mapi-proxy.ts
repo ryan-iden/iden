@@ -4,6 +4,7 @@ import {
   getManagementApiResourceIndicator,
   getMapiProxyM2mApp,
   getTenantOrganizationId,
+  PredefinedScope,
   TenantScope,
 } from '@logto/schemas';
 import { appendPath } from '@silverhand/essentials';
@@ -49,6 +50,7 @@ const getProxyAccessToken = async (tenant: TenantContext, tenantId: string) => {
           client_id: application.id,
           client_secret: application.secret,
           resource: getManagementApiResourceIndicator(tenantId),
+          scope: PredefinedScope.All,
         },
       })
       .json()

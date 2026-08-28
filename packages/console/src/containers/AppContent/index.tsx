@@ -1,6 +1,6 @@
-import { conditional, joinPath } from '@silverhand/essentials';
+import { conditional } from '@silverhand/essentials';
 import { useContext, useRef } from 'react';
-import { Navigate, Outlet, useParams } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { type SubscriptionCountBasedUsage } from '@/cloud/types/router';
 import AppLoading from '@/components/AppLoading';
@@ -14,6 +14,7 @@ import {
 } from '@/contexts/SubscriptionDataProvider/utils';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import useScroll from '@/hooks/use-scroll';
+import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useUserPreferences from '@/hooks/use-user-preferences';
 import { shouldEnforcePaywallInUI } from '@/utils/paywall';
 
@@ -90,16 +91,12 @@ export default function AppContent() {
 }
 
 export function RedirectToFirstItem() {
-  const { tenantId } = useParams();
   const { firstItem } = useSidebarMenuItems();
+  const { getTo } = useTenantPathname();
 
   if (!firstItem) {
     throw new Error('First sidebar item not found');
   }
 
-  if (!tenantId) {
-    throw new Error('Tenant ID not found');
-  }
-
-  return <Navigate replace to={joinPath(tenantId, getPath(firstItem.title))} />;
+  return <Navigate replace to={getTo('/' + getPath(firstItem.title))} />;
 }

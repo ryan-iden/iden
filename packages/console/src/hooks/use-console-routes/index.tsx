@@ -1,9 +1,10 @@
-import { condArray, joinPath } from '@silverhand/essentials';
+import { condArray } from '@silverhand/essentials';
 import { useMemo } from 'react';
-import { Navigate, useParams, type RouteObject } from 'react-router-dom';
+import { Navigate, type RouteObject } from 'react-router-dom';
 import { safeLazy } from 'react-safe-lazy';
 
 import useIsActionsEnabled from '@/hooks/use-is-actions-enabled';
+import useTenantPathname from '@/hooks/use-tenant-pathname';
 import NotFound from '@/pages/NotFound';
 
 import { actions } from './routes/actions';
@@ -29,7 +30,7 @@ const GetStarted = safeLazy(async () => import('@/pages/GetStarted'));
 export const useConsoleRoutes = () => {
   const tenantSettings = useTenantSettings();
   const isActionsEnabled = useIsActionsEnabled();
-  const { tenantId } = useParams();
+  const { getTo } = useTenantPathname();
 
   const routeObjects: RouteObject[] = useMemo(
     () =>
@@ -54,17 +55,12 @@ export const useConsoleRoutes = () => {
         {
           path: 'signing-keys',
           // Deprecated page, redirect to oidc-configs in the tenant settings page.
-          element: (
-            <Navigate
-              replace
-              to={tenantId ? joinPath(tenantId, 'tenant-settings/oidc-configs') : '/'}
-            />
-          ),
+          element: <Navigate replace to={getTo('/tenant-settings/oidc-configs')} />,
         },
         tenantSettings,
         customizeJwt
       ),
-    [isActionsEnabled, tenantId, tenantSettings]
+    [getTo, isActionsEnabled, tenantSettings]
   );
 
   return routeObjects;
