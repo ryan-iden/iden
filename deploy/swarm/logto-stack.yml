@@ -7,18 +7,20 @@ services:
       - --log.level=INFO
       - --ping=true
       - --entrypoints.web.address=:80
-      - --entrypoints.web.http.underscoreheadersstrategy=delete
+      - --entrypoints.web.http.aliasheadersstrategy=delete
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      - --entrypoints.web.http.redirections.entrypoint.priority=1
       - --entrypoints.websecure.address=:443
-      - --entrypoints.websecure.http.underscoreheadersstrategy=delete
+      - --entrypoints.websecure.http.aliasheadersstrategy=delete
+      - --entrypoints.adminsecure.address=:${LOGTO_ADMIN_PORT:-30443}
+      - --entrypoints.adminsecure.http.aliasheadersstrategy=delete
       - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.exposedbydefault=false
       - --providers.swarm.network=logto-public
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --providers.file.directory=/dynamic
+      - --providers.file.watch=true
     ports:
       - target: 80
         published: 80
@@ -28,14 +30,23 @@ services:
         published: 443
         protocol: tcp
         mode: host
+      - target: ${LOGTO_ADMIN_PORT:-30443}
+        published: ${LOGTO_ADMIN_PORT:-30443}
+        protocol: tcp
+        mode: host
     volumes:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         read_only: true
       - type: volume
-        source: traefik-acme
-        target: /letsencrypt
+        source: acme-state
+        target: /var/lib/lego
+        read_only: true
+      - type: volume
+        source: traefik-dynamic
+        target: /dynamic
+        read_only: true
     networks:
       - public
     healthcheck:
@@ -68,6 +79,116 @@ services:
           memory: 64M
         limits:
           memory: 256M
+
+  acme-web:
+    image: nginx:1.29-alpine
+    volumes:
+      - type: volume
+        source: acme-challenges
+        target: /usr/share/nginx/html
+        read_only: true
+    networks:
+      - public
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == ${LOGTO_PLACEMENT_HOSTNAME}
+      labels:
+        - traefik.enable=true
+        - traefik.swarm.network=logto-public
+        - traefik.http.routers.logto-acme.rule=PathPrefix(`/.well-known/acme-challenge/`)
+        - traefik.http.routers.logto-acme.entrypoints=web
+        - traefik.http.routers.logto-acme.priority=10000
+        - traefik.http.routers.logto-acme.service=logto-acme
+        - traefik.http.services.logto-acme.loadbalancer.server.port=80
+      restart_policy:
+        condition: any
+        delay: 5s
+      resources:
+        reservations:
+          memory: 16M
+        limits:
+          memory: 64M
+
+  acme-renewer:
+    image: goacme/lego:v5.4.0
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        mkdir -p /var/www/acme/.well-known/acme-challenge /var/lib/lego/certificates /dynamic
+        while true; do
+          /lego run \
+            --accept-tos \
+            --email "$${ACME_EMAIL}" \
+            --domains "$${LOGTO_HOST}" \
+            --http \
+            --http.webroot /var/www/acme \
+            --path /var/lib/lego \
+            --profile shortlived \
+            --renew-days 3 \
+            --no-random-sleep
+          config=/dynamic/tls.yml.tmp
+          printf '%s\n' \
+            'tls:' \
+            '  stores:' \
+            '    default:' \
+            '      defaultCertificate:' \
+            "        certFile: /var/lib/lego/certificates/$${LOGTO_HOST}.crt" \
+            "        keyFile: /var/lib/lego/certificates/$${LOGTO_HOST}.key" \
+            '  certificates:' \
+            "    - certFile: /var/lib/lego/certificates/$${LOGTO_HOST}.crt" \
+            "      keyFile: /var/lib/lego/certificates/$${LOGTO_HOST}.key" \
+            > "$${config}"
+          mv "$${config}" /dynamic/tls.yml
+          sleep 12h
+        done
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL}
+      LOGTO_HOST: ${LOGTO_HOST}
+    volumes:
+      - type: volume
+        source: acme-state
+        target: /var/lib/lego
+      - type: volume
+        source: acme-challenges
+        target: /var/www/acme
+      - type: volume
+        source: traefik-dynamic
+        target: /dynamic
+    networks:
+      - public
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "test -s /var/lib/lego/certificates/$${LOGTO_HOST}.crt -a -s /var/lib/lego/certificates/$${LOGTO_HOST}.key",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 3m
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == ${LOGTO_PLACEMENT_HOSTNAME}
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 20
+        window: 30m
+      resources:
+        reservations:
+          memory: 16M
+        limits:
+          memory: 128M
 
   postgres:
     image: postgres:17-alpine
@@ -126,7 +247,7 @@ services:
     environment:
       TRUST_PROXY_HEADER: "1"
       ENDPOINT: https://${LOGTO_HOST}
-      ADMIN_ENDPOINT: https://${LOGTO_ADMIN_HOST}
+      ADMIN_ENDPOINT: https://${LOGTO_ADMIN_HOST}:${LOGTO_ADMIN_PORT:-30443}
       SELF_HOSTED_PARITY_ENABLED: "true"
       SELF_HOSTED_DATA_PATH: /var/lib/logto
       PROTECTED_APP_GATEWAY_DOMAIN: ${PROTECTED_APP_GATEWAY_DOMAIN}
@@ -158,13 +279,11 @@ services:
         - traefik.http.routers.logto.rule=Host(`${LOGTO_HOST}`)
         - traefik.http.routers.logto.entrypoints=websecure
         - traefik.http.routers.logto.tls=true
-        - traefik.http.routers.logto.tls.certresolver=letsencrypt
         - traefik.http.routers.logto.service=logto
         - traefik.http.services.logto.loadbalancer.server.port=3001
         - traefik.http.routers.logto-admin.rule=Host(`${LOGTO_ADMIN_HOST}`)
-        - traefik.http.routers.logto-admin.entrypoints=websecure
+        - traefik.http.routers.logto-admin.entrypoints=adminsecure
         - traefik.http.routers.logto-admin.tls=true
-        - traefik.http.routers.logto-admin.tls.certresolver=letsencrypt
         - traefik.http.routers.logto-admin.service=logto-admin
         - traefik.http.services.logto-admin.loadbalancer.server.port=3002
       update_config:
@@ -197,7 +316,9 @@ networks:
 volumes:
   logto-data:
   postgres-data:
-  traefik-acme:
+  acme-state:
+  acme-challenges:
+  traefik-dynamic:
 
 secrets:
   logto_postgres_password:

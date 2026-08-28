@@ -36,16 +36,17 @@ docker stack deploy \
   --with-registry-auth \
   "$stack_name"
 
-services=(traefik postgres app)
+services=(traefik acme-web acme-renewer postgres app)
 deadline=$((SECONDS + timeout_seconds))
 
 while ((SECONDS < deadline)); do
   all_ready=true
 
   for service in "${services[@]}"; do
+    service_name="${stack_name}_${service}"
     replicas="$(
       docker service ls \
-        --filter "name=${stack_name}_${service}" \
+        --filter "name=${service_name}" \
         --format '{{.Replicas}}'
     )"
 
@@ -53,6 +54,24 @@ while ((SECONDS < deadline)); do
       all_ready=false
       break
     fi
+
+    update_state="$(
+      docker service inspect "$service_name" \
+        --format '{{if .UpdateStatus}}{{.UpdateStatus.State}}{{else}}none{{end}}'
+    )"
+
+    case "$update_state" in
+      none | completed) ;;
+      paused | rollback_*)
+        echo "Service ${service_name} failed to update: ${update_state}" >&2
+        docker service ps "$service_name" --no-trunc >&2 || true
+        exit 1
+        ;;
+      *)
+        all_ready=false
+        break
+        ;;
+    esac
   done
 
   if [[ "$all_ready" == 'true' ]]; then

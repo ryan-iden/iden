@@ -112,9 +112,11 @@ jobs:
       STACK_NAME: ${{ vars.SWARM_STACK_NAME || 'logto' }}
       LOGTO_HOST: ${{ vars.LOGTO_HOST }}
       LOGTO_ADMIN_HOST: ${{ vars.LOGTO_ADMIN_HOST }}
+      LOGTO_ADMIN_PORT: ${{ vars.LOGTO_ADMIN_PORT || '30443' }}
       LOGTO_PLACEMENT_HOSTNAME: ${{ vars.LOGTO_PLACEMENT_HOSTNAME }}
       TRAEFIK_VERSION: ${{ vars.TRAEFIK_VERSION || 'v3.7.12' }}
       PROTECTED_APP_GATEWAY_DOMAIN: ${{ vars.PROTECTED_APP_GATEWAY_DOMAIN }}
+      ACME_EMAIL: ${{ vars.ACME_EMAIL }}
 
     steps:
       - uses: actions/checkout@v7
@@ -129,8 +131,10 @@ jobs:
           : "${SWARM_DEPLOY_USER:?Set SWARM_DEPLOY_USER in the production environment}"
           : "${LOGTO_HOST:?Set LOGTO_HOST in the production environment}"
           : "${LOGTO_ADMIN_HOST:?Set LOGTO_ADMIN_HOST in the production environment}"
+          : "${LOGTO_ADMIN_PORT:?Set LOGTO_ADMIN_PORT in the production environment}"
           : "${LOGTO_PLACEMENT_HOSTNAME:?Set LOGTO_PLACEMENT_HOSTNAME in the production environment}"
           : "${PROTECTED_APP_GATEWAY_DOMAIN:?Set PROTECTED_APP_GATEWAY_DOMAIN in the production environment}"
+          : "${ACME_EMAIL:?Set ACME_EMAIL in the production environment}"
           : "${SWARM_SSH_PRIVATE_KEY:?Set SWARM_SSH_PRIVATE_KEY in the production environment}"
           : "${SWARM_KNOWN_HOSTS:?Set SWARM_KNOWN_HOSTS in the production environment}"
 
@@ -189,14 +193,14 @@ jobs:
           printf '%s' "$GHCR_TOKEN" | ssh "${ssh_args[@]}" "$target" \
             "docker login '${REGISTRY}' --username '${GITHUB_ACTOR}' --password-stdin"
           ssh "${ssh_args[@]}" "$target" \
-            "LOGTO_IMAGE='${LOGTO_IMAGE}' TRAEFIK_VERSION='${TRAEFIK_VERSION}' LOGTO_HOST='${LOGTO_HOST}' LOGTO_ADMIN_HOST='${LOGTO_ADMIN_HOST}' LOGTO_PLACEMENT_HOSTNAME='${LOGTO_PLACEMENT_HOSTNAME}' PROTECTED_APP_GATEWAY_DOMAIN='${PROTECTED_APP_GATEWAY_DOMAIN}' bash releases/deploy.sh releases/logto-stack.yml '${STACK_NAME}' '${LOGTO_IMAGE}'"
+            "LOGTO_IMAGE='${LOGTO_IMAGE}' TRAEFIK_VERSION='${TRAEFIK_VERSION}' LOGTO_HOST='${LOGTO_HOST}' LOGTO_ADMIN_HOST='${LOGTO_ADMIN_HOST}' LOGTO_ADMIN_PORT='${LOGTO_ADMIN_PORT}' LOGTO_PLACEMENT_HOSTNAME='${LOGTO_PLACEMENT_HOSTNAME}' PROTECTED_APP_GATEWAY_DOMAIN='${PROTECTED_APP_GATEWAY_DOMAIN}' ACME_EMAIL='${ACME_EMAIL}' bash releases/deploy.sh releases/logto-stack.yml '${STACK_NAME}' '${LOGTO_IMAGE}'"
 
       - name: Verify public endpoints
         run: |
           set -euo pipefail
           for endpoint in \
             "https://${LOGTO_HOST}/api/status" \
-            "https://${LOGTO_ADMIN_HOST}/api/status"
+            "https://${LOGTO_ADMIN_HOST}:${LOGTO_ADMIN_PORT}/api/status"
           do
             curl \
               --fail \
