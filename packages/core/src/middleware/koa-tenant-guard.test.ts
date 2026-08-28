@@ -10,6 +10,7 @@ import koaTenantGuard from './koa-tenant-guard.js';
 const { jest } = import.meta;
 
 const mockFindTenantStatusById = jest.fn();
+const mockSharedPoolOne = jest.fn();
 
 const queries = new MockQueries({
   tenants: {
@@ -24,17 +25,32 @@ describe('koaTenantGuard middleware', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    Sinon.restore();
   });
 
   it('should return directly if not in cloud', async () => {
-    const stub = Sinon.stub(EnvSet, 'values').value({
+    Sinon.stub(EnvSet, 'values').value({
       ...EnvSet.values,
       isCloud: false,
     });
 
     await expect(koaTenantGuard(tenantId, queries)(ctx, next)).resolves.not.toThrow();
     expect(mockFindTenantStatusById).not.toBeCalled();
-    stub.restore();
+  });
+
+  it('should use the shared management pool for self-hosted tenant metadata', async () => {
+    Sinon.stub(EnvSet, 'values').value({
+      ...EnvSet.values,
+      isCloud: false,
+      isSelfHostedParityEnabled: true,
+    });
+    Sinon.stub(EnvSet, 'sharedPool').value(Promise.resolve({ one: mockSharedPoolOne } as never));
+    mockSharedPoolOne.mockResolvedValueOnce({ id: tenantId, isSuspended: false });
+
+    await expect(koaTenantGuard(tenantId, queries)(ctx, next)).resolves.not.toThrow();
+
+    expect(mockSharedPoolOne).toBeCalledTimes(1);
+    expect(mockFindTenantStatusById).not.toBeCalled();
   });
 
   it('should reject if tenant is suspended', async () => {
