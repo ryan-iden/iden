@@ -36,6 +36,9 @@ jobs:
       - name: Lint changed feature packages
         run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console lint
 
+      - name: Build Core test artifacts
+        run: pnpm --filter @logto/core build:test
+
       - name: Test changed feature packages
         run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console test:ci
 
