@@ -1,4 +1,4 @@
-name: Self-hosted release
+name: Self-hosted Swarm release
 
 on:
   push:
@@ -12,6 +12,11 @@ concurrency:
 
 permissions:
   contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/logto-personal
 
 jobs:
   validate:
@@ -43,65 +48,30 @@ jobs:
         run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console test:ci
 
   publish-image:
-    name: Publish immutable Harbor image
+    name: Publish immutable GHCR image
     needs: validate
-    environment: self-hosted-production
-    runs-on: ${{ vars.RELEASE_RUNNER || 'ubuntu-24.04' }}
+    runs-on: ubuntu-24.04
     outputs:
-      image_repository: ${{ steps.image.outputs.repository }}
-      image_tag: ${{ steps.image.outputs.tag }}
-
-    env:
-      HARBOR_HOST: ${{ vars.HARBOR_HOST }}
-      HARBOR_PROJECT: ${{ vars.HARBOR_PROJECT }}
-      IMAGE_NAME: ${{ vars.IMAGE_NAME || 'logto' }}
+      image: ${{ steps.image.outputs.image }}
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Validate release configuration
-        env:
-          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
-          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
-        run: |
-          set -euo pipefail
-          : "${HARBOR_HOST:?Set the HARBOR_HOST repository variable}"
-          : "${HARBOR_PROJECT:?Set the HARBOR_PROJECT repository variable}"
-          : "${IMAGE_NAME:?Set the IMAGE_NAME repository variable}"
-          : "${HARBOR_USERNAME:?Set the HARBOR_USERNAME environment secret}"
-          : "${HARBOR_PASSWORD:?Set the HARBOR_PASSWORD environment secret}"
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Resolve immutable image name
         id: image
-        run: |
-          set -euo pipefail
-          echo "repository=${HARBOR_HOST}/${HARBOR_PROJECT}/${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
-          echo "tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-
-      - name: Configure ephemeral Harbor credentials
-        env:
-          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
-          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
-        run: |
-          set -euo pipefail
-          docker_config_dir="${RUNNER_TEMP}/logto-docker-config"
-          mkdir -p "$docker_config_dir"
-          auth="$(printf '%s:%s' "$HARBOR_USERNAME" "$HARBOR_PASSWORD" | base64 | tr -d '\n')"
-          jq -n \
-            --arg registry "$HARBOR_HOST" \
-            --arg auth "$auth" \
-            '{auths: {($registry): {auth: $auth}}}' > "$docker_config_dir/config.json"
-          echo "DOCKER_CONFIG=$docker_config_dir" >> "$GITHUB_ENV"
-
-      - name: Set up Docker Buildx for the HTTP Harbor registry
-        uses: docker/setup-buildx-action@v3
-        with:
-          buildkitd-config-inline: |
-            [registry."${{ vars.HARBOR_HOST }}"]
-              http = true
-              insecure = true
+        run: echo "image=${REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push image
         uses: docker/build-push-action@v6
@@ -109,7 +79,9 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ${{ steps.image.outputs.repository }}:${{ steps.image.outputs.tag }}
+          tags: |
+            ${{ steps.image.outputs.image }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:personal
           labels: |
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
@@ -118,64 +90,112 @@ jobs:
           cache-from: type=gha,scope=logto-self-hosted
           cache-to: type=gha,mode=max,scope=logto-self-hosted
 
-  update-gitops:
-    name: Promote image through GitOps
+  deploy-swarm:
+    name: Deploy to production Swarm
     needs: publish-image
     environment: self-hosted-production
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    env:
+      SWARM_MANAGER_HOST: ${{ vars.SWARM_MANAGER_HOST }}
+      SWARM_DEPLOY_USER: ${{ vars.SWARM_DEPLOY_USER || 'logto-deploy' }}
+      STACK_NAME: ${{ vars.SWARM_STACK_NAME || 'logto' }}
+      LOGTO_HOST: ${{ vars.LOGTO_HOST }}
+      LOGTO_ADMIN_HOST: ${{ vars.LOGTO_ADMIN_HOST }}
+      LOGTO_PLACEMENT_HOSTNAME: ${{ vars.LOGTO_PLACEMENT_HOSTNAME }}
+      TRAEFIK_VERSION: ${{ vars.TRAEFIK_VERSION || 'v3.7.12' }}
+      PROTECTED_APP_GATEWAY_DOMAIN: ${{ vars.PROTECTED_APP_GATEWAY_DOMAIN }}
 
     steps:
-      - name: Check out Argo CD configuration
-        uses: actions/checkout@v4
-        with:
-          repository: ryan-wong-coder/argo-config
-          ref: main
-          ssh-key: ${{ secrets.ARGO_CONFIG_SSH_KEY }}
-          path: argo-config
+      - uses: actions/checkout@v4
 
-      - name: Update Logto image
-        working-directory: argo-config
+      - name: Validate deployment configuration
         env:
-          IMAGE_REPOSITORY: ${{ needs.publish-image.outputs.image_repository }}
-          IMAGE_TAG: ${{ needs.publish-image.outputs.image_tag }}
+          SWARM_SSH_PRIVATE_KEY: ${{ secrets.SWARM_SSH_PRIVATE_KEY }}
+          SWARM_KNOWN_HOSTS: ${{ secrets.SWARM_KNOWN_HOSTS }}
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import os
-          import re
-          from pathlib import Path
+          : "${SWARM_MANAGER_HOST:?Set SWARM_MANAGER_HOST in the production environment}"
+          : "${SWARM_DEPLOY_USER:?Set SWARM_DEPLOY_USER in the production environment}"
+          : "${LOGTO_HOST:?Set LOGTO_HOST in the production environment}"
+          : "${LOGTO_ADMIN_HOST:?Set LOGTO_ADMIN_HOST in the production environment}"
+          : "${LOGTO_PLACEMENT_HOSTNAME:?Set LOGTO_PLACEMENT_HOSTNAME in the production environment}"
+          : "${PROTECTED_APP_GATEWAY_DOMAIN:?Set PROTECTED_APP_GATEWAY_DOMAIN in the production environment}"
+          : "${SWARM_SSH_PRIVATE_KEY:?Set SWARM_SSH_PRIVATE_KEY in the production environment}"
+          : "${SWARM_KNOWN_HOSTS:?Set SWARM_KNOWN_HOSTS in the production environment}"
 
-          path = Path('apps/logto/kustomization.yaml')
-          source = path.read_text()
-          source, repository_count = re.subn(
-              r'(?m)^(\s*newName:\s*).+$',
-              rf'\g<1>{os.environ["IMAGE_REPOSITORY"]}',
-              source,
-              count=1,
-          )
-          source, tag_count = re.subn(
-              r'(?m)^(\s*newTag:\s*).+$',
-              rf'\g<1>{os.environ["IMAGE_TAG"]}',
-              source,
-              count=1,
-          )
-          if repository_count != 1 or tag_count != 1:
-              raise SystemExit('Expected one newName and one newTag in the Logto kustomization')
-          path.write_text(source)
-          PY
-
-      - name: Commit deployment revision
-        working-directory: argo-config
+      - name: Configure deployment SSH identity
         env:
-          IMAGE_TAG: ${{ needs.publish-image.outputs.image_tag }}
+          SWARM_SSH_PRIVATE_KEY: ${{ secrets.SWARM_SSH_PRIVATE_KEY }}
+          SWARM_KNOWN_HOSTS: ${{ secrets.SWARM_KNOWN_HOSTS }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- apps/logto/kustomization.yaml; then
-            echo "GitOps already points to ${IMAGE_TAG}"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add apps/logto/kustomization.yaml
-          git commit -m "deploy(logto): ${IMAGE_TAG}"
-          git push origin HEAD:main
+          ssh_dir="${RUNNER_TEMP}/swarm-ssh"
+          install -d -m 0700 "$ssh_dir"
+          printf '%s\n' "$SWARM_SSH_PRIVATE_KEY" > "$ssh_dir/id_ed25519"
+          printf '%s\n' "$SWARM_KNOWN_HOSTS" > "$ssh_dir/known_hosts"
+          chmod 0600 "$ssh_dir/id_ed25519" "$ssh_dir/known_hosts"
+          echo "SWARM_SSH_KEY=${ssh_dir}/id_ed25519" >> "$GITHUB_ENV"
+          echo "SWARM_KNOWN_HOSTS_FILE=${ssh_dir}/known_hosts" >> "$GITHUB_ENV"
+
+      - name: Validate Swarm stack
+        env:
+          LOGTO_IMAGE: ${{ needs.publish-image.outputs.image }}
+        run: |
+          set -euo pipefail
+          docker stack config \
+            --compose-file deploy/swarm/logto-stack.yml \
+            > /dev/null
+
+      - name: Upload deployment files
+        run: |
+          set -euo pipefail
+          target="${SWARM_DEPLOY_USER}@${SWARM_MANAGER_HOST}"
+          ssh_args=(
+            -i "$SWARM_SSH_KEY"
+            -o BatchMode=yes
+            -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=${SWARM_KNOWN_HOSTS_FILE}"
+          )
+          ssh "${ssh_args[@]}" "$target" 'install -d -m 0750 "$HOME/releases"'
+          scp "${ssh_args[@]}" \
+            deploy/swarm/logto-stack.yml \
+            deploy/swarm/deploy.sh \
+            "$target:releases/"
+
+      - name: Deploy immutable image
+        env:
+          GHCR_TOKEN: ${{ github.token }}
+          LOGTO_IMAGE: ${{ needs.publish-image.outputs.image }}
+        run: |
+          set -euo pipefail
+          target="${SWARM_DEPLOY_USER}@${SWARM_MANAGER_HOST}"
+          ssh_args=(
+            -i "$SWARM_SSH_KEY"
+            -o BatchMode=yes
+            -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=${SWARM_KNOWN_HOSTS_FILE}"
+          )
+          printf '%s' "$GHCR_TOKEN" | ssh "${ssh_args[@]}" "$target" \
+            "docker login '${REGISTRY}' --username '${GITHUB_ACTOR}' --password-stdin"
+          ssh "${ssh_args[@]}" "$target" \
+            "LOGTO_IMAGE='${LOGTO_IMAGE}' TRAEFIK_VERSION='${TRAEFIK_VERSION}' LOGTO_HOST='${LOGTO_HOST}' LOGTO_ADMIN_HOST='${LOGTO_ADMIN_HOST}' LOGTO_PLACEMENT_HOSTNAME='${LOGTO_PLACEMENT_HOSTNAME}' PROTECTED_APP_GATEWAY_DOMAIN='${PROTECTED_APP_GATEWAY_DOMAIN}' bash releases/deploy.sh releases/logto-stack.yml '${STACK_NAME}' '${LOGTO_IMAGE}'"
+
+      - name: Verify public endpoints
+        run: |
+          set -euo pipefail
+          for endpoint in \
+            "https://${LOGTO_HOST}/api/status" \
+            "https://${LOGTO_ADMIN_HOST}/api/status"
+          do
+            curl \
+              --fail \
+              --silent \
+              --show-error \
+              --retry 18 \
+              --retry-delay 5 \
+              --retry-all-errors \
+              --output /dev/null \
+              "$endpoint"
+          done
