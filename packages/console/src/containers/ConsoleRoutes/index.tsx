@@ -10,6 +10,7 @@ import {
   isCloud,
   isDevFeaturesEnabled,
   isProduction,
+  isSelfHostedParityEnabled,
   isTenantManagementEnabled,
 } from '@/consts/env';
 import AppBoundary from '@/containers/AppBoundary';
@@ -22,6 +23,7 @@ import { GlobalRoute } from '@/contexts/TenantsProvider';
 import useSwrOptions from '@/hooks/use-swr-options';
 import Callback from '@/pages/Callback';
 import CheckoutSuccessCallback from '@/pages/CheckoutSuccessCallback';
+import { getTenantRoutePath } from '@/utils/tenant-path';
 import { dropLeadingSlash } from '@/utils/url';
 
 import { __Internal__ImportError } from './internal';
@@ -53,7 +55,12 @@ export function ConsoleRoutes() {
         {!isTenantManagementEnabled && (
           <Route path="/" element={<Navigate to={ossConsolePath} />} />
         )}
-        <Route path="/:tenantId" element={<Layout />}>
+        <Route
+          path={getTenantRoutePath({
+            isSelfHostedTenantManagementEnabled: isSelfHostedParityEnabled,
+          })}
+          element={<Layout />}
+        >
           <Route path="callback" element={<Callback />} />
           <Route path="welcome" element={<Welcome />} />
           {isDevFeaturesEnabled && (

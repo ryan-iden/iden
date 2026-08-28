@@ -11,8 +11,9 @@ import {
   type NavigateFunction,
 } from 'react-router-dom';
 
-import { isTenantManagementEnabled } from '@/consts/env';
+import { isSelfHostedParityEnabled, isTenantManagementEnabled } from '@/consts/env';
 import { TenantsContext } from '@/contexts/TenantsProvider';
+import { getTenantPath, getTenantRoutePath } from '@/utils/tenant-path';
 
 type TenantPathname = {
   /**
@@ -58,9 +59,23 @@ type TenantPathname = {
 function useTenantPathname(): TenantPathname {
   const location = useLocation();
   const { currentTenantId } = useContext(TenantsContext);
-  const tenantSegment = useMemo(
-    () => (isTenantManagementEnabled ? currentTenantId : ossConsolePath.slice(1)),
+  const tenantRootPath = useMemo(
+    () =>
+      isTenantManagementEnabled
+        ? getTenantPath(currentTenantId, '', {
+            isSelfHostedTenantManagementEnabled: isSelfHostedParityEnabled,
+          })
+        : ossConsolePath,
     [currentTenantId]
+  );
+  const tenantRoutePath = useMemo(
+    () =>
+      isTenantManagementEnabled
+        ? getTenantRoutePath({
+            isSelfHostedTenantManagementEnabled: isSelfHostedParityEnabled,
+          })
+        : ossConsolePath,
+    []
   );
   const navigate = useNavigate();
   const href = useHref('/');
@@ -77,22 +92,26 @@ function useTenantPathname(): TenantPathname {
 
       // Match absolute pathnames with the tenant segment
       return (
-        matchPath(joinPath(':tenantId', pathname, exact ? '' : '*'), location.pathname) !== null
+        matchPath(joinPath(tenantRoutePath, pathname, exact ? '' : '*'), location.pathname) !== null
       );
     },
-    [location.pathname]
+    [location.pathname, tenantRoutePath]
   );
 
   /** Returns the pathname with the current tenant ID prepended. */
   const getPathname = useCallback(
     (pathname: string) => {
-      if (pathname.startsWith('/') && !pathname.startsWith(`/${tenantSegment}`)) {
-        return joinPath(tenantSegment, pathname);
+      if (
+        pathname.startsWith('/') &&
+        pathname !== tenantRootPath &&
+        !pathname.startsWith(tenantRootPath + '/')
+      ) {
+        return joinPath(tenantRootPath, pathname);
       }
       // Directly return the pathname if it's a relative pathname
       return pathname;
     },
-    [tenantSegment]
+    [tenantRootPath]
   );
 
   const getTo = useCallback(
@@ -106,8 +125,8 @@ function useTenantPathname(): TenantPathname {
   );
 
   const getUrl = useCallback(
-    (pathname = '/') => appendPath(new URL(window.location.origin), href, tenantSegment, pathname),
-    [href, tenantSegment]
+    (pathname = '/') => appendPath(new URL(window.location.origin), href, tenantRootPath, pathname),
+    [href, tenantRootPath]
   );
 
   const data = useMemo(

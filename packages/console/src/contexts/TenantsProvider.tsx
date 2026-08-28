@@ -2,11 +2,12 @@ import { adminTenantId, defaultTenantId, TenantTag } from '@logto/schemas';
 import { conditionalArray, noop } from '@silverhand/essentials';
 import type { ReactNode } from 'react';
 import { useCallback, useMemo, createContext, useState } from 'react';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { type TenantResponse } from '@/cloud/types/router';
 import { defaultTenantResponse } from '@/consts';
-import { isTenantManagementEnabled } from '@/consts/env';
+import { isSelfHostedParityEnabled, isTenantManagementEnabled } from '@/consts/env';
+import { getTenantIdFromPathname, getTenantPath } from '@/utils/tenant-path';
 
 /**
  * The reserved routes that don't require authentication.
@@ -35,9 +36,12 @@ export enum GlobalRoute {
   DeleteAccount = '/delete-account',
 }
 
+export const selfHostedWelcomeRoute = '/welcome';
+
 const reservedRoutes: Readonly<string[]> = Object.freeze([
   ...Object.values(GlobalAnonymousRoute),
   ...Object.values(GlobalRoute),
+  ...conditionalArray(isSelfHostedParityEnabled && selfHostedWelcomeRoute),
 ]);
 
 /**
@@ -114,28 +118,27 @@ function TenantsProvider({ children }: Props) {
   const [tenants, setTenants] = useState(initialTenants);
   /** @see {@link initialTenants} */
   const [isInitComplete, setIsInitComplete] = useState(!isTenantManagementEnabled);
-  const match = useMatch('/:tenantId/*');
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const currentTenantId = useMemo(() => {
     if (!isTenantManagementEnabled) {
       return defaultTenantId;
     }
 
-    if (
-      !match ||
-      reservedRoutes.some(
-        (route) => match.pathname === route || match.pathname.startsWith(route + '/')
-      )
-    ) {
-      return '';
-    }
-
-    return match.params.tenantId ?? '';
-  }, [match]);
+    return getTenantIdFromPathname(pathname, {
+      isTenantManagementEnabled,
+      isSelfHostedTenantManagementEnabled: isSelfHostedParityEnabled,
+      reservedRoutes,
+    });
+  }, [pathname]);
 
   const navigateTenant = useCallback(
     (tenantId: string) => {
-      navigate(`/${tenantId}`);
+      navigate(
+        getTenantPath(tenantId, '', {
+          isSelfHostedTenantManagementEnabled: isSelfHostedParityEnabled,
+        })
+      );
     },
     [navigate]
   );

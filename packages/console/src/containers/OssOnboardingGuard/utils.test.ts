@@ -44,6 +44,22 @@ describe('OSS onboarding guard utils', () => {
     ).toBeUndefined();
   });
 
+  test('keeps the self-hosted tenant route under the Console mount point', () => {
+    expect(
+      getOssOnboardingRedirectPath({
+        isCloud: false,
+        isDevFeaturesEnabled: true,
+        isProduction: true,
+        hasError: false,
+        isLoading: false,
+        isOnboardingDone: false,
+        isSelfHostedParityEnabled: true,
+        tenantId: 'default',
+        pathname: '/console/default/get-started',
+      })
+    ).toBe('/console/default/onboarding');
+  });
+
   test('never redirects cloud routes', () => {
     expect(
       getOssOnboardingRedirectPath({

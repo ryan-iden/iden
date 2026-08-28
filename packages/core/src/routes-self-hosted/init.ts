@@ -56,6 +56,7 @@ import assertThat from '#src/utils/assert-that.js';
 import { convertToIdentifiers } from '#src/utils/sql.js';
 
 import { maskedSecret, preserveEmailSecret, preserveStorageSecret } from './config.js';
+import { selfHostedTenantOrganizationPath } from './route-path.js';
 
 const { table: tenantsTable, fields: tenantFields } = convertToIdentifiers({
   table: Tenants.tableName,
@@ -149,6 +150,7 @@ export default function initSelfHostedControlApi(tenant: TenantContext): Koa {
   const anonymousRouter = new Router();
   cloudRouter.use(buildUserAuth(tenant, cloudApiIndicator));
   organizationRouter.use(
+    selfHostedTenantOrganizationPath,
     buildUserAuth(tenant, (tenantId) => buildOrganizationUrn(getTenantOrganizationId(tenantId)))
   );
   const { organizations, users, oneTimeTokens } = tenant.queries;

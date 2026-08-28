@@ -1,7 +1,12 @@
 import { useParams, Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import AppLoading from '@/components/AppLoading';
-import { isCloud, isDevFeaturesEnabled, isProduction } from '@/consts/env';
+import {
+  isCloud,
+  isDevFeaturesEnabled,
+  isProduction,
+  isSelfHostedParityEnabled,
+} from '@/consts/env';
 import useOssOnboardingData from '@/hooks/use-oss-onboarding-data';
 
 import { getOssOnboardingRedirectPath } from './utils';
@@ -23,6 +28,7 @@ function OssOnboardingGuard() {
         hasError: Boolean(error),
         isLoading,
         isOnboardingDone,
+        isSelfHostedParityEnabled,
         tenantId,
         pathname,
       })

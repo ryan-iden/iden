@@ -1,3 +1,5 @@
+import { getTenantPath } from '@/utils/tenant-path';
+
 type GetOssOnboardingRedirectPathOptions = {
   isCloud: boolean;
   isDevFeaturesEnabled: boolean;
@@ -5,6 +7,7 @@ type GetOssOnboardingRedirectPathOptions = {
   hasError: boolean;
   isLoading: boolean;
   isOnboardingDone: boolean;
+  isSelfHostedParityEnabled?: boolean;
   tenantId: string;
   pathname: string;
 };
@@ -18,6 +21,7 @@ export const getOssOnboardingRedirectPath = ({
   hasError,
   isLoading,
   isOnboardingDone,
+  isSelfHostedParityEnabled = false,
   tenantId,
   pathname,
 }: GetOssOnboardingRedirectPathOptions): string | undefined => {
@@ -33,5 +37,7 @@ export const getOssOnboardingRedirectPath = ({
     return;
   }
 
-  return `/${tenantId}/${onboardingPath}`;
+  return getTenantPath(tenantId, onboardingPath, {
+    isSelfHostedTenantManagementEnabled: isSelfHostedParityEnabled,
+  });
 };
