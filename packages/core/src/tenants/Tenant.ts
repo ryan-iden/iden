@@ -79,7 +79,7 @@ export default class Tenant implements TenantContext {
       await envSet.load(customDomain);
 
       const tenant = new Tenant(envSet, id, customDomain, new WellKnownCache(id, redisCache));
-      await ensureSelfHostedEmailConnector(tenant.queries);
+      await ensureSelfHostedEmailConnector(id, tenant.queries);
       return tenant;
     } catch (error) {
       consoleLog.error('Failed to create tenant:', id, error);
