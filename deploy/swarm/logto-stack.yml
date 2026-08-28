@@ -7,10 +7,12 @@ services:
       - --log.level=INFO
       - --ping=true
       - --entrypoints.web.address=:80
+      - --entrypoints.web.http.underscoreheadersstrategy=delete
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
       - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.underscoreheadersstrategy=delete
       - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.exposedbydefault=false
       - --providers.swarm.network=logto-public
@@ -152,7 +154,7 @@ services:
           - node.hostname == ${LOGTO_PLACEMENT_HOSTNAME}
       labels:
         - traefik.enable=true
-        - traefik.docker.network=logto-public
+        - traefik.swarm.network=logto-public
         - traefik.http.routers.logto.rule=Host(`${LOGTO_HOST}`)
         - traefik.http.routers.logto.entrypoints=websecure
         - traefik.http.routers.logto.tls=true

@@ -35,5 +35,5 @@ the volumes first.
 
 Traefik exposes only the two Logto endpoints and obtains certificates with an ACME HTTP challenge.
 Its dashboard is disabled. The Protected App gateway process is intentionally not exposed by this
-stack because wildcard TLS cannot be issued for a `nip.io` domain with an HTTP challenge. Add a
-real delegated domain and DNS challenge before exposing that gateway publicly.
+stack because wildcard TLS cannot be issued for an IP-encoded test domain with an HTTP challenge.
+Add a real delegated domain and DNS challenge before exposing that gateway publicly.
