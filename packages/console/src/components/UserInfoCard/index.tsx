@@ -10,7 +10,7 @@ import styles from './index.module.scss';
 type Props = {
   readonly className?: string;
   readonly user?: Partial<
-    Pick<User, 'name' | 'username' | 'avatar' | 'primaryEmail'> &
+    Pick<User, 'id' | 'name' | 'username' | 'avatar' | 'primaryEmail' | 'primaryPhone'> &
       Pick<IdTokenClaims, 'picture' | 'email'>
   >;
   readonly avatarSize?: 'medium' | 'large';
@@ -19,7 +19,7 @@ type Props = {
 function UserInfoCard({ className, user, avatarSize = 'medium' }: Props) {
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
 
-  const { name, username, avatar, picture, primaryEmail, email } = user ?? {};
+  const { id, name, username, avatar, picture, primaryEmail, primaryPhone, email } = user ?? {};
   const avatarToDisplay = avatar ?? picture;
   const nameToDisplay = name ?? username;
   const emailToDisplay = primaryEmail ?? email;
@@ -28,7 +28,14 @@ function UserInfoCard({ className, user, avatarSize = 'medium' }: Props) {
     <div className={classNames(styles.userInfo, className)}>
       <UserAvatar
         size={avatarSize}
-        user={{ name, username, avatar: avatarToDisplay, primaryEmail: emailToDisplay }}
+        user={{
+          id,
+          name,
+          username,
+          avatar: avatarToDisplay,
+          primaryEmail: emailToDisplay,
+          primaryPhone,
+        }}
       />
       <div className={styles.nameWrapper}>
         <div className={styles.name}>{nameToDisplay}</div>
