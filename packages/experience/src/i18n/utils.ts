@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import { getPhrases as getPhrasesApi } from '@/apis/settings';
+import { getBrandedPhrases } from '@/shared/utils/product-brand';
 import { searchKeys } from '@/shared/utils/search-parameters';
 
 const getPhrases = async (language?: string) => {
@@ -18,7 +19,7 @@ const getPhrases = async (language?: string) => {
     isObject(logtoSsr) &&
     (!preferredLanguage || logtoSsr.phrases.lng === (language ?? uiLocalesFirst))
   ) {
-    return { phrases: logtoSsr.phrases.data, lng: logtoSsr.phrases.lng };
+    return { phrases: getBrandedPhrases(logtoSsr.phrases.data), lng: logtoSsr.phrases.lng };
   }
 
   const detectedLanguage = detectLanguage();
@@ -34,7 +35,7 @@ const getPhrases = async (language?: string) => {
     throw new Error('lng not found');
   }
 
-  return { phrases: remotePhrases, lng };
+  return { phrases: getBrandedPhrases(remotePhrases), lng };
 };
 
 export const getI18nResource = async (
@@ -50,7 +51,7 @@ export const getI18nResource = async (
   } catch {
     // Fallback to build in en
     return {
-      resources: { en: resource.en },
+      resources: { en: getBrandedPhrases(resource.en) },
       lng: 'en',
     };
   }

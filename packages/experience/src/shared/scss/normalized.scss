@@ -23,6 +23,14 @@ html[data-theme='dark'] body {
   @include colors.dark;
 }
 
+html[data-product-brand='iden'][data-theme='light'] body {
+  @include colors.iden-light;
+}
+
+html[data-product-brand='iden'][data-theme='dark'] body {
+  @include colors.iden-dark;
+}
+
 html[data-theme] body:not(.desktop) {
   background: var(--color-bg-body);
 }

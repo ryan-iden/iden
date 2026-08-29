@@ -4,8 +4,9 @@ import type { LinkProps } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 // Used in the docs
-// eslint-disable-next-line unused-imports/no-unused-imports
-import { LinkButton } from '@/ds-components/Button';
+
+import { isIdenBrand } from '@/consts/env';
+import useDocumentationUrl from '@/hooks/use-documentation-url';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 
 import styles from './index.module.scss';
@@ -30,6 +31,7 @@ export type Props = AnchorHTMLAttributes<HTMLAnchorElement> &
 
 function TextLink({
   to,
+  href,
   children,
   icon,
   isTrailingIcon = false,
@@ -38,18 +40,38 @@ function TextLink({
   ...rest
 }: Props) {
   const { getTo } = useTenantPathname();
+  const { getDocumentationUrl } = useDocumentationUrl();
+  const sourceUrl = typeof to === 'string' ? to : href;
+  const localDocumentationUrl = useMemo(() => {
+    if (!isIdenBrand || !sourceUrl?.startsWith('https://docs.logto.io')) {
+      return null;
+    }
+    const url = new URL(sourceUrl);
+    return `${getDocumentationUrl(url.pathname)}${url.hash}`;
+  }, [getDocumentationUrl, sourceUrl]);
 
   const props = useMemo(
     () => ({
       ...rest,
+      href: localDocumentationUrl ?? href,
       className: classNames(styles.link, isTrailingIcon && styles.trailingIcon, className),
-      ...(Boolean(targetBlank) && {
-        rel: typeof targetBlank === 'string' ? targetBlank : 'noopener noreferrer',
-        target: '_blank',
-      }),
+      ...(Boolean(targetBlank) &&
+        !localDocumentationUrl && {
+          rel: typeof targetBlank === 'string' ? targetBlank : 'noopener noreferrer',
+          target: '_blank',
+        }),
     }),
-    [className, isTrailingIcon, rest, targetBlank]
+    [className, href, isTrailingIcon, localDocumentationUrl, rest, targetBlank]
   );
+
+  if (localDocumentationUrl) {
+    return (
+      <a {...props} href={localDocumentationUrl}>
+        {icon}
+        {children}
+      </a>
+    );
+  }
 
   if (to) {
     return (

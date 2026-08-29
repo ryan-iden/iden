@@ -21,6 +21,13 @@
     flex-shrink: 0;
   }
 
+  .illustration {
+    width: 320px;
+    height: 218px;
+    margin-top: _.unit(24);
+    object-fit: contain;
+  }
+
   label {
     font: var(--font-title-1);
   }

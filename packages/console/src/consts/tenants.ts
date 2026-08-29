@@ -10,7 +10,7 @@ import {
 import { defaultRegionName } from '@/components/Region';
 import { LogtoSkuType } from '@/types/skus';
 
-import { adminEndpoint, isCloud, isSelfHostedParityEnabled } from './env';
+import { adminEndpoint, brandProfile, isCloud, isSelfHostedParityEnabled } from './env';
 
 const { tenantId, indicator } = defaultManagementApi.resource;
 
@@ -169,7 +169,7 @@ const getAdminTenantEndpoint = () => {
 
 export const adminTenantEndpoint = getAdminTenantEndpoint();
 
-export const mainTitle = isCloud ? 'Logto Cloud' : 'Logto Console';
+export const mainTitle = brandProfile.consoleTitle;
 
 // The threshold days to show the convert to production card in the get started page
 export const convertToProductionThresholdDays = 7;

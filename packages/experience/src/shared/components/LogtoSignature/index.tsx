@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import LogtoLogtoDark from '@/shared/assets/icons/logto-logo-dark.svg?react';
 import LogtoLogoLight from '@/shared/assets/icons/logto-logo-light.svg?react';
 import LogtoLogoShadow from '@/shared/assets/icons/logto-logo-shadow.svg?react';
+import { isCloudBuild, productBrand } from '@/shared/utils/product-brand';
 
 import styles from './index.module.scss';
 
@@ -79,7 +80,7 @@ type Props = {
   readonly theme: Theme;
 };
 
-const LogtoSignature = ({ className, theme }: Props) => {
+const CloudSignature = ({ className, theme }: Props) => {
   const LogtoLogo = theme === Theme.Light ? LogtoLogoLight : LogtoLogtoDark;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -186,5 +187,18 @@ const LogtoSignature = ({ className, theme }: Props) => {
     </div>
   );
 };
+
+const IdenSignature = ({ className }: Pick<Props, 'className'>) => (
+  <div className={className}>
+    <a className={styles.idenSignature} href="/help/en/about">
+      <span>Powered by</span>
+      <span aria-hidden className={styles.idenMark} />
+      <strong>{productBrand.productName}</strong>
+    </a>
+  </div>
+);
+
+const LogtoSignature = (props: Props) =>
+  isCloudBuild ? <CloudSignature {...props} /> : <IdenSignature className={props.className} />;
 
 export default LogtoSignature;

@@ -1,0 +1,97 @@
+@use '@/scss/underscore' as _;
+
+.drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: min(480px, 100vw);
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-layer-1);
+  border-inline-start: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-3);
+  transform: translateX(100%);
+  transition: transform 220ms ease;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-drawer-overlay);
+}
+
+.header {
+  height: 72px;
+  padding: 0 20px 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.title {
+  color: var(--color-text);
+  font: var(--font-title-3);
+}
+
+.subtitle {
+  margin-top: 2px;
+  color: var(--color-text-secondary);
+  font: var(--font-body-3);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.expand {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+
+  &:hover {
+    color: var(--color-text);
+    background: var(--color-hover);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.frame {
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  border: none;
+  background: var(--color-layer-1);
+}
+
+/* stylelint-disable selector-class-pattern */
+:global(.ReactModal__Content--after-open) {
+  &.drawer {
+    transform: translateX(0);
+  }
+}
+
+:global(.ReactModal__Content--before-close) {
+  &.drawer {
+    transform: translateX(100%);
+  }
+}
+/* stylelint-enable selector-class-pattern */
+
+@media (max-width: 640px) {
+  .drawer {
+    width: 100vw;
+    border: none;
+  }
+}

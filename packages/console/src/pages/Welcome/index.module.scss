@@ -68,6 +68,32 @@ main {
   margin-bottom: _.unit(8);
 }
 
+:global(html[data-product-brand='iden']) {
+  .container {
+    min-width: 0;
+    min-height: 0;
+    background-color: var(--color-layer-1);
+    background-image: none;
+  }
+
+  .header {
+    padding: _.unit(8);
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  .content {
+    width: min(640px, calc(100vw - 48px));
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 48px;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+  }
+}
+
 .button {
   width: 400px;
 }

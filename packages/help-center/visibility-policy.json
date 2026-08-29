@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "excludedRouteSegments": [
+    "logto-cloud",
+    "cloud",
+    "pricing",
+    "subscription",
+    "subscriptions",
+    "billing",
+    "region",
+    "regions",
+    "tenant-isolation"
+  ],
+  "excludedBlockPatterns": [
+    "Logto Cloud",
+    "cloud.logto.io",
+    "numbers.logto.io",
+    "Cloud only",
+    "paid plan",
+    "pricing plan",
+    "subscription plan"
+  ],
+  "forbiddenPublishedPatterns": [
+    "docs.logto.io",
+    "cloud.logto.io",
+    "numbers.logto.io",
+    "Logto Cloud",
+    "Cloud only"
+  ],
+  "technicalCompatibilityPatterns": [
+    "@logto/",
+    "LogtoClient",
+    "LogtoConfig",
+    "LogtoError",
+    "Logto-ID-Token",
+    "Logto-Host",
+    "urn:logto:",
+    "logto-"
+  ]
+}

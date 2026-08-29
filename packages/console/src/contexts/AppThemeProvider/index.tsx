@@ -1,9 +1,12 @@
+import { installSelfHostedHelpNavigation } from '@logto/core-kit';
+import idenAppIcon from '@logto/core-kit/assets/iden-app-icon.svg?url';
 import { Theme } from '@logto/schemas';
 import { condArray, noop, trySafe } from '@silverhand/essentials';
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState, createContext } from 'react';
 
 import { storageKeys } from '@/consts';
+import { brandProfile, isIdenBrand } from '@/consts/env';
 import type { AppearanceMode } from '@/types/appearance-mode';
 import { appearanceModeGuard, DynamicAppearanceMode } from '@/types/appearance-mode';
 
@@ -79,7 +82,17 @@ export function AppThemeProvider({ children }: Props) {
   // Set Theme Mode
   useEffect(() => {
     document.body.classList.remove(...condArray(styles.light, styles.dark));
-    document.body.classList.add(...condArray(styles[theme]));
+    document.body.classList.add(...condArray(styles[theme], isIdenBrand && styles.iden));
+    Reflect.set(document.documentElement.dataset, 'productBrand', brandProfile.id);
+    if (isIdenBrand) {
+      const uninstallHelpNavigation = installSelfHostedHelpNavigation();
+      const favicon = document.querySelector<HTMLLinkElement>('link[rel~="icon"]');
+      if (favicon) {
+        favicon.setAttribute('href', idenAppIcon);
+      }
+
+      return uninstallHelpNavigation;
+    }
   }, [theme]);
 
   const context = useMemo<Context>(

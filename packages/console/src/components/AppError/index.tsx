@@ -7,6 +7,8 @@ import KeyboardArrowDown from '@/assets/icons/keyboard-arrow-down.svg?react';
 import KeyboardArrowUp from '@/assets/icons/keyboard-arrow-up.svg?react';
 import ErrorDark from '@/assets/images/error-dark.svg?react';
 import Error from '@/assets/images/error.svg?react';
+import IdenRequestError from '@/assets/images/iden-states/request-error.png';
+import { isIdenBrand } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import useTheme from '@/hooks/use-theme';
 import { onKeyDownHandler } from '@/utils/a11y';
@@ -29,7 +31,13 @@ function AppError({ title, errorCode, errorMessage, callStack, children }: Props
 
   return (
     <div className={styles.container}>
-      {theme === Theme.Light ? <Error /> : <ErrorDark />}
+      {isIdenBrand ? (
+        <img alt="" className={styles.illustration} src={IdenRequestError} />
+      ) : theme === Theme.Light ? (
+        <Error />
+      ) : (
+        <ErrorDark />
+      )}
       <label>{title ?? t('errors.something_went_wrong')}</label>
       <Button
         title="general.retry"

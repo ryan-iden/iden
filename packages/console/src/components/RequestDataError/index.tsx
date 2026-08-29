@@ -2,8 +2,10 @@ import { Theme } from '@logto/schemas';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import IdenRequestError from '@/assets/images/iden-states/request-error.png';
 import RequestErrorDarkImage from '@/assets/images/request-error-dark.svg?react';
 import RequestErrorImage from '@/assets/images/request-error.svg?react';
+import { isIdenBrand } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import Card from '@/ds-components/Card';
 import type { RequestError } from '@/hooks/use-api';
@@ -26,7 +28,11 @@ function RequestDataError({ error, onRetry, className }: Props) {
 
   return (
     <Card className={classNames(styles.error, className)}>
-      <ErrorImage className={styles.image} />
+      {isIdenBrand ? (
+        <img alt="" className={styles.image} src={IdenRequestError} />
+      ) : (
+        <ErrorImage className={styles.image} />
+      )}
       <div className={styles.title}>
         {t(isNotFoundError ? 'errors.not_found' : 'errors.something_went_wrong')}
       </div>

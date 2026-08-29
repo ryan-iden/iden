@@ -4,6 +4,7 @@ import { decodeJwt } from 'jose';
 import { useCallback, useState, type FormEventHandler } from 'react';
 
 import styles from './App.module.scss';
+import { productBrand } from './product-brand';
 import { getLocalData, setLocalData } from './utils';
 
 const safeDecodeJwt = (token: string) => {
@@ -48,7 +49,7 @@ const DevPanel = () => {
   return (
     <div className={[styles.card, styles.devPanel].join(' ')}>
       <form onSubmit={submitConfig}>
-        <div className={styles.title}>Logto config</div>
+        <div className={styles.title}>{productBrand.productName} config</div>
         <div className={styles.item}>
           <div className={styles.text}>App ID</div>
           <input

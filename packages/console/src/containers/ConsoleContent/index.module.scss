@@ -2,9 +2,35 @@
 @use './dev-status-spacing' as devStatusSpacing;
 
 .content {
+  position: relative;
   flex-grow: 1;
   display: flex;
   overflow: hidden;
+}
+
+.sidebarFrame {
+  height: 100%;
+  flex: 0 0 auto;
+}
+
+.navToggle,
+.navOverlay {
+  display: none;
+}
+
+/* stylelint-disable no-descending-specificity -- Brand-scoped overrides intentionally follow the structural layout selectors. */
+:global(html[data-product-brand='iden']) {
+  .content {
+    background: var(--color-layer-1);
+  }
+
+  .overlayScrollbarWrapper {
+    border-inline-start: 1px solid var(--color-divider);
+  }
+
+  .main {
+    padding-inline: 36px 40px;
+  }
 }
 
 .overlayScrollbarWrapper {
@@ -44,3 +70,61 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
+@media (max-width: 900px) {
+  :global(html[data-product-brand='iden']) {
+    .sidebarFrame {
+      position: absolute;
+      z-index: 20;
+      inset-block: 0;
+      inset-inline-start: 0;
+      background: var(--color-layer-1);
+      transform: translateX(-105%);
+      transition: transform 180ms ease;
+
+      &.open {
+        transform: translateX(0);
+      }
+    }
+
+    .navToggle {
+      position: absolute;
+      z-index: 12;
+      inset-block-start: 12px;
+      inset-inline-start: 12px;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--color-divider);
+      border-radius: 8px;
+      background: var(--color-layer-1);
+      color: var(--color-text);
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .navOverlay {
+      position: absolute;
+      z-index: 19;
+      inset: 0;
+      padding: 0;
+      border: none;
+      background: rgba(0, 0, 0, 24%);
+
+      &.open {
+        display: block;
+      }
+    }
+
+    .main {
+      padding-block-start: 64px;
+      padding-inline: 20px;
+    }
+  }
+}
+/* stylelint-enable no-descending-specificity */

@@ -7,6 +7,31 @@
   min-width: min-content;
 }
 
+/* stylelint-disable no-descending-specificity, no-duplicate-selectors -- Brand-scoped table surfaces intentionally override the legacy card treatment. */
+:global(html[data-product-brand='iden']) {
+  .tableContainer {
+    .filterContainer,
+    .headerTable,
+    .bodyTable {
+      border-radius: 0;
+    }
+
+    .headerTable,
+    .bodyTable,
+    .filterContainer {
+      background: transparent;
+    }
+
+    .headerTable {
+      border-bottom: 1px solid var(--color-divider);
+    }
+
+    .bodyTable tbody tr:hover {
+      background: var(--color-hover);
+    }
+  }
+}
+
 .tableContainer {
   overflow: hidden;
   display: flex;
@@ -200,3 +225,4 @@
 .pagination {
   margin-top: _.unit(4);
 }
+/* stylelint-enable no-descending-specificity, no-duplicate-selectors */

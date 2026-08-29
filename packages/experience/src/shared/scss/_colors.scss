@@ -228,3 +228,61 @@
   --color-overlay-brand-pressed: rgba(202, 190, 255, 12%); // 12% --color-brand-40
   --color-overlay-brand-focused: rgba(202, 190, 255, 16%); // 16% --color-brand-40
 }
+
+@mixin iden-light {
+  --color-brand-30: #4142cf;
+  --color-brand-40: #5b5cf6;
+  --color-brand-50: #6f70fa;
+  --color-brand-60: #8586ff;
+  --color-brand-70: #a3a4ff;
+  --color-brand-default: #5b5cf6;
+  --color-brand-hover: #4f50e7;
+  --color-brand-pressed: #4142cf;
+  --color-brand-loading: #8586ff;
+  --color-overlay-brand-hover: rgba(91, 92, 246, 7%);
+  --color-overlay-brand-pressed: rgba(91, 92, 246, 11%);
+  --color-overlay-brand-focused: rgba(91, 92, 246, 14%);
+  --color-neutral-variant-80: #d2d4d9;
+  --color-neutral-variant-90: #e7e8eb;
+  --color-bg-body-base: #fff;
+  --color-bg-body: #fff;
+  --color-bg-layer-1: #fff;
+  --color-bg-layer-2: #f7f8fa;
+  --color-bg-float-base: #f7f8fa;
+  --color-bg-float: #fff;
+  --color-bg-float-overlay: #fff;
+  --color-shadow-1: 0 1px 2px rgba(16, 24, 40, 5%);
+  --color-shadow-2: 0 8px 24px rgba(16, 24, 40, 8%);
+  --color-shadow-2-reversed: 0 -8px 24px rgba(16, 24, 40, 8%);
+}
+
+@mixin iden-dark {
+  --color-brand-30: #dadbff;
+  --color-brand-40: #c7c8ff;
+  --color-brand-50: #afb0ff;
+  --color-brand-60: #9b9cff;
+  --color-brand-70: #8b8cff;
+  --color-brand-default: #8b8cff;
+  --color-brand-hover: #a3a4ff;
+  --color-brand-pressed: #7778f8;
+  --color-brand-loading: #9b9cff;
+  --color-overlay-brand-hover: rgba(139, 140, 255, 10%);
+  --color-overlay-brand-pressed: rgba(139, 140, 255, 15%);
+  --color-overlay-brand-focused: rgba(139, 140, 255, 20%);
+  --color-neutral-99: #0f1115;
+  --color-neutral-100: #0b0d10;
+  --color-bg-body-base: #0f1115;
+  --color-bg-body: #0f1115;
+  --color-bg-layer-1: #171a21;
+  --color-bg-layer-2: #222730;
+  --color-bg-float-base: #0f1115;
+  --color-bg-float: #171a21;
+  --color-bg-float-overlay: #1c2028;
+  --color-surface: #0f1115;
+  --color-surface-2: #171a21;
+  --color-surface-3: #1c2028;
+  --color-surface-4: #222730;
+  --color-shadow-1: 0 1px 2px rgba(0, 0, 0, 24%);
+  --color-shadow-2: 0 8px 24px rgba(0, 0, 0, 28%);
+  --color-shadow-2-reversed: 0 -8px 24px rgba(0, 0, 0, 28%);
+}

@@ -263,7 +263,10 @@ services:
       - backend
     healthcheck:
       test:
-        ["CMD-SHELL", "wget --quiet --spider http://127.0.0.1:3002/api/status"]
+        [
+          "CMD-SHELL",
+          "wget --quiet --spider http://127.0.0.1:3002/api/status && wget --quiet --spider http://127.0.0.1:3002/help/en/",
+        ]
       interval: 15s
       timeout: 5s
       retries: 20

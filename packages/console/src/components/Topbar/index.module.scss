@@ -1,16 +1,19 @@
 @use '@/scss/underscore' as _;
 
 .topbar {
-  flex: 0 0 64px;
+  flex: 0 0 72px;
   width: 100%;
-  padding: 0 _.unit(6);
+  padding: 0 28px;
   gap: _.unit(4);
   display: flex;
   align-items: center;
+  background: var(--color-layer-1);
+  border-bottom: 1px solid var(--color-divider);
 
   .logo {
     width: auto;
-    height: 28px;
+    min-width: 192px;
+    height: 32px;
     color: var(--color-text);
     cursor: pointer;
   }
@@ -23,6 +26,17 @@
   .text {
     font: var(--font-title-2);
     color: var(--color-text);
+  }
+}
+
+/* stylelint-disable no-descending-specificity -- Brand-scoped hover styling intentionally overrides the base topbar action. */
+:global(html[data-product-brand='iden']) {
+  .topbar {
+    box-shadow: none;
+  }
+
+  .button:hover {
+    background: var(--color-hover);
   }
 }
 
@@ -73,3 +87,4 @@
   background-color: var(--color-error);
   margin-inline-start: _.unit(0.5);
 }
+/* stylelint-enable no-descending-specificity */

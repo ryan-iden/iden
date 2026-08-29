@@ -1,3 +1,4 @@
+import { resolveBrandProfile } from '@logto/core-kit';
 import { yes } from '@silverhand/essentials';
 
 import { storageKeys } from './storage';
@@ -7,6 +8,8 @@ const normalizeEnv = (value: unknown) =>
 
 export const isProduction = import.meta.env.PROD;
 export const isCloud = yes(normalizeEnv(import.meta.env.IS_CLOUD));
+export const brandProfile = resolveBrandProfile(isCloud);
+export const isIdenBrand = brandProfile.id === 'iden';
 /** Enables the self-hosted feature parity suite. */
 export const isSelfHostedParityEnabled =
   !isCloud && yes(normalizeEnv(import.meta.env.SELF_HOSTED_PARITY_ENABLED));

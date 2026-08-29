@@ -26,6 +26,7 @@ export class LogtoProfileItem extends LitElement {
       align-items: center;
       background-color: var(--logto-profile-item-container-color, var(--logto-color-background));
       border-radius: var(--logto-profile-item-container-shape, var(--logto-shape-corner-lg));
+      border: 1px solid var(--logto-profile-item-border-color, var(--logto-color-divider));
       padding-inline-start: var(
         --logto-profile-item-container-leading-space,
         var(--logto-spacing-xl)

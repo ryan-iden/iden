@@ -448,3 +448,104 @@
   --color-code-grey: #adaab4;
   --color-code-dark-bg-focused: rgba(255, 255, 255, 24%);
 }
+
+// Self-hosted iden overrides are intentionally layered after the legacy Logto theme so Cloud
+// builds keep their current appearance.
+@mixin iden-light {
+  --color-primary-30: #4142cf;
+  --color-primary-40: #5b5cf6;
+  --color-primary-50: #6f70fa;
+  --color-primary-60: #8586ff;
+  --color-primary-70: #a3a4ff;
+  --color-primary-80: #c7c8ff;
+  --color-primary-90: #e8e8ff;
+  --color-primary-95: #f4f4ff;
+  --color-primary-99: #fbfbff;
+  --color-neutral-variant-90: #e7e8eb;
+  --color-neutral-variant-95: #f2f3f5;
+  --color-neutral-variant-99: #fafbfc;
+  --color-primary: #5b5cf6;
+  --color-primary-hover: #4f50e7;
+  --color-primary-pressed: #4142cf;
+  --color-primary-container: #eeeefe;
+  --color-on-primary-container: #2e2f91;
+  --color-text-link: #5253ec;
+  --color-background: #fff;
+  --color-surface: #fff;
+  --color-surface-1: #fafafa;
+  --color-surface-2: #f6f7f8;
+  --color-surface-3: #f1f2f4;
+  --color-surface-4: #eceef0;
+  --color-surface-5: #e8e9ed;
+  --color-base: #fff;
+  --color-layer-1: #fff;
+  --color-layer-2: #f7f8fa;
+  --color-float: #fff;
+  --color-icon-background: #f3f4f6;
+  --color-hover-variant: rgba(91, 92, 246, 7%);
+  --color-pressed-variant: rgba(91, 92, 246, 11%);
+  --color-focused-variant: rgba(91, 92, 246, 14%);
+  --color-overlay-primary-subtle: rgba(91, 92, 246, 4%);
+  --color-overlay-primary-hover: rgba(91, 92, 246, 7%);
+  --color-overlay-primary-pressed: rgba(91, 92, 246, 11%);
+  --color-function-n-overlay-primary-focused: rgba(91, 92, 246, 14%);
+  --color-bg-body-base: #fff;
+  --color-bg-body: #fff;
+  --color-bg-body-overlay: #fafafa;
+  --color-bg-layer-1: #fff;
+  --color-bg-layer-2: #f7f8fa;
+  --color-bg-float-base: #f2f3f5;
+  --color-bg-float: #fff;
+  --color-bg-float-overlay: #fff;
+  --color-bg-info-tag: #f1f2f4;
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, 5%);
+  --shadow-2: 0 8px 24px rgba(16, 24, 40, 8%);
+  --shadow-2-reversed: 0 -8px 24px rgba(16, 24, 40, 8%);
+  --shadow-3: 0 16px 40px rgba(16, 24, 40, 12%);
+}
+
+@mixin iden-dark {
+  --color-primary-30: #dadbff;
+  --color-primary-40: #c7c8ff;
+  --color-primary-50: #afb0ff;
+  --color-primary-60: #9b9cff;
+  --color-primary-70: #8b8cff;
+  --color-primary-80: #6869f7;
+  --color-primary-90: #4f50d6;
+  --color-primary: #8b8cff;
+  --color-primary-hover: #a3a4ff;
+  --color-primary-pressed: #7778f8;
+  --color-text-link: #a7a8ff;
+  --color-background: #0f1115;
+  --color-surface: #0f1115;
+  --color-surface-1: #13161b;
+  --color-surface-2: #171a21;
+  --color-surface-3: #1c2028;
+  --color-surface-4: #222730;
+  --color-surface-5: #292f39;
+  --color-base: #0f1115;
+  --color-layer-1: #171a21;
+  --color-layer-2: #222730;
+  --color-float: #1c2028;
+  --color-icon-background: #222730;
+  --color-hover-variant: rgba(139, 140, 255, 10%);
+  --color-pressed-variant: rgba(139, 140, 255, 15%);
+  --color-focused-variant: rgba(139, 140, 255, 20%);
+  --color-overlay-primary-subtle: rgba(139, 140, 255, 6%);
+  --color-overlay-primary-hover: rgba(139, 140, 255, 10%);
+  --color-overlay-primary-pressed: rgba(139, 140, 255, 15%);
+  --color-function-n-overlay-primary-focused: rgba(139, 140, 255, 20%);
+  --color-bg-body-base: #0f1115;
+  --color-bg-body: #0f1115;
+  --color-bg-body-overlay: #171a21;
+  --color-bg-layer-1: #171a21;
+  --color-bg-layer-2: #222730;
+  --color-bg-float-base: #0f1115;
+  --color-bg-float: #1c2028;
+  --color-bg-float-overlay: #222730;
+  --color-bg-info-tag: #222730;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 24%);
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 28%);
+  --shadow-2-reversed: 0 -8px 24px rgba(0, 0, 0, 28%);
+  --shadow-3: 0 16px 40px rgba(0, 0, 0, 36%);
+}

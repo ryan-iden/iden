@@ -5,3 +5,11 @@
   color: var(--color-neutral-variant-70);
   padding: _.unit(2) _.unit(6);
 }
+
+:global(html[data-product-brand='iden']) .title {
+  padding: 18px 24px 6px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}

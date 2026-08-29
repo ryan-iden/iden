@@ -11,8 +11,15 @@
   text-align: center;
   overflow: hidden;
 
-  svg {
+  svg,
+  img {
     margin: 15% 0 _.unit(4);
+  }
+
+  img {
+    width: 320px;
+    height: 218px;
+    object-fit: contain;
   }
 
   .message {

@@ -65,6 +65,11 @@ const buildConfig = (mode: string): UserConfig => ({
   ],
   define: {
     'import.meta.env.DEV_FEATURES_ENABLED': JSON.stringify(process.env.DEV_FEATURES_ENABLED),
+    'process.env': {
+      NODE_ENV: process.env.NODE_ENV,
+      DEV_FEATURES_ENABLED: process.env.DEV_FEATURES_ENABLED,
+      IS_CLOUD: process.env.IS_CLOUD,
+    },
   },
 });
 

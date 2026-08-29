@@ -291,3 +291,22 @@
     }
   }
 }
+
+/* stylelint-disable no-descending-specificity -- Brand-scoped button states intentionally override the legacy component states. */
+:global(html[data-product-brand='iden']) .button.branding {
+  background: var(--color-primary);
+
+  &:focus-visible {
+    background: var(--color-primary);
+    outline: 3px solid var(--color-focused-variant);
+  }
+
+  &:active {
+    background: var(--color-primary-pressed);
+  }
+
+  &:not(:disabled):not(:active):hover {
+    background: var(--color-primary-hover);
+  }
+}
+/* stylelint-enable no-descending-specificity */

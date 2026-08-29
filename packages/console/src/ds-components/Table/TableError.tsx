@@ -1,8 +1,10 @@
 import { Theme } from '@logto/schemas';
 import { useTranslation } from 'react-i18next';
 
+import IdenRequestError from '@/assets/images/iden-states/request-error.png';
 import RequestErrorDarkImage from '@/assets/images/request-error-dark.svg?react';
 import RequestErrorImage from '@/assets/images/request-error.svg?react';
+import { isIdenBrand } from '@/consts/env';
 import useTheme from '@/hooks/use-theme';
 
 import Button from '../Button';
@@ -24,7 +26,13 @@ function TableError({ title, content, onRetry, columns }: Props) {
     <tr>
       <td colSpan={columns}>
         <div className={styles.tableError}>
-          {theme === Theme.Light ? <RequestErrorImage /> : <RequestErrorDarkImage />}
+          {isIdenBrand ? (
+            <img alt="" src={IdenRequestError} />
+          ) : theme === Theme.Light ? (
+            <RequestErrorImage />
+          ) : (
+            <RequestErrorDarkImage />
+          )}
           <div className={styles.title}>{title ?? t('errors.something_went_wrong')}</div>
           <div className={styles.content}>{content ?? t('errors.unknown_server_error')}</div>
           {onRetry && <Button title="general.retry" onClick={onRetry} />}

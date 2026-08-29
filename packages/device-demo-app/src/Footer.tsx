@@ -4,6 +4,7 @@ import styles from './App.module.scss';
 import logtoLogoDark from './assets/logto-logo-dark.svg';
 import logtoLogoLight from './assets/logto-logo-light.svg';
 import logtoLogoShadow from './assets/logto-logo-shadow.svg';
+import { isCloudBuild, productBrand } from './product-brand';
 
 const logtoUrl = `https://logto.io/?${new URLSearchParams({
   utm_source: 'sign_in',
@@ -29,24 +30,38 @@ export const useIsDarkMode = () => {
   return isDarkMode;
 };
 
-const Footer = ({ isDarkMode }: { readonly isDarkMode: boolean }) => (
-  <div className={styles.footerContainer}>
-    <a
-      className={styles.footer}
-      href={logtoUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Powered By Logto"
-    >
-      <span>Powered by</span>
-      <img className={styles.staticLogo} src={logtoLogoShadow} alt="Logto" />
-      <img
-        className={styles.highlightLogo}
-        src={isDarkMode ? logtoLogoDark : logtoLogoLight}
-        alt="Logto"
-      />
-    </a>
-  </div>
-);
+const Footer = ({ isDarkMode }: { readonly isDarkMode: boolean }) => {
+  if (!isCloudBuild) {
+    return (
+      <div className={styles.footerContainer}>
+        <a className={styles.idenFooter} href="/help/en/about">
+          <span>Powered by</span>
+          <span aria-hidden className={styles.idenMark} />
+          <strong>{productBrand.productName}</strong>
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.footerContainer}>
+      <a
+        className={styles.footer}
+        href={logtoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Powered By Logto"
+      >
+        <span>Powered by</span>
+        <img className={styles.staticLogo} src={logtoLogoShadow} alt="Logto" />
+        <img
+          className={styles.highlightLogo}
+          src={isDarkMode ? logtoLogoDark : logtoLogoLight}
+          alt="Logto"
+        />
+      </a>
+    </div>
+  );
+};
 
 export default Footer;

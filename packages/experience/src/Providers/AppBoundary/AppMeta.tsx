@@ -1,3 +1,4 @@
+import idenAppIcon from '@logto/core-kit/assets/iden-app-icon.svg';
 import { Theme } from '@logto/schemas';
 import { conditionalString } from '@silverhand/essentials';
 import classNames from 'classnames';
@@ -8,6 +9,7 @@ import { Helmet } from 'react-helmet';
 import PageContext from '@/Providers/PageContextProvider/PageContext';
 import defaultAppleTouchLogo from '@/shared/assets/apple-touch-icon.png';
 import defaultFavicon from '@/shared/assets/favicon.png';
+import { isCloudBuild } from '@/shared/utils/product-brand';
 import { type SignInExperienceResponse } from '@/types';
 
 import styles from './index.module.scss';
@@ -39,8 +41,12 @@ const AppMeta = () => {
   return (
     <Helmet>
       <html lang={i18next.language} dir={i18next.dir()} data-theme={theme} />
-      <link rel="shortcut icon" href={favicon ?? defaultFavicon} />
-      <link rel="apple-touch-icon" href={favicon ?? defaultAppleTouchLogo} sizes="180x180" />
+      <link rel="shortcut icon" href={favicon ?? (isCloudBuild ? defaultFavicon : idenAppIcon)} />
+      <link
+        rel="apple-touch-icon"
+        href={favicon ?? (isCloudBuild ? defaultAppleTouchLogo : idenAppIcon)}
+        sizes="180x180"
+      />
       {experienceSettings?.customCss && <style>{experienceSettings.customCss}</style>}
       <body
         className={classNames(

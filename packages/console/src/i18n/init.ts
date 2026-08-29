@@ -1,9 +1,12 @@
+import { rebrandProductPhrases } from '@logto/core-kit';
 import type { LanguageTag } from '@logto/language-kit';
 import resources from '@logto/phrases';
 import experienceResource from '@logto/phrases-experience';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+
+import { isCloud } from '@/consts/env';
 
 const initI18n = async (language?: LanguageTag) => {
   await i18next
@@ -28,13 +31,28 @@ const initI18n = async (language?: LanguageTag) => {
 
   // Load phrases
   for (const [language, values] of Object.entries(resources)) {
-    i18next.addResourceBundle(language, 'translation', values.translation, true);
-    i18next.addResourceBundle(language, 'errors', values.errors, true);
+    i18next.addResourceBundle(
+      language,
+      'translation',
+      rebrandProductPhrases(values.translation, isCloud),
+      true
+    );
+    i18next.addResourceBundle(
+      language,
+      'errors',
+      rebrandProductPhrases(values.errors, isCloud),
+      true
+    );
   }
 
   // Load phrases-experience
   for (const [language, values] of Object.entries(experienceResource)) {
-    i18next.addResourceBundle(language, 'experience', values.translation, true);
+    i18next.addResourceBundle(
+      language,
+      'experience',
+      rebrandProductPhrases(values.translation, isCloud),
+      true
+    );
   }
 };
 

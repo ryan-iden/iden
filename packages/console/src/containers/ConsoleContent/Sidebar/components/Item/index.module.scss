@@ -44,3 +44,34 @@
     font: var(--font-label-2);
   }
 }
+
+/* stylelint-disable no-descending-specificity -- Brand-scoped navigation states intentionally override the legacy item states. */
+:global(html[data-product-brand='iden']) {
+  .row {
+    margin-block: 2px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    gap: 12px;
+
+    &:not(.active):hover {
+      background: var(--color-hover);
+    }
+
+    &.active {
+      position: relative;
+      background: var(--color-hover-variant);
+      color: var(--color-text-link);
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset-block: 8px;
+        inset-inline-start: -16px;
+        width: 3px;
+        border-radius: 999px;
+        background: var(--color-primary);
+      }
+    }
+  }
+}
+/* stylelint-enable no-descending-specificity */

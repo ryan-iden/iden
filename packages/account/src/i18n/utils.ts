@@ -1,3 +1,4 @@
+import { getBrandedPhrases } from '@experience/shared/utils/product-brand';
 import resource, { type LocalePhrase } from '@logto/phrases-experience';
 import type { LanguageInfo } from '@logto/schemas';
 import type { Resource } from 'i18next';
@@ -62,7 +63,7 @@ const getPhrases = async (language?: string) => {
     throw new Error('lng not found');
   }
 
-  return { phrases: remotePhrases, lng };
+  return { phrases: getBrandedPhrases(remotePhrases), lng };
 };
 
 export const getI18nResource = async (
@@ -77,7 +78,7 @@ export const getI18nResource = async (
     };
   } catch {
     return {
-      resources: { en: resource.en },
+      resources: { en: getBrandedPhrases(resource.en) },
       lng: 'en',
     };
   }

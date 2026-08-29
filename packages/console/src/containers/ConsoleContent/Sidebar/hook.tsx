@@ -1,29 +1,31 @@
 import { type Optional } from '@silverhand/essentials';
 import type { TFuncKey } from 'i18next';
-import type { FC, ReactNode } from 'react';
+import {
+  AppWindow,
+  Blocks,
+  Bolt,
+  Braces,
+  Building2,
+  Cable,
+  Code2,
+  FileKey2,
+  Gauge,
+  KeyRound,
+  PanelsTopLeft,
+  ScrollText,
+  Settings2,
+  ShieldCheck,
+  SlidersHorizontal,
+  UsersRound,
+  Webhook,
+  type LucideIcon,
+} from 'lucide-react';
+import type { ReactNode } from 'react';
 
-import BarGraph from '@/assets/icons/bar-graph.svg?react';
-import Bolt from '@/assets/icons/bolt.svg?react';
-import Box from '@/assets/icons/box.svg?react';
-import Code from '@/assets/icons/code.svg?react';
-import Connection from '@/assets/icons/connection.svg?react';
-import Gear from '@/assets/icons/gear.svg?react';
-import Hook from '@/assets/icons/hook.svg?react';
-import JwtClaims from '@/assets/icons/jwt-claims.svg?react';
-import List from '@/assets/icons/list.svg?react';
-import OrganizationTemplate from '@/assets/icons/organization-template-feature.svg?react';
-import Organization from '@/assets/icons/organization.svg?react';
-import UserProfile from '@/assets/icons/profile.svg?react';
-import ResourceIcon from '@/assets/icons/resource.svg?react';
-import Role from '@/assets/icons/role.svg?react';
-import SecurityLock from '@/assets/icons/security-lock.svg?react';
-import Security from '@/assets/icons/security.svg?react';
-import EnterpriseSso from '@/assets/icons/single-sign-on.svg?react';
-import Web from '@/assets/icons/web.svg?react';
 import useIsActionsEnabled from '@/hooks/use-is-actions-enabled';
 
 type SidebarItem = {
-  Icon: FC;
+  Icon: LucideIcon;
   title: TFuncKey<'translation', 'admin_console.tabs'>;
   isHidden?: boolean;
   modal?: (isOpen: boolean, onCancel: () => void) => ReactNode;
@@ -61,7 +63,7 @@ export const useSidebarMenuItems = (): {
           title: 'get_started',
         },
         {
-          Icon: BarGraph,
+          Icon: Gauge,
           title: 'dashboard',
         },
       ],
@@ -70,29 +72,29 @@ export const useSidebarMenuItems = (): {
       title: 'authentication',
       items: [
         {
-          Icon: Box,
+          Icon: AppWindow,
           title: 'applications',
         },
 
         {
-          Icon: Web,
+          Icon: PanelsTopLeft,
           title: 'sign_in_experience',
           path: 'sign-in-experience',
         },
         {
-          Icon: SecurityLock,
+          Icon: FileKey2,
           title: 'mfa',
         },
         {
-          Icon: Connection,
+          Icon: Cable,
           title: 'connectors',
         },
         {
-          Icon: EnterpriseSso,
+          Icon: Building2,
           title: 'enterprise_sso',
         },
         {
-          Icon: Security,
+          Icon: ShieldCheck,
           title: 'security',
         },
       ],
@@ -101,15 +103,15 @@ export const useSidebarMenuItems = (): {
       title: 'authorization',
       items: [
         {
-          Icon: ResourceIcon,
+          Icon: Blocks,
           title: 'api_resources',
         },
         {
-          Icon: Role,
+          Icon: KeyRound,
           title: 'roles',
         },
         {
-          Icon: OrganizationTemplate,
+          Icon: SlidersHorizontal,
           title: 'organization_template',
         },
       ],
@@ -118,11 +120,11 @@ export const useSidebarMenuItems = (): {
       title: 'users',
       items: [
         {
-          Icon: Organization,
+          Icon: Building2,
           title: 'organizations',
         },
         {
-          Icon: UserProfile,
+          Icon: UsersRound,
           title: 'users',
         },
       ],
@@ -131,22 +133,22 @@ export const useSidebarMenuItems = (): {
       title: 'developer',
       items: [
         {
-          Icon: Code,
+          Icon: Code2,
           title: 'actions',
           path: 'actions',
           // Actions are still under development and should be released as one feature.
           isHidden: !isActionsEnabled,
         },
         {
-          Icon: JwtClaims,
+          Icon: Braces,
           title: 'customize_jwt',
         },
         {
-          Icon: Hook,
+          Icon: Webhook,
           title: 'webhooks',
         },
         {
-          Icon: List,
+          Icon: ScrollText,
           title: 'audit_logs',
         },
       ],
@@ -155,7 +157,7 @@ export const useSidebarMenuItems = (): {
       title: 'tenant',
       items: [
         {
-          Icon: Gear,
+          Icon: Settings2,
           title: 'tenant_settings',
         },
       ],

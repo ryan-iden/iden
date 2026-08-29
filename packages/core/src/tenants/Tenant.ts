@@ -21,6 +21,7 @@ import koaConsoleRedirectProxy from '#src/middleware/koa-console-redirect-proxy.
 import koaDeviceFlowShortcut from '#src/middleware/koa-device-flow-shortcut.js';
 import koaErrorHandler from '#src/middleware/koa-error-handler.js';
 import koaExperienceSsr from '#src/middleware/koa-experience-ssr.js';
+import koaHelpCenter from '#src/middleware/koa-help-center.js';
 import koaI18next from '#src/middleware/koa-i18next.js';
 import koaInteractionDetails from '#src/middleware/koa-interaction-details.js';
 import koaOidcErrorHandler from '#src/middleware/koa-oidc-error-handler.js';
@@ -260,6 +261,11 @@ export default class Tenant implements TenantContext {
         ])
       )
     );
+
+    // The self-hosted help center is a separate static bundle and is intentionally absent in Cloud.
+    if (!EnvSet.values.isCloud) {
+      app.use(mount('/' + UserApps.HelpCenter, koaHelpCenter()));
+    }
 
     // Mount experience app
     app.use(

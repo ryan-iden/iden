@@ -8,9 +8,9 @@ import '@/scss/normalized.scss';
 import styles from './App.module.scss';
 import DevPanel, { getDevConfig } from './DevPanel';
 import Footer, { useIsDarkMode } from './Footer';
+import ProductIcon from './ProductIcon';
 import congratsDark from './assets/congrats-dark.svg';
 import congrats from './assets/congrats.svg';
-import logtoIcon from './assets/logto-icon.svg';
 import type { AppState, DeviceAuthResponse, TokenResponse, UserInfo } from './types';
 import { getStringClaim, parseJsonResponse } from './types';
 
@@ -285,7 +285,7 @@ const App = () => {
     <div className={styles.app}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <img className={styles.icon} src={logtoIcon} alt="Logto" />
+          <ProductIcon className={styles.icon} />
           <h1 className={styles.title}>Sign in to your account</h1>
         </div>
         {deviceAuth && (

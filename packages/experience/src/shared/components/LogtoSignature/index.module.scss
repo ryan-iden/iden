@@ -36,6 +36,36 @@
   }
 }
 
+.idenSignature {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: _.unit(1) _.unit(2);
+  color: var(--color-type-secondary);
+  font: var(--font-label-2);
+  text-decoration: none;
+  opacity: 72%;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-type-primary);
+    opacity: 100%;
+  }
+
+  strong {
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+}
+
+.idenMark {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: var(--color-brand-default);
+  mask: url('@logto/core-kit/assets/iden-mark.svg') center / contain no-repeat;
+}
+
 :global(body.mobile) {
   .signature {
     color: var(--color-neutral-variant-80);

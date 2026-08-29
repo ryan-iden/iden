@@ -350,15 +350,45 @@
   }
 }
 
+.idenFooter {
+  display: inline-flex;
+  align-items: center;
+  gap: _.unit(1);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  opacity: 72%;
+
+  &:hover {
+    color: var(--color-text);
+    opacity: 100%;
+  }
+
+  .idenMark {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    mask: url('@logto/core-kit/assets/iden-mark.svg') center / contain no-repeat;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   body {
     @include themes.light;
+  }
+
+  :global(html[data-product-brand='iden']) body {
+    @include themes.iden-light;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   body {
     @include themes.dark;
+  }
+
+  :global(html[data-product-brand='iden']) body {
+    @include themes.iden-dark;
   }
 
   .app {
@@ -374,6 +404,10 @@
         rgba(120, 118, 127, 4%) 100%
       ),
       linear-gradient(90deg, rgb(26, 28, 30) 0%, rgb(26, 28, 30) 100%);
+  }
+
+  :global(html[data-product-brand='iden']) .app {
+    background: var(--color-base);
   }
 
   .qrCodeBox {

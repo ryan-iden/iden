@@ -12,3 +12,11 @@
 
   --inkeep-logto-icon: #{_.inkeep-logto-icon(#5f5d67)};
 }
+
+.light.iden {
+  @include themes.iden-light;
+}
+
+.dark.iden {
+  @include themes.iden-dark;
+}

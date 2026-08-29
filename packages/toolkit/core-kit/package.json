@@ -18,6 +18,7 @@
     },
     "./declaration": "./declaration/index.ts",
     "./scss/*": "./scss/*.scss",
+    "./assets/*": "./assets/*",
     "./custom-jwt": {
       "types": "./lib/custom-jwt/index.d.ts",
       "node": "./lib/custom-jwt/index.js"
@@ -26,6 +27,7 @@
   "types": "./lib/index.d.ts",
   "files": [
     "declaration",
+    "assets",
     "lib",
     "scss"
   ],

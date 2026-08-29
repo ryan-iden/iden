@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Logo from '@/assets/images/logo.svg?react';
+import BrandLogo from '@/components/BrandLogo';
+import { isIdenBrand } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import useRedirectUri from '@/hooks/use-redirect-uri';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
@@ -28,7 +30,7 @@ function Welcome() {
   return (
     <div className={classNames(styles.container, styles[theme])}>
       <div className={styles.header}>
-        <Logo className={styles.logo} />
+        {isIdenBrand ? <BrandLogo className={styles.logo} /> : <Logo className={styles.logo} />}
       </div>
       <main>
         <div className={styles.placeholderTop} />

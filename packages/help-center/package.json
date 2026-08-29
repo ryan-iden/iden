@@ -1,0 +1,30 @@
+{
+  "name": "@logto/help-center",
+  "version": "1.0.0",
+  "description": "The same-origin iden help center.",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "source.json",
+    "visibility-policy.json"
+  ],
+  "scripts": {
+    "prepack": "pnpm build",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/dev.mjs",
+    "check": "node --test scripts/*.test.mjs",
+    "test": "node --test scripts/*.test.mjs",
+    "test:ci": "node --test scripts/*.test.mjs"
+  },
+  "dependencies": {
+    "marked": "^15.0.12"
+  },
+  "devDependencies": {
+    "pagefind": "^1.4.0"
+  },
+  "engines": {
+    "node": "^22.14.0"
+  },
+  "license": "MPL-2.0"
+}

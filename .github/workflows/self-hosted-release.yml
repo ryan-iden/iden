@@ -44,17 +44,29 @@ jobs:
       - name: Build workspace packages
         run: pnpm prepack
 
+      - name: Build self-hosted frontends
+        run: pnpm --filter @logto/console --filter @logto/experience --filter @logto/account --filter @logto/demo-app --filter @logto/device-demo-app build
+
+      - name: Verify self-hosted brand and local documentation output
+        run: pnpm verify:self-hosted-brand
+
       - name: Check types
         run: pnpm -r check
 
       - name: Lint changed feature packages
-        run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console lint
+        run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/core-kit --filter @logto/console --filter @logto/experience --filter @logto/account --filter @logto/demo-app --filter @logto/device-demo-app --filter @logto/elements lint
+
+      - name: Check frontend styles
+        run: pnpm --filter @logto/core-kit --filter @logto/console --filter @logto/experience --filter @logto/account --filter @logto/demo-app --filter @logto/device-demo-app stylelint
 
       - name: Build Core test artifacts
         run: pnpm --filter @logto/core build:test
 
       - name: Test changed feature packages
-        run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/console test:ci
+        run: pnpm --filter @logto/shared --filter @logto/core --filter @logto/core-kit --filter @logto/console --filter @logto/experience --filter @logto/account --filter @logto/elements --filter @logto/help-center test:ci
+
+      - name: Verify Cloud frontend build compatibility
+        run: IS_CLOUD=1 pnpm --filter @logto/console --filter @logto/experience --filter @logto/account --filter @logto/demo-app --filter @logto/device-demo-app build
 
   publish-image:
     name: Publish immutable GHCR image
@@ -200,7 +212,9 @@ jobs:
           set -euo pipefail
           for endpoint in \
             "https://${LOGTO_HOST}/api/status" \
-            "https://${LOGTO_ADMIN_HOST}:${LOGTO_ADMIN_PORT}/api/status"
+            "https://${LOGTO_HOST}/help/en/" \
+            "https://${LOGTO_ADMIN_HOST}:${LOGTO_ADMIN_PORT}/api/status" \
+            "https://${LOGTO_ADMIN_HOST}:${LOGTO_ADMIN_PORT}/help/en/"
           do
             curl \
               --fail \

@@ -42,6 +42,7 @@
     "@logto/demo-app": "workspace:*",
     "@logto/device-demo-app": "workspace:*",
     "@logto/experience": "workspace:*",
+    "@logto/help-center": "workspace:*",
     "@logto/js": "^5.1.0",
     "@logto/language-kit": "workspace:^",
     "@logto/phrases": "workspace:^",

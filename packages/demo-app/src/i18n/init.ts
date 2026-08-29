@@ -4,12 +4,14 @@ import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
+import { getBrandedPhrases } from '../product-brand';
+
 const initI18n = async (language?: LanguageTag) =>
   i18next
     .use(initReactI18next)
     .use(LanguageDetector)
     .init({
-      resources,
+      resources: getBrandedPhrases(resources),
       fallbackLng: 'en',
       interpolation: {
         escapeValue: false,

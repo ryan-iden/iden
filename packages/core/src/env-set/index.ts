@@ -20,6 +20,7 @@ export enum UserApps {
   DemoApp = 'demo-app',
   DeviceDemoApp = 'device-demo-app',
   AccountCenter = 'account',
+  HelpCenter = 'help',
   WellKnown = '.well-known',
 }
 

@@ -1,4 +1,4 @@
-import { type IdTokenClaims, LogtoProvider, useLogto, type Prompt } from '@logto/react';
+import { type IdTokenClaims, LogtoProvider, type Prompt, useLogto } from '@logto/react';
 import { demoAppApplicationId } from '@logto/schemas';
 import i18next from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import DevPanel from './DevPanel';
 import congratsDark from './assets/congrats-dark.svg';
 import congrats from './assets/congrats.svg';
 import initI18n from './i18n/init';
+import { isCloudBuild, productBrand } from './product-brand';
 import { getLocalData, setLocalData } from './utils';
 
 void initI18n();
@@ -140,6 +141,7 @@ const Main = () => {
   return (
     <div className={styles.app}>
       <Helmet
+        title={`${productBrand.productName} Live Preview`}
         htmlAttributes={{
           // We intentionally use the imported i18next instance instead of the hook, since the hook
           // will cause a re-render following some bugs here. This still works for the initial
@@ -150,6 +152,12 @@ const Main = () => {
       />
       {showDevPanel && <DevPanel />}
       <div className={[styles.card, styles.congrats].join(' ')}>
+        {!isCloudBuild && (
+          <div className={styles.brand}>
+            <span aria-hidden className={styles.brandMark} />
+            <span>{productBrand.productName}</span>
+          </div>
+        )}
         {congratsIcon && <img src={congratsIcon} alt="Congrats" />}
         <div className={styles.title}>{t('title')}</div>
         <div className={styles.text}>{t('subtitle')}</div>
