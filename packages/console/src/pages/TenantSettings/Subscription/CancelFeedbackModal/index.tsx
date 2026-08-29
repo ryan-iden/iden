@@ -3,6 +3,7 @@ import { usePostHog } from 'posthog-js/react';
 import { useState } from 'react';
 import ReactModal from 'react-modal';
 
+import { postHogKey } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import FormField from '@/ds-components/FormField';
 import ModalLayout from '@/ds-components/ModalLayout';
@@ -25,10 +26,12 @@ function CancelFeedbackModal({ isOpen, fromSkuId, onClose }: Props) {
   const reconsiderSuggestion = howToReconsider.trim();
 
   const captureAndClose = (properties: Record<string, unknown>) => {
-    postHog.capture('console:subscription_cancel_feedback', {
-      from_sku_id: fromSkuId,
-      ...properties,
-    });
+    if (postHogKey) {
+      postHog.capture('console:subscription_cancel_feedback', {
+        from_sku_id: fromSkuId,
+        ...properties,
+      });
+    }
     onClose();
   };
 

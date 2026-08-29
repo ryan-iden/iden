@@ -16,6 +16,7 @@ import { GtagConversionId, reportToGoogle } from '@/components/Conversion/utils'
 import { type CreateTenantData } from '@/components/CreateTenantModal/types';
 import PageMeta from '@/components/PageMeta';
 import Region, { defaultRegionName } from '@/components/Region';
+import { postHogKey } from '@/consts/env';
 import { TenantsContext } from '@/contexts/TenantsProvider';
 import Button from '@/ds-components/Button';
 import DangerousRaw from '@/ds-components/DangerousRaw';
@@ -99,7 +100,7 @@ function CreateTenant() {
         toast.success(t('tenants.create_modal.tenant_created'));
 
         // Only report the questionnaire when it was shown (i.e., the user hasn't answered before).
-        if (!isOnboardingDone) {
+        if (postHogKey && !isOnboardingDone) {
           const { source } = hearAboutUs;
           const sourceDetail = conditional(
             source && sourcesWithDetail.has(source) && hearAboutUs.detail?.trim()

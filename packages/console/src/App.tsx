@@ -112,40 +112,48 @@ function Providers() {
     []
   );
 
+  const content = (
+    <LogtoProvider
+      unstable_enableCache
+      config={{
+        endpoint: adminTenantEndpoint.href,
+        appId: adminConsoleApplicationId,
+        resources,
+        scopes,
+        prompt: [Prompt.Login, Prompt.Consent],
+      }}
+    >
+      <AppThemeProvider>
+        <Helmet titleTemplate={`%s - ${mainTitle}`} defaultTitle={mainTitle} />
+        <Toast />
+        <AppConfirmModalProvider>
+          <ErrorBoundary>
+            <LogtoErrorBoundary>
+              <AppDataProvider>
+                <GlobalScripts />
+                <Content />
+              </AppDataProvider>
+            </LogtoErrorBoundary>
+          </ErrorBoundary>
+        </AppConfirmModalProvider>
+      </AppThemeProvider>
+    </LogtoProvider>
+  );
+
+  if (!postHogKey) {
+    return content;
+  }
+
   return (
     <PostHogProvider
-      apiKey={postHogKey ?? ''} // Empty key will disable PostHog
+      apiKey={postHogKey}
       options={{
         ui_host: postHogUiHost,
         api_host: postHogHost,
         defaults: '2025-05-24',
       }}
     >
-      <LogtoProvider
-        unstable_enableCache
-        config={{
-          endpoint: adminTenantEndpoint.href,
-          appId: adminConsoleApplicationId,
-          resources,
-          scopes,
-          prompt: [Prompt.Login, Prompt.Consent],
-        }}
-      >
-        <AppThemeProvider>
-          <Helmet titleTemplate={`%s - ${mainTitle}`} defaultTitle={mainTitle} />
-          <Toast />
-          <AppConfirmModalProvider>
-            <ErrorBoundary>
-              <LogtoErrorBoundary>
-                <AppDataProvider>
-                  <GlobalScripts />
-                  <Content />
-                </AppDataProvider>
-              </LogtoErrorBoundary>
-            </ErrorBoundary>
-          </AppConfirmModalProvider>
-        </AppThemeProvider>
-      </LogtoProvider>
+      {content}
     </PostHogProvider>
   );
 }
@@ -158,7 +166,7 @@ function Content() {
   const postHog = usePostHog();
 
   useEffect(() => {
-    if (isLoaded) {
+    if (postHogKey && isLoaded) {
       postHog.identify(user?.id);
     }
     // We don't reset user info here because this component includes some anonymous pages.
@@ -190,6 +198,10 @@ function Content() {
    * for details at the time of writing.
    */
   useEffect(() => {
+    if (!postHogKey) {
+      return;
+    }
+
     const captureGroups = () => {
       if (currentTenant) {
         postHog.group('tenant', currentTenantId, {

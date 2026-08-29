@@ -1,3 +1,4 @@
+import { rebrandProductText } from '@logto/core-kit';
 import { type AdminConsoleKey } from '@logto/phrases';
 import { Theme } from '@logto/schemas';
 import classNames from 'classnames';
@@ -5,6 +6,7 @@ import { type ReactNode, Suspense, useCallback } from 'react';
 
 import { type Guide, type GuideMetadata } from '@/assets/docs/guides/types';
 import { BetaTag } from '@/components/FeatureTag';
+import { isCloud } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import useTheme from '@/hooks/use-theme';
 import { dynamicAppGuideId } from '@/types/applications';
@@ -38,6 +40,7 @@ function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: 
   const { id, Logo, DarkLogo, metadata } = data;
 
   const { target, name, description } = metadata;
+  const displayDescription = description && rebrandProductText(description, isCloud);
   const buttonText = getButtonText(id, target);
   const theme = useTheme();
   const hasTags = Boolean(paywallTag) || Boolean(isBeta);
@@ -76,8 +79,8 @@ function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: 
               </div>
             )}
           </div>
-          <div className={styles.description} title={description}>
-            {description}
+          <div className={styles.description} title={displayDescription}>
+            {displayDescription}
           </div>
         </div>
       </div>
