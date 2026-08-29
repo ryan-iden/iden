@@ -139,6 +139,8 @@
   },
   "prettier": "@silverhand/eslint-config/.prettierrc",
   "dependencies": {
+    "@blobatar/react": "^2.6.0",
+    "blobatar": "^2.6.0",
     "lucide-react": "^0.468.0"
   }
 }

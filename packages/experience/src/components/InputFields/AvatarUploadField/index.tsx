@@ -1,13 +1,14 @@
+import { resolveDefaultAvatarSeed } from '@logto/core-kit';
 import { maxUploadFileSize } from '@logto/schemas';
 import classNames from 'classnames';
 import { useCallback, useEffect, useId, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { uploadAvatar } from '@/apis/experience/avatar';
-import UserAvatar from '@/assets/icons/default-user-avatar.svg?react';
 import AvatarCropModal from '@/components/AvatarCropModal';
 import useAvatarCropUpload from '@/hooks/use-avatar-crop-upload';
 import RotatingRingIcon from '@/shared/components/Button/RotatingRingIcon';
+import DefaultUserAvatar from '@/shared/components/DefaultUserAvatar';
 import { avatarFileAccept, formatFileSizeLimit } from '@/utils/avatar-upload';
 
 import styles from './index.module.scss';
@@ -89,6 +90,7 @@ const AvatarUploadField = ({
   const displayError = cropImageSource ? errorMessage : (uploadError ?? errorMessage);
   const showRemove = Boolean(value) && !isRequired && !isUploading;
   const showHint = !displayError && !isUploading;
+  const avatarSeed = resolveDefaultAvatarSeed(name);
 
   return (
     <div className={classNames(styles.container, className)}>
@@ -106,7 +108,7 @@ const AvatarUploadField = ({
               referrerPolicy="no-referrer"
             />
           ) : (
-            <UserAvatar className={styles.placeholder} />
+            <DefaultUserAvatar className={styles.placeholder} seed={avatarSeed} />
           )}
         </div>
         <div className={styles.controls}>

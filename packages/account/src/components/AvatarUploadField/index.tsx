@@ -1,8 +1,9 @@
-import UserAvatar from '@experience/assets/icons/default-user-avatar.svg?react';
 import AvatarCropModal from '@experience/components/AvatarCropModal';
 import useAvatarCropUpload from '@experience/hooks/use-avatar-crop-upload';
 import RotatingRingIcon from '@experience/shared/components/Button/RotatingRingIcon';
+import DefaultUserAvatar from '@experience/shared/components/DefaultUserAvatar';
 import { avatarFileAccept } from '@experience/utils/avatar-upload';
+import { resolveDefaultAvatarSeed } from '@logto/core-kit';
 import { useLogto } from '@logto/react';
 import classNames from 'classnames';
 import { useCallback, useId, useRef } from 'react';
@@ -19,10 +20,11 @@ type Props = {
   readonly className?: string;
   readonly label: string;
   readonly value?: string;
+  readonly avatarSeed?: string;
   readonly onChange: (value: string) => void | Promise<void>;
 };
 
-const AvatarUploadField = ({ className, label, value = '', onChange }: Props) => {
+const AvatarUploadField = ({ className, label, value = '', avatarSeed, onChange }: Props) => {
   const { t } = useTranslation();
   const { t: tAvatar } = useTranslation(undefined, { keyPrefix: 'profile.avatar_upload' });
   const { getAccessToken } = useLogto();
@@ -97,7 +99,10 @@ const AvatarUploadField = ({ className, label, value = '', onChange }: Props) =>
               referrerPolicy="no-referrer"
             />
           ) : (
-            <UserAvatar className={styles.placeholder} />
+            <DefaultUserAvatar
+              className={styles.placeholder}
+              seed={resolveDefaultAvatarSeed(avatarSeed)}
+            />
           )}
           {uploadError && !cropImageSource && (
             <span className={styles.errorText} role="alert">

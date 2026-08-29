@@ -1,3 +1,6 @@
+// eslint-disable-next-line n/prefer-global/text-decoder,n/prefer-global/text-encoder -- import Node implementations before defining missing jsdom globals
+import { TextDecoder, TextEncoder } from 'node:util';
+
 import { type LocalePhrase } from '@logto/phrases-experience';
 import { ssrPlaceholder } from '@logto/schemas';
 import { noop, type DeepPartial } from '@silverhand/essentials';
@@ -6,6 +9,12 @@ import i18next from 'i18next';
 import { createElement, forwardRef, type ReactNode } from 'react';
 import { initReactI18next } from 'react-i18next';
 import ReactModal from 'react-modal';
+
+/* eslint-disable @silverhand/fp/no-mutation -- jsdom 29 lacks the encoding globals Blobatar uses */
+global.TextEncoder = TextEncoder;
+// @ts-expect-error -- Node's TextDecoder is runtime-compatible with the DOM global in Jest.
+global.TextDecoder = TextDecoder;
+/* eslint-enable @silverhand/fp/no-mutation */
 
 if (typeof document !== 'undefined') {
   ReactModal.setAppElement(document.body);

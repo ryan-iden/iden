@@ -1,5 +1,6 @@
 import { ApplicationType, Theme } from '@logto/schemas';
 
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import {
   darkModeApplicationIconMap,
   deviceFlowApplicationIcon,
@@ -8,6 +9,7 @@ import {
   thirdPartyApplicationIcon,
   thirdPartyApplicationIconDark,
 } from '@/consts';
+import { isCloud } from '@/consts/env';
 import useTheme from '@/hooks/use-theme';
 
 type Props = {
@@ -40,6 +42,15 @@ const getIcon = (
 function ApplicationIcon({ type, className, isThirdParty = false, isDeviceFlow = false }: Props) {
   const theme = useTheme();
   const isLightMode = theme === Theme.Light;
+
+  if (!isCloud && type === ApplicationType.MachineToMachine && !isThirdParty) {
+    return <IdenProductIcon className={className} isDark={!isLightMode} name="machineToMachine" />;
+  }
+
+  if (!isCloud && type === ApplicationType.Protected && !isThirdParty) {
+    return <IdenProductIcon className={className} isDark={!isLightMode} name="protectedApp" />;
+  }
+
   const Icon = getIcon(type, isLightMode, isThirdParty, isDeviceFlow);
 
   return <Icon className={className} />;

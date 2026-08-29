@@ -1,8 +1,9 @@
-import { ConnectorPlatform, ConnectorType } from '@logto/schemas';
+import { ConnectorPlatform, ConnectorType, Theme } from '@logto/schemas';
 import { conditional } from '@silverhand/essentials';
 import { useTranslation } from 'react-i18next';
 
 import ConnectorLogo from '@/components/ConnectorLogo';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import ItemPreview from '@/components/ItemPreview';
 import UnnamedTrans from '@/components/UnnamedTrans';
 import {
@@ -10,9 +11,11 @@ import {
   connectorPlatformLabel,
   connectorTitlePlaceHolder,
 } from '@/consts/connectors';
+import { isIdenBrand } from '@/consts/env';
 import { ConnectorsTabs } from '@/consts/page-tabs';
 import Button from '@/ds-components/Button';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
+import useTheme from '@/hooks/use-theme';
 import ConnectorPlatformIcon from '@/icons/ConnectorPlatformIcon';
 import type { ConnectorGroup } from '@/types/connector';
 
@@ -29,12 +32,16 @@ function ConnectorName({ connectorGroup, isDemo = false }: Props) {
   const { type, connectors } = connectorGroup;
   const connector = connectors[0];
   const { navigate } = useTenantPathname();
+  const theme = useTheme();
   const hasNonUniversalConnector = connectors.some(
     ({ platform }) => platform !== ConnectorPlatform.Universal
   );
 
   if (!connector) {
     const PlaceholderIcon = connectorPlaceholderIcon[type];
+    const idenIconName =
+      type === ConnectorType.Email ? 'email' : type === ConnectorType.Sms ? 'sms' : undefined;
+    const shouldUseIdenIcon = Boolean(idenIconName) && isIdenBrand;
 
     return (
       <ItemPreview
@@ -53,7 +60,15 @@ function ConnectorName({ connectorGroup, isDemo = false }: Props) {
         }
         icon={
           <div className={styles.logoContainer}>
-            {PlaceholderIcon && <PlaceholderIcon className={styles.logo} />}
+            {shouldUseIdenIcon && idenIconName ? (
+              <IdenProductIcon
+                className={styles.logo}
+                isDark={theme === Theme.Dark}
+                name={idenIconName}
+              />
+            ) : (
+              PlaceholderIcon && <PlaceholderIcon className={styles.logo} />
+            )}
           </div>
         }
       />

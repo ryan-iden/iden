@@ -15,6 +15,7 @@ import ApplicationCreation from '@/components/ApplicationCreation';
 import { type SelectedGuide } from '@/components/Guide/GuideCard';
 import GuideCardGroup from '@/components/Guide/GuideCardGroup';
 import { useApiGuideMetadata, useAppGuideMetadata } from '@/components/Guide/hooks';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import PageMeta from '@/components/PageMeta';
 import { ConnectorsTabs, convertToProductionThresholdDays } from '@/consts';
 import { isCloud } from '@/consts/env';
@@ -177,7 +178,11 @@ function GetStarted() {
         <div className={styles.borderBox}>
           <div className={styles.rowWrapper}>
             <div className={styles.icon}>
-              <PreviewIcon />
+              {isCloud ? (
+                <PreviewIcon />
+              ) : (
+                <IdenProductIcon isDark={theme === Theme.Dark} name="signInPreview" />
+              )}
             </div>
             <div className={styles.columnWrapper}>
               <div className={styles.title}>{t('get_started.customize.preview.title')}</div>
@@ -200,7 +205,11 @@ function GetStarted() {
         <div className={styles.borderBox}>
           <div className={styles.rowWrapper}>
             <div className={styles.icon}>
-              <SocialIcon />
+              {isCloud ? (
+                <SocialIcon />
+              ) : (
+                <IdenProductIcon isDark={theme === Theme.Dark} name="connectors" />
+              )}
             </div>
             <div className={styles.columnWrapper}>
               <div className={styles.title}>{t('get_started.customize.connector.title')}</div>

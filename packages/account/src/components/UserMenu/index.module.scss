@@ -40,16 +40,6 @@
   height: 40px;
 }
 
-/* Applies only to the `<span>` placeholder rendered when the user has no avatar image. */
-.avatarFallback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-overlay-brand-focused);
-  color: var(--color-type-link);
-  font: var(--font-label-2);
-}
-
 .dropdown {
   position: absolute;
   top: calc(100% + #{_.unit(1)});

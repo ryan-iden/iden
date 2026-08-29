@@ -1,3 +1,5 @@
+import { Blobatar } from '@blobatar/react';
+import { resolveDefaultAvatarSeed } from '@logto/core-kit';
 import type { User } from '@logto/schemas';
 import { getUserDisplayName, formatToInternationalPhoneNumber } from '@logto/shared/universal';
 import { conditional } from '@silverhand/essentials';
@@ -5,12 +7,13 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import DefaultAvatar from '@/assets/images/default-avatar.svg?react';
+import { isCloud } from '@/consts/env';
 import ImageWithErrorFallback from '@/ds-components/ImageWithErrorFallback';
 import { Tooltip } from '@/ds-components/Tip';
 
 import styles from './index.module.scss';
 
-type UserInfo = Pick<User, 'name' | 'username' | 'avatar' | 'primaryEmail' | 'primaryPhone'>;
+type UserInfo = Pick<User, 'id' | 'name' | 'username' | 'avatar' | 'primaryEmail' | 'primaryPhone'>;
 
 type Props = {
   readonly className?: string;
@@ -64,7 +67,18 @@ function UserAvatar({ className, size = 'medium', user, hasTooltip = false }: Pr
     '#ADAAB4',
   ];
 
-  const { name, username, avatar, primaryEmail } = user ?? {};
+  const { id, name, username, avatar, primaryEmail, primaryPhone } = user ?? {};
+  const avatarSeed = resolveDefaultAvatarSeed(id, primaryEmail, username, primaryPhone, name);
+  const idenDefaultAvatar = (
+    <Blobatar
+      alt="avatar"
+      background="squircle"
+      className={avatarClassName}
+      draggable={false}
+      name={avatarSeed}
+      size={48}
+    />
+  );
 
   if (avatar) {
     return (
@@ -79,8 +93,22 @@ function UserAvatar({ className, size = 'medium', user, hasTooltip = false }: Pr
            * https://stackoverflow.com/questions/40570117/http403-forbidden-error-when-trying-to-load-img-src-with-google-profile-pic
            */
           referrerPolicy="no-referrer"
-          fallbackElement={<DefaultAvatar />}
+          fallbackElement={isCloud ? <DefaultAvatar /> : idenDefaultAvatar}
         />
+      </div>
+    );
+  }
+
+  if (!isCloud) {
+    return (
+      <div className={wrapperClassName}>
+        <Tooltip
+          className={styles.tooltip}
+          anchorClassName={styles[size]}
+          content={conditional(hasTooltip && user && <UserInfoTipContent user={user} />)}
+        >
+          {idenDefaultAvatar}
+        </Tooltip>
       </div>
     );
   }

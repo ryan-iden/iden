@@ -32,7 +32,9 @@ const config: Config.InitialOptions = {
     '^@/([^?]*)(\\?.*)?$': '<rootDir>/src/$1',
     '^@logto/shared/(.*)$': '<rootDir>/../shared/lib/$1',
   },
-  transformIgnorePatterns: ['node_modules/(?!(.*(nanoid|jose|ky|@logto|@silverhand))/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(.*(nanoid|jose|ky|@blobatar|blobatar|@logto|@silverhand))/)',
+  ],
 };
 
 export default config;

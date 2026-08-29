@@ -6,6 +6,7 @@ import { type ReactNode, Suspense, useCallback } from 'react';
 
 import { type Guide, type GuideMetadata } from '@/assets/docs/guides/types';
 import { BetaTag } from '@/components/FeatureTag';
+import { IdenProductIcon, type IdenProductIconName } from '@/components/IdenProductIcon';
 import { isCloud } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import useTheme from '@/hooks/use-theme';
@@ -36,6 +37,11 @@ const getButtonText = (id: Guide['id'], target: GuideMetadata['target']): AdminC
   return target === 'API' ? 'guide.get_started' : 'guide.start_building';
 };
 
+const idenGuideIconNames: Readonly<Record<string, IdenProductIconName>> = Object.freeze({
+  'protected-app': 'protectedApp',
+  'm2m-general': 'machineToMachine',
+});
+
 function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: Props) {
   const { id, Logo, DarkLogo, metadata } = data;
 
@@ -44,6 +50,7 @@ function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: 
   const buttonText = getButtonText(id, target);
   const theme = useTheme();
   const hasTags = Boolean(paywallTag) || Boolean(isBeta);
+  const idenIconName = isCloud ? undefined : idenGuideIconNames[id];
 
   const handleClick = useCallback(() => {
     onClick({ id, metadata });
@@ -66,7 +73,13 @@ function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: 
       <div className={styles.header}>
         <Suspense fallback={<div className={styles.logoSkeleton} />}>
           <div className={styles.logo}>
-            {theme === Theme.Dark && DarkLogo ? <DarkLogo /> : <Logo />}
+            {idenIconName ? (
+              <IdenProductIcon isDark={theme === Theme.Dark} name={idenIconName} />
+            ) : theme === Theme.Dark && DarkLogo ? (
+              <DarkLogo />
+            ) : (
+              <Logo />
+            )}
           </div>
         </Suspense>
         <div className={styles.infoWrapper}>

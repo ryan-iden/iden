@@ -3765,6 +3765,12 @@ importers:
 
   packages/console:
     dependencies:
+      '@blobatar/react':
+        specifier: ^2.6.0
+        version: 2.6.0(blobatar@2.6.0(react@18.3.1))(react@18.3.1)
+      blobatar:
+        specifier: ^2.6.0
+        version: 2.6.0(react@18.3.1)
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@18.3.1)
@@ -4679,6 +4685,12 @@ importers:
 
   packages/experience:
     dependencies:
+      '@blobatar/react':
+        specifier: ^2.6.0
+        version: 2.6.0(blobatar@2.6.0(react@18.3.1))(react@18.3.1)
+      blobatar:
+        specifier: ^2.6.0
+        version: 2.6.0(react@18.3.1)
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@18.3.1)
@@ -6014,6 +6026,12 @@ packages:
   '@bcoe/v8-coverage@1.0.2':
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
+
+  '@blobatar/react@2.6.0':
+    resolution: {integrity: sha512-d3BX7KH7nh7N8wfCxP5LGwe+2o+OlcbIJsdDIBrcAME6GxmD63770BFCPiovnN+tWXCGA0yAAPTmznPUEOzPxA==}
+    peerDependencies:
+      blobatar: 2.x
+      react: '>=18'
 
   '@braintree/sanitize-url@6.0.4':
     resolution: {integrity: sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A==}
@@ -9483,6 +9501,17 @@ packages:
 
   bl@5.1.0:
     resolution: {integrity: sha512-tv1ZJHLfTDnXE6tMHv73YgSJaWR2AFuPwMntBe7XL/GBFHnT0CLnsHMogfk5+GzCDC5ZWarSCYaIGATZt9dNsQ==}
+
+  blobatar@2.6.0:
+    resolution: {integrity: sha512-rKwSmlhIIYCw9k9d5fwsZB/7EmuEE0h+4fGKVOks4PJml82w4CkoKxJLlcfU47Yft2vuPa3UEOZ8kMD0rk6Vtg==}
+    peerDependencies:
+      react: '>=18'
+      vue: '>=3'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      vue:
+        optional: true
 
   bluebird@3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
@@ -17087,6 +17116,11 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
+  '@blobatar/react@2.6.0(blobatar@2.6.0(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      blobatar: 2.6.0(react@18.3.1)
+      react: 18.3.1
+
   '@braintree/sanitize-url@6.0.4': {}
 
   '@changesets/apply-release-plan@6.1.4':
@@ -21472,6 +21506,10 @@ snapshots:
       buffer: 6.0.3
       inherits: 2.0.4
       readable-stream: 3.6.2
+
+  blobatar@2.6.0(react@18.3.1):
+    optionalDependencies:
+      react: 18.3.1
 
   bluebird@3.7.2: {}
 

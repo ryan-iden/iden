@@ -1,6 +1,7 @@
-import UserAvatar from '@experience/assets/icons/default-user-avatar.svg?react';
+import DefaultUserAvatar from '@experience/shared/components/DefaultUserAvatar';
 import FlipOnRtl from '@experience/shared/components/FlipOnRtl';
 import { onKeyDownHandler } from '@experience/shared/utils/a11y';
+import { resolveDefaultAvatarSeed } from '@logto/core-kit';
 import { useLogto } from '@logto/react';
 import { formatToInternationalPhoneNumber, getUserDisplayName } from '@logto/shared/universal';
 import classNames from 'classnames';
@@ -19,19 +20,15 @@ const postSignOutRedirectUri = `${window.location.origin}${accountCenterBasePath
 type AvatarProps = {
   readonly className?: string;
   readonly avatar?: string;
-  readonly initial?: string;
+  readonly seed: string;
 };
 
-const Avatar = ({ className, avatar, initial }: AvatarProps) => {
+const Avatar = ({ className, avatar, seed }: AvatarProps) => {
   if (avatar) {
     return <img className={className} src={avatar} alt="avatar" referrerPolicy="no-referrer" />;
   }
 
-  if (initial) {
-    return <span className={classNames(className, styles.avatarFallback)}>{initial}</span>;
-  }
-
-  return <UserAvatar className={className} />;
+  return <DefaultUserAvatar className={className} seed={seed} />;
 };
 
 const UserMenu = () => {
@@ -101,7 +98,7 @@ const UserMenu = () => {
   const displayName =
     getUserDisplayName({ name, username, primaryEmail, primaryPhone }) ??
     (id ? t('description.user_id', { id }) : undefined);
-  const initial = displayName?.charAt(0).toLocaleUpperCase();
+  const avatarSeed = resolveDefaultAvatarSeed(id, primaryEmail, username, primaryPhone, name);
   // `primaryPhone` is stored as normalized digits, so format it the same way `getUserDisplayName`
   // does. Otherwise a phone-only user sees the formatted number as the name and the raw digits
   // right below it.
@@ -129,12 +126,12 @@ const UserMenu = () => {
           setIsOpen((value) => !value);
         }}
       >
-        <Avatar className={styles.avatar} avatar={avatarUrl} initial={initial} />
+        <Avatar className={styles.avatar} avatar={avatarUrl} seed={avatarSeed} />
       </div>
       {isOpen && (
         <div role="menu" className={classNames(styles.dropdown, layoutClassNames.userMenuDropdown)}>
           <div role="group" className={styles.userInfo}>
-            <Avatar className={styles.userInfoAvatar} avatar={avatarUrl} initial={initial} />
+            <Avatar className={styles.userInfoAvatar} avatar={avatarUrl} seed={avatarSeed} />
             <div className={styles.userInfoText}>
               {displayName && <div className={styles.name}>{displayName}</div>}
               {secondaryText !== displayName && secondaryText && (

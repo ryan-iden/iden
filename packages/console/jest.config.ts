@@ -27,7 +27,9 @@ const config: Config.InitialOptions = {
     '^@logto/shared/(.*)$': '<rootDir>/../shared/lib/$1',
     '\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },
-  transformIgnorePatterns: ['node_modules/(?!(.*(nanoid|jose|ky|@logto|@silverhand))/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(.*(nanoid|jose|ky|@blobatar|blobatar|@logto|@silverhand))/)',
+  ],
 };
 
 export default config;
