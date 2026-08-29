@@ -1,5 +1,5 @@
+import { createRequire } from 'node:module';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import type { MiddlewareType } from 'koa';
 import proxy from 'koa-proxies';
@@ -9,7 +9,7 @@ import serveStatic from '#src/middleware/koa-serve-static.js';
 import { getConsoleLogFromContext } from '#src/utils/console.js';
 
 const distributionPath = path.join(
-  path.dirname(fileURLToPath(import.meta.resolve('@logto/help-center/package.json'))),
+  path.dirname(createRequire(import.meta.url).resolve('@logto/help-center/package.json')),
   'dist'
 );
 
