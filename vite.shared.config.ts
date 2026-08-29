@@ -2,13 +2,21 @@
 
 import { type Plugin, Rollup, UserConfig } from 'vite';
 
+// Must stay in sync with `cloudApiIndicator` from `@logto/schemas`.
+const compatibleCloudApiIndicator = 'https://cloud.logto.io/api';
+const cloudApiIndicatorPlaceholder = '__IDEN_COMPAT_CLOUD_API_INDICATOR__';
+
 const sanitizeSelfHostedChunk = (code: string) =>
   code
+    // Keep the inherited OAuth resource indicator intact. It is an internal protocol identifier,
+    // not user-facing Cloud promotion, and the admin tenant validates it verbatim.
+    .replaceAll(compatibleCloudApiIndicator, cloudApiIndicatorPlaceholder)
     .replaceAll('Logto Cloud', 'iden')
     .replaceAll('Powered by Logto', 'Powered by iden')
     .replaceAll('docs.logto.io', 'help.iden.local')
     .replaceAll('cloud.logto.io', 'console.iden.local')
-    .replaceAll('numbers.logto.io', 'telemetry.iden.local');
+    .replaceAll('numbers.logto.io', 'telemetry.iden.local')
+    .replaceAll(cloudApiIndicatorPlaceholder, compatibleCloudApiIndicator);
 
 const selfHostedBrandSanitizer = (): Plugin => ({
   name: 'self-hosted-brand-sanitizer',

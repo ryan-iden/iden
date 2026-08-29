@@ -24,6 +24,9 @@ const forbiddenPatterns = [
   "Logto Cloud",
   "Powered by Logto",
 ];
+// The local control plane intentionally reuses this inherited OAuth resource indicator. It is
+// validated verbatim by the admin tenant and is never rendered as user-facing product copy.
+const compatibleCloudApiIndicator = "https://cloud.logto.io/api";
 
 const readFilesRecursively = async (root) => {
   const entries = await readdir(root, { withFileTypes: true });
@@ -42,6 +45,7 @@ const readFilesRecursively = async (root) => {
 };
 
 const violations = [];
+let hasCompatibleCloudApiIndicator = false;
 for (const root of roots) {
   await access(root);
   for (const file of await readFilesRecursively(root)) {
@@ -49,12 +53,25 @@ for (const root of roots) {
       continue;
     }
     const content = await readFile(file, "utf8");
+    if (
+      root === "packages/console/dist" &&
+      content.includes(compatibleCloudApiIndicator)
+    ) {
+      hasCompatibleCloudApiIndicator = true;
+    }
+    const visibleContent = content.replaceAll(compatibleCloudApiIndicator, "");
     for (const pattern of forbiddenPatterns) {
-      if (content.includes(pattern)) {
+      if (visibleContent.includes(pattern)) {
         violations.push(`${file}: ${pattern}`);
       }
     }
   }
+}
+
+if (!hasCompatibleCloudApiIndicator) {
+  throw new Error(
+    "Self-hosted Console is missing the compatible OAuth resource indicator.",
+  );
 }
 
 const requiredLocales = JSON.parse(
@@ -71,7 +88,9 @@ for (const locale of requiredLocales) {
   await access(entryPath);
   const entry = await readFile(entryPath, "utf8");
   if (!entry.includes(`<html lang="${locale}"`)) {
-    throw new Error(`Help locale ${locale} has an incorrect document language.`);
+    throw new Error(
+      `Help locale ${locale} has an incorrect document language.`,
+    );
   }
 }
 await access("packages/help-center/dist/pagefind/pagefind.js");
