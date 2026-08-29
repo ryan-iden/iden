@@ -70,14 +70,16 @@ describe('<UserMenu />', () => {
     expect(document.activeElement).toBe(trigger);
   });
 
-  it('falls back to the display name initial when no avatar is set', () => {
-    const { getByRole, container } = renderWithPageContext(<UserMenu />);
+  it('renders a deterministic generated avatar when no custom avatar is set', () => {
+    const { container } = renderWithPageContext(<UserMenu />);
 
     expect(container.querySelector('img[alt="avatar"]')).toBeNull();
-    expect(getByRole('button', { name: 'User menu' }).textContent).toBe('A');
+    expect(container.querySelector('img[aria-hidden="true"]')?.getAttribute('src')).toMatch(
+      /^data:image\/svg\+xml/
+    );
   });
 
-  it('falls back to user ID and default avatar icon when user has no avatar and no display name', () => {
+  it('uses the user ID for the generated avatar and display fallback', () => {
     const { getByRole, getByText, container } = renderWithPageContext(
       <UserMenu />,
       {},
@@ -97,6 +99,9 @@ describe('<UserMenu />', () => {
     );
 
     expect(container.querySelector('img[alt="avatar"]')).toBeNull();
+    expect(container.querySelector('img[aria-hidden="true"]')?.getAttribute('src')).toMatch(
+      /^data:image\/svg\+xml/
+    );
     fireEvent.click(getByRole('button', { name: 'User menu' }));
     expect(getByText('description.user_id')).toBeTruthy();
   });
