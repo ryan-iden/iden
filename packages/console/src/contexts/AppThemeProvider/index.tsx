@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState, createContext } from 'react';
 
 import { storageKeys } from '@/consts';
-import { brandProfile, isIdenBrand } from '@/consts/env';
+import { brandProfile, isIdenBrand } from '@/consts/brand';
 import type { AppearanceMode } from '@/types/appearance-mode';
 import { appearanceModeGuard, DynamicAppearanceMode } from '@/types/appearance-mode';
 

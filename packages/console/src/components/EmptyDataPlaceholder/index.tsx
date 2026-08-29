@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import IdenEmpty from '@/assets/images/iden-states/empty.png';
 import EmptyDark from '@/assets/images/table-empty-dark.svg?react';
 import Empty from '@/assets/images/table-empty.svg?react';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import useTheme from '@/hooks/use-theme';
 
 import styles from './index.module.scss';

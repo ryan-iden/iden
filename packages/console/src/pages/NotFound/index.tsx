@@ -6,7 +6,7 @@ import IdenNoResults from '@/assets/images/iden-states/no-results.png';
 import NotFoundDarkImage from '@/assets/images/not-found-dark.svg?react';
 import NotFoundImage from '@/assets/images/not-found.svg?react';
 import PageMeta from '@/components/PageMeta';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import Card from '@/ds-components/Card';
 import useTheme from '@/hooks/use-theme';
 

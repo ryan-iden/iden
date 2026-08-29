@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import Logo from '@/assets/images/logo.svg?react';
 import BrandLogo from '@/components/BrandLogo';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import Button from '@/ds-components/Button';
 import useRedirectUri from '@/hooks/use-redirect-uri';
 import useTenantPathname from '@/hooks/use-tenant-pathname';

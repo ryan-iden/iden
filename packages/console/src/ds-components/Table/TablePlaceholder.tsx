@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import IdenEmpty from '@/assets/images/iden-states/empty.png';
 import { CombinedAddOnAndFeatureTag, type PaywallPlanId } from '@/components/FeatureTag';
 import LearnMore, { type Props as LearnMoreProps } from '@/components/LearnMore';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import useTheme from '@/hooks/use-theme';
 
 import DynamicT from '../DynamicT';

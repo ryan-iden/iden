@@ -8,7 +8,7 @@ import KeyboardArrowUp from '@/assets/icons/keyboard-arrow-up.svg?react';
 import ErrorDark from '@/assets/images/error-dark.svg?react';
 import Error from '@/assets/images/error.svg?react';
 import IdenRequestError from '@/assets/images/iden-states/request-error.png';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import Button from '@/ds-components/Button';
 import useTheme from '@/hooks/use-theme';
 import { onKeyDownHandler } from '@/utils/a11y';

@@ -1,6 +1,6 @@
 import Logo from '@/assets/images/logo.svg?react';
 import BrandLogo from '@/components/BrandLogo';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import { Daisy as Spinner } from '@/ds-components/Spinner';
 
 import styles from './index.module.scss';

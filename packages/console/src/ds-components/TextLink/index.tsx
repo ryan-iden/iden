@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 // Used in the docs
 
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import useDocumentationUrl from '@/hooks/use-documentation-url';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 

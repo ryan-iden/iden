@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 import CloudLogo from '@/assets/images/cloud-logo.svg?react';
-import { brandProfile, isCloud } from '@/consts/env';
+import { brandProfile, isCloudBrand } from '@/consts/brand';
 
 import styles from './index.module.scss';
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 function BrandLogo({ className, onClick }: Props) {
-  if (isCloud) {
+  if (isCloudBrand) {
     return (
       <CloudLogo
         aria-label={brandProfile.productName}

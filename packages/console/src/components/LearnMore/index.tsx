@@ -2,7 +2,7 @@ import { type AdminConsoleKey } from '@logto/phrases';
 import { useState } from 'react';
 
 import HelpDrawer from '@/components/HelpDrawer';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import DynamicT from '@/ds-components/DynamicT';
 import TextLink, { type Props as TextLinkProps } from '@/ds-components/TextLink';
 import useDocumentationUrl from '@/hooks/use-documentation-url';

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import IdenRequestError from '@/assets/images/iden-states/request-error.png';
 import RequestErrorDarkImage from '@/assets/images/request-error-dark.svg?react';
 import RequestErrorImage from '@/assets/images/request-error.svg?react';
-import { isIdenBrand } from '@/consts/env';
+import { isIdenBrand } from '@/consts/brand';
 import Button from '@/ds-components/Button';
 import Card from '@/ds-components/Card';
 import type { RequestError } from '@/hooks/use-api';

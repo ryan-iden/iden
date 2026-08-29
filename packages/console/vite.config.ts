@@ -45,6 +45,7 @@ const buildConfig = (mode: string): UserConfig => ({
   ],
   define: {
     'import.meta.env.IS_CLOUD': JSON.stringify(process.env.IS_CLOUD),
+    'process.env.IS_CLOUD': JSON.stringify(process.env.IS_CLOUD),
     'import.meta.env.SELF_HOSTED_PARITY_ENABLED': JSON.stringify(
       process.env.SELF_HOSTED_PARITY_ENABLED
     ),
