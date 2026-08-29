@@ -2,10 +2,12 @@ import { type OrganizationRole, type RoleType } from '@logto/schemas';
 import classNames from 'classnames';
 
 import RoleIcon from '@/assets/icons/organization-role-feature.svg?react';
+import { isCloud } from '@/consts/env';
 import MultiSelect, { type Option } from '@/ds-components/Select/MultiSelect';
 import useSearchValues from '@/hooks/use-search-values';
 
 import Breakable from '../Breakable';
+import { IdenProductIcon } from '../IdenProductIcon';
 import ThemedIcon from '../ThemedIcon';
 
 import styles from './index.module.scss';
@@ -19,7 +21,11 @@ type RoleOptionProps = {
 export function RoleOption({ title, value, size = 'small' }: RoleOptionProps) {
   return (
     <div className={classNames(styles.roleOption, size === 'large' && styles.large)}>
-      <ThemedIcon for={RoleIcon} size={size === 'small' ? 16 : 40} />
+      {isCloud ? (
+        <ThemedIcon for={RoleIcon} size={size === 'small' ? 16 : 40} />
+      ) : (
+        <IdenProductIcon name="roleAccess" size={size === 'small' ? 16 : 40} />
+      )}
       <Breakable>{title ?? value}</Breakable>
     </div>
   );

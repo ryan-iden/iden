@@ -40,6 +40,12 @@ const getButtonText = (id: Guide['id'], target: GuideMetadata['target']): AdminC
 const idenGuideIconNames: Readonly<Record<string, IdenProductIconName>> = Object.freeze({
   'protected-app': 'protectedApp',
   'm2m-general': 'machineToMachine',
+  'saml-idp': 'thirdPartyApp',
+  'third-party-oidc': 'traditionalWebApp',
+  'third-party-oidc-spa': 'singlePageApp',
+  'third-party-oidc-native': 'nativeApp',
+  'third-party-dynamic-app': 'thirdPartyApp',
+  'native-device-flow': 'deviceFlowApp',
 });
 
 function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: Props) {

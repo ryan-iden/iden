@@ -17,7 +17,9 @@ import ManagementApiResource from '@/assets/icons/management-api-resource.svg?re
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader, { type MenuItem } from '@/components/DetailsPage/DetailsPageHeader';
 import Drawer from '@/components/Drawer';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import PageMeta from '@/components/PageMeta';
+import { isCloud } from '@/consts/env';
 import { ApiResourceDetailsTabs } from '@/consts/page-tabs';
 import DeleteConfirmModal from '@/ds-components/DeleteConfirmModal';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
@@ -26,6 +28,7 @@ import useApi from '@/hooks/use-api';
 import useDocumentationUrl from '@/hooks/use-documentation-url';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useTheme from '@/hooks/use-theme';
+import { getApiResourceDisplayName } from '@/utils/api-resource';
 
 import GuideDrawer from './components/GuideDrawer';
 import GuideModal from './components/GuideModal';
@@ -112,8 +115,16 @@ function ApiResourceDetails() {
       {data && (
         <>
           <DetailsPageHeader
-            icon={<Icon />}
-            title={data.name}
+            icon={
+              isCloud ? (
+                <Icon />
+              ) : (
+                <IdenProductIcon
+                  name={isLogtoManagementApiResource ? 'managementApi' : 'apiResource'}
+                />
+              )
+            }
+            title={getApiResourceDisplayName(data.name, data.indicator)}
             primaryTag={data.isDefault && t('api_resources.default_api')}
             identifier={{
               name: 'API Identifier',

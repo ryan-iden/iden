@@ -1,6 +1,6 @@
 import { ApplicationType, Theme } from '@logto/schemas';
 
-import { IdenProductIcon } from '@/components/IdenProductIcon';
+import { IdenProductIcon, type IdenProductIconName } from '@/components/IdenProductIcon';
 import {
   darkModeApplicationIconMap,
   deviceFlowApplicationIcon,
@@ -18,6 +18,14 @@ type Props = {
   readonly isThirdParty?: boolean;
   readonly isDeviceFlow?: boolean;
 };
+
+const selfHostedApplicationIcons = Object.freeze({
+  [ApplicationType.Native]: 'nativeApp',
+  [ApplicationType.SPA]: 'singlePageApp',
+  [ApplicationType.Traditional]: 'traditionalWebApp',
+  [ApplicationType.MachineToMachine]: 'machineToMachine',
+  [ApplicationType.Protected]: 'protectedApp',
+} satisfies Record<Exclude<ApplicationType, ApplicationType.SAML>, IdenProductIconName>);
 
 const getIcon = (
   type: ApplicationType,
@@ -43,12 +51,15 @@ function ApplicationIcon({ type, className, isThirdParty = false, isDeviceFlow =
   const theme = useTheme();
   const isLightMode = theme === Theme.Light;
 
-  if (!isCloud && type === ApplicationType.MachineToMachine && !isThirdParty) {
-    return <IdenProductIcon className={className} isDark={!isLightMode} name="machineToMachine" />;
-  }
+  if (!isCloud) {
+    const name =
+      isThirdParty || type === ApplicationType.SAML
+        ? 'thirdPartyApp'
+        : isDeviceFlow && type === ApplicationType.Native
+          ? 'deviceFlowApp'
+          : selfHostedApplicationIcons[type];
 
-  if (!isCloud && type === ApplicationType.Protected && !isThirdParty) {
-    return <IdenProductIcon className={className} isDark={!isLightMode} name="protectedApp" />;
+    return <IdenProductIcon className={className} name={name} />;
   }
 
   const Icon = getIcon(type, isLightMode, isThirdParty, isDeviceFlow);

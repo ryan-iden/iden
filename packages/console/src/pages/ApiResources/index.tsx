@@ -10,9 +10,11 @@ import ManagementApiResourceDark from '@/assets/icons/management-api-resource-da
 import ManagementApiResource from '@/assets/icons/management-api-resource.svg?react';
 import Plus from '@/assets/icons/plus.svg?react';
 import EmptyDataPlaceholder from '@/components/EmptyDataPlaceholder';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import ItemPreview from '@/components/ItemPreview';
 import PageMeta from '@/components/PageMeta';
 import { defaultPageSize, apiResources as apiResourcesDocumentationLink } from '@/consts';
+import { isCloud } from '@/consts/env';
 import { ApiResourceDetailsTabs } from '@/consts/page-tabs';
 import Button from '@/ds-components/Button';
 import CardTitle from '@/ds-components/CardTitle';
@@ -24,6 +26,7 @@ import useSearchParametersWatcher from '@/hooks/use-search-parameters-watcher';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useTheme from '@/hooks/use-theme';
 import pageLayout from '@/scss/page-layout.module.scss';
+import { getApiResourceDisplayName } from '@/utils/api-resource';
 import { buildUrl } from '@/utils/url';
 
 import CreateForm from './components/CreateForm';
@@ -96,11 +99,21 @@ function ApiResources() {
             dataIndex: 'name',
             colSpan: 6,
             render: ({ id, name, isDefault, indicator }) => {
-              const Icon = isManagementApi(indicator) ? ManagementApiIcon : ApiIcon;
+              const isBuiltInManagementApi = isManagementApi(indicator);
+              const Icon = isBuiltInManagementApi ? ManagementApiIcon : ApiIcon;
               return (
                 <ItemPreview
-                  title={name}
-                  icon={<Icon className={styles.icon} />}
+                  title={getApiResourceDisplayName(name, indicator)}
+                  icon={
+                    isCloud ? (
+                      <Icon className={styles.icon} />
+                    ) : (
+                      <IdenProductIcon
+                        className={styles.icon}
+                        name={isBuiltInManagementApi ? 'managementApi' : 'apiResource'}
+                      />
+                    )
+                  }
                   to={buildDetailsPathname(id)}
                   suffix={isDefault && <Tag>{t('api_resources.default_api')}</Tag>}
                 />

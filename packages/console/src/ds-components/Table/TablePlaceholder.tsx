@@ -2,8 +2,8 @@ import type { AdminConsoleKey } from '@logto/phrases';
 import { Theme } from '@logto/schemas';
 import type { ReactNode } from 'react';
 
-import IdenEmpty from '@/assets/images/iden-states/empty.png';
 import { CombinedAddOnAndFeatureTag, type PaywallPlanId } from '@/components/FeatureTag';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
 import LearnMore, { type Props as LearnMoreProps } from '@/components/LearnMore';
 import { isIdenBrand } from '@/consts/brand';
 import useTheme from '@/hooks/use-theme';
@@ -42,7 +42,13 @@ function TablePlaceholder({
   return (
     <div className={styles.placeholder}>
       <div className={styles.image}>
-        {isIdenBrand ? <img alt="" src={IdenEmpty} /> : theme === Theme.Light ? image : imageDark}
+        {isIdenBrand ? (
+          <IdenStateIllustration name="empty" />
+        ) : theme === Theme.Light ? (
+          image
+        ) : (
+          imageDark
+        )}
       </div>
       <div className={styles.title}>
         <DynamicT forKey={title} />

@@ -11,8 +11,10 @@ import ContactUsPhraseLink from '@/components/ContactUsPhraseLink';
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
 import { BetaTag } from '@/components/FeatureTag';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import PageMeta from '@/components/PageMeta';
 import { ApplicationDetailsTabs } from '@/consts';
+import { isCloud } from '@/consts/env';
 import { openIdProviderConfigPath } from '@/consts/oidc';
 import InlineNotification from '@/ds-components/InlineNotification';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
@@ -72,7 +74,7 @@ function DynamicAppDetails() {
         </Trans>
       </InlineNotification>
       <DetailsPageHeader
-        icon={<Icon />}
+        icon={isCloud ? <Icon /> : <IdenProductIcon name="thirdPartyApp" />}
         title={
           <div className={styles.title}>
             {t('applications.dynamic_app.title')}

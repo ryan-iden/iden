@@ -4,10 +4,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 
-import OrganizationIcon from '@/assets/icons/organization-preview.svg?react';
 import NotFoundDataPlaceholder from '@/components/EmptyDataPlaceholder';
 import ItemPreview from '@/components/ItemPreview';
-import ThemedIcon from '@/components/ThemedIcon';
+import OrganizationIcon from '@/components/OrganizationIcon';
 import { defaultPageSize } from '@/consts';
 import CopyToClipboard from '@/ds-components/CopyToClipboard';
 import Search from '@/ds-components/Search';
@@ -69,11 +68,7 @@ function OrganizationsTable({ onCreate }: Props) {
           title: t('general.name'),
           dataIndex: 'name',
           render: ({ name, id }) => (
-            <ItemPreview
-              title={name}
-              icon={<ThemedIcon for={OrganizationIcon} />}
-              to={joinPath(pathname, id)}
-            />
+            <ItemPreview title={name} icon={<OrganizationIcon />} to={joinPath(pathname, id)} />
           ),
         },
         {

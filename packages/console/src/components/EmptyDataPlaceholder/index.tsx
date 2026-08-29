@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import IdenEmpty from '@/assets/images/iden-states/empty.png';
 import EmptyDark from '@/assets/images/table-empty-dark.svg?react';
 import Empty from '@/assets/images/table-empty.svg?react';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
 import { isIdenBrand } from '@/consts/brand';
 import useTheme from '@/hooks/use-theme';
 
@@ -26,7 +26,7 @@ function EmptyDataPlaceholder({ title, size = 'medium', className }: Props) {
     <div className={classNames(styles.empty, styles[size], className)}>
       <div className={styles.topSpace} />
       {isIdenBrand ? (
-        <img alt="" className={styles.image} src={IdenEmpty} />
+        <IdenStateIllustration className={styles.image} name="empty" />
       ) : (
         <EmptyImage className={styles.image} />
       )}

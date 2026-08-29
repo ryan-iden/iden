@@ -4,6 +4,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import Plus from '@/assets/icons/plus.svg?react';
 import SignInExperienceWelcomeDark from '@/assets/images/sign-in-experience-welcome-dark.svg?react';
 import SignInExperienceWelcome from '@/assets/images/sign-in-experience-welcome.svg?react';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
+import { isIdenBrand } from '@/consts/brand';
 import { thirdPartyApp } from '@/consts/external-links';
 import Button from '@/ds-components/Button';
 import TextLink from '@/ds-components/TextLink';
@@ -26,7 +28,11 @@ function ThirdPartyApplicationEmptyDataPlaceHolder({ onCreateThirdParty }: Props
 
   return (
     <div className={styles.placeholder}>
-      <PlaceholderImage className={styles.image} />
+      {isIdenBrand ? (
+        <IdenStateIllustration className={styles.image} name="empty" />
+      ) : (
+        <PlaceholderImage className={styles.image} />
+      )}
       <div className={styles.title}>{t('type.third_party.title')}</div>
       <div className={styles.text}>
         <Trans

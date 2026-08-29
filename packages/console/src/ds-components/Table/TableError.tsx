@@ -1,9 +1,9 @@
 import { Theme } from '@logto/schemas';
 import { useTranslation } from 'react-i18next';
 
-import IdenRequestError from '@/assets/images/iden-states/request-error.png';
 import RequestErrorDarkImage from '@/assets/images/request-error-dark.svg?react';
 import RequestErrorImage from '@/assets/images/request-error.svg?react';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
 import { isIdenBrand } from '@/consts/brand';
 import useTheme from '@/hooks/use-theme';
 
@@ -27,7 +27,7 @@ function TableError({ title, content, onRetry, columns }: Props) {
       <td colSpan={columns}>
         <div className={styles.tableError}>
           {isIdenBrand ? (
-            <img alt="" src={IdenRequestError} />
+            <IdenStateIllustration name="requestError" />
           ) : theme === Theme.Light ? (
             <RequestErrorImage />
           ) : (

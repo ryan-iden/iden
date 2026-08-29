@@ -10,10 +10,12 @@ import RolesEmptyDark from '@/assets/images/roles-empty-dark.svg?react';
 import RolesEmpty from '@/assets/images/roles-empty.svg?react';
 import Breakable from '@/components/Breakable';
 import EmptyDataPlaceholder from '@/components/EmptyDataPlaceholder';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import ItemPreview from '@/components/ItemPreview';
 import OrganizationRolePermissionsAssignmentModal from '@/components/OrganizationRolePermissionsAssignmentModal';
 import ThemedIcon from '@/components/ThemedIcon';
 import { defaultPageSize, organizationRoleLink } from '@/consts';
+import { isCloud } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import DynamicT from '@/ds-components/DynamicT';
 import Search from '@/ds-components/Search';
@@ -65,7 +67,19 @@ function OrganizationRoles() {
             dataIndex: 'name',
             colSpan: 4,
             render: ({ id, name }) => {
-              return <ItemPreview title={name} icon={<ThemedIcon for={OrgRoleIcon} />} to={id} />;
+              return (
+                <ItemPreview
+                  title={name}
+                  icon={
+                    isCloud ? (
+                      <ThemedIcon for={OrgRoleIcon} />
+                    ) : (
+                      <IdenProductIcon name="roleAccess" size={40} />
+                    )
+                  }
+                  to={id}
+                />
+              );
             },
           },
           {

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import DynamicAppDarkIcon from '@/assets/icons/dynamic-app-dark.svg?react';
 import DynamicAppIcon from '@/assets/icons/dynamic-app.svg?react';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
+import { isCloud } from '@/consts/env';
 import useTheme from '@/hooks/use-theme';
 import { dynamicAppId } from '@/types/applications';
 
@@ -22,7 +24,13 @@ function DynamicAppPreview() {
     <ItemPreview
       title={t('applications.dynamic_app.title')}
       subtitle={t('applications.dynamic_app.subtitle')}
-      icon={<Icon className={styles.icon} />}
+      icon={
+        isCloud ? (
+          <Icon className={styles.icon} />
+        ) : (
+          <IdenProductIcon className={styles.icon} name="thirdPartyApp" />
+        )
+      }
       to={`/applications/${dynamicAppId}`}
     />
   );

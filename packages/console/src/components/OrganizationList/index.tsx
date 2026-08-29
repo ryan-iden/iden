@@ -3,12 +3,11 @@ import { type ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 
-import OrganizationIcon from '@/assets/icons/organization-preview.svg?react';
 import Tip from '@/assets/icons/tip.svg?react';
 import EmptyDataPlaceholder from '@/components/EmptyDataPlaceholder';
 import ItemPreview from '@/components/ItemPreview';
+import OrganizationIcon from '@/components/OrganizationIcon';
 import { RoleOption } from '@/components/OrganizationRolesSelect';
-import ThemedIcon from '@/components/ThemedIcon';
 import CopyToClipboard from '@/ds-components/CopyToClipboard';
 import IconButton from '@/ds-components/IconButton';
 import Search from '@/ds-components/Search';
@@ -54,7 +53,7 @@ function OrganizationList({ type, data: { id }, placeholder }: Props) {
           render: ({ name, id }) => (
             <ItemPreview
               title={name}
-              icon={<ThemedIcon for={OrganizationIcon} />}
+              icon={<OrganizationIcon />}
               to={getPathname(`/organizations/${id}`)}
             />
           ),

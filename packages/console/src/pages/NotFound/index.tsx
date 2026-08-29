@@ -2,9 +2,9 @@ import { Theme } from '@logto/schemas';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import IdenNoResults from '@/assets/images/iden-states/no-results.png';
 import NotFoundDarkImage from '@/assets/images/not-found-dark.svg?react';
 import NotFoundImage from '@/assets/images/not-found.svg?react';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
 import PageMeta from '@/components/PageMeta';
 import { isIdenBrand } from '@/consts/brand';
 import Card from '@/ds-components/Card';
@@ -26,7 +26,7 @@ function NotFound({ className }: Props) {
       <PageMeta titleKey="errors.page_not_found" />
       <Card className={styles.content}>
         {isIdenBrand ? (
-          <img alt="" src={IdenNoResults} />
+          <IdenStateIllustration name="noResults" />
         ) : theme === Theme.Light ? (
           <NotFoundImage />
         ) : (

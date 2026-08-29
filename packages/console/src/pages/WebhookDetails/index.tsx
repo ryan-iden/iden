@@ -1,4 +1,4 @@
-import { type HookResponse, type Hook } from '@logto/schemas';
+import { Theme, type HookResponse, type Hook } from '@logto/schemas';
 import { conditional } from '@silverhand/essentials';
 import classNames from 'classnames';
 import { useState } from 'react';
@@ -14,9 +14,11 @@ import WebhookDark from '@/assets/icons/webhook-dark.svg?react';
 import Webhook from '@/assets/icons/webhook.svg?react';
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import PageMeta from '@/components/PageMeta';
 import SuccessRate from '@/components/SuccessRate';
 import { WebhookDetailsTabs } from '@/consts';
+import { isCloud } from '@/consts/env';
 import DynamicT from '@/ds-components/DynamicT';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import useApi, { type RequestError } from '@/hooks/use-api';
@@ -40,9 +42,8 @@ function WebhookDetails() {
   const { enabled: isEnabled, executionStats } = data ?? {};
   const isLoading = !data && !error;
   const api = useApi();
-
   const theme = useTheme();
-  const WebhookIcon = theme === 'light' ? Webhook : WebhookDark;
+  const WebhookIcon = theme === Theme.Light ? Webhook : WebhookDark;
 
   const { show } = useConfirmModal();
 
@@ -117,7 +118,7 @@ function WebhookDetails() {
       {data && (
         <>
           <DetailsPageHeader
-            icon={<WebhookIcon />}
+            icon={isCloud ? <WebhookIcon /> : <IdenProductIcon name="webhook" />}
             title={data.name}
             subtitle={
               isEnabled &&

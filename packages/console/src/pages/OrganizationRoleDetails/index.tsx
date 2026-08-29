@@ -10,9 +10,11 @@ import Delete from '@/assets/icons/delete.svg?react';
 import OrgRoleIcon from '@/assets/icons/organization-role-feature.svg?react';
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import PageMeta from '@/components/PageMeta';
 import ThemedIcon from '@/components/ThemedIcon';
 import { OrganizationRoleDetailsTabs, OrganizationTemplateTabs } from '@/consts';
+import { isCloud } from '@/consts/env';
 import ConfirmModal from '@/ds-components/ConfirmModal';
 import DynamicT from '@/ds-components/DynamicT';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
@@ -79,7 +81,13 @@ function OrganizationRoleDetails() {
       {data && (
         <>
           <DetailsPageHeader
-            icon={<ThemedIcon for={OrgRoleIcon} size={60} />}
+            icon={
+              isCloud ? (
+                <ThemedIcon for={OrgRoleIcon} size={60} />
+              ) : (
+                <IdenProductIcon name="roleAccess" size={60} />
+              )
+            }
             title={data.name}
             primaryTag={t(`roles.type_${roleTypeToKey[data.type]}`)}
             identifier={{ name: 'ID', value: data.id }}

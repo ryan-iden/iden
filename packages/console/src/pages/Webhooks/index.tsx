@@ -10,10 +10,12 @@ import WebhookDark from '@/assets/icons/webhook-dark.svg?react';
 import Webhook from '@/assets/icons/webhook.svg?react';
 import WebhooksEmptyDark from '@/assets/images/webhooks-empty-dark.svg?react';
 import WebhooksEmpty from '@/assets/images/webhooks-empty.svg?react';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
 import ItemPreview from '@/components/ItemPreview';
 import PageMeta from '@/components/PageMeta';
 import SuccessRate from '@/components/SuccessRate';
 import { defaultPageSize, webhooks as webhooksDocumentationLink } from '@/consts';
+import { isCloud } from '@/consts/env';
 import Button from '@/ds-components/Button';
 import CardTitle from '@/ds-components/CardTitle';
 import DynamicT from '@/ds-components/DynamicT';
@@ -90,7 +92,13 @@ function Webhooks() {
             render: ({ id, name }) => {
               return (
                 <ItemPreview
-                  icon={<WebhookIcon className={styles.icon} />}
+                  icon={
+                    isCloud ? (
+                      <WebhookIcon className={styles.icon} />
+                    ) : (
+                      <IdenProductIcon className={styles.icon} name="webhook" />
+                    )
+                  }
                   title={name || t('general.unnamed')}
                   to={buildDetailsPathname(id)}
                 />

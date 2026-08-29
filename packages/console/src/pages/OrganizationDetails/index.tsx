@@ -11,12 +11,11 @@ import useSWR from 'swr';
 
 import Delete from '@/assets/icons/delete.svg?react';
 import File from '@/assets/icons/file.svg?react';
-import OrganizationIcon from '@/assets/icons/organization-preview.svg?react';
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
 import Drawer from '@/components/Drawer';
+import OrganizationIcon from '@/components/OrganizationIcon';
 import PageMeta from '@/components/PageMeta';
-import ThemedIcon from '@/components/ThemedIcon';
 import DeleteConfirmModal from '@/ds-components/DeleteConfirmModal';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import useApi, { type RequestError } from '@/hooks/use-api';
@@ -87,7 +86,7 @@ function OrganizationDetails() {
         jitSsoConnectors.data && (
           <>
             <DetailsPageHeader
-              icon={<ThemedIcon for={OrganizationIcon} size={60} />}
+              icon={<OrganizationIcon size={60} />}
               title={organization.data.name}
               identifier={{ name: t('organization_details.organization_id'), value: id }}
               additionalActionButton={{

@@ -240,7 +240,7 @@ function GetStarted() {
         <div className={styles.borderBox}>
           <div className={styles.rowWrapper}>
             <div className={styles.icon}>
-              <RbacIcon />
+              {isCloud ? <RbacIcon /> : <IdenProductIcon name="roleAccess" />}
             </div>
             <div className={styles.columnWrapper}>
               <div className={styles.title}>{t('get_started.manage.rbac.title')}</div>

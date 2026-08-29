@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import OrganizationFeatureDark from '@/assets/icons/organization-feature-dark.svg?react';
 import OrganizationFeature from '@/assets/icons/organization-feature.svg?react';
+import { IdenProductIcon } from '@/components/IdenProductIcon';
+import { isCloud } from '@/consts/env';
 import Card from '@/ds-components/Card';
 import OverlayScrollbar from '@/ds-components/OverlayScrollbar';
 import useTheme from '@/hooks/use-theme';
@@ -31,7 +33,11 @@ function Introduction() {
     <OverlayScrollbar className={styles.stepContainer}>
       <div className={classNames(styles.content)}>
         <Card className={classNames(styles.card)}>
-          <OrganizationIcon className={styles.icon} />
+          {isCloud ? (
+            <OrganizationIcon className={styles.icon} />
+          ) : (
+            <IdenProductIcon className={styles.icon} name="organizations" />
+          )}
           <FlexBox type="column" gap={24}>
             <div className={styles.title}>{t('guide.introduction.title')}</div>
             <FlexBox type="column">

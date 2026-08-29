@@ -7,7 +7,7 @@ import KeyboardArrowDown from '@/assets/icons/keyboard-arrow-down.svg?react';
 import KeyboardArrowUp from '@/assets/icons/keyboard-arrow-up.svg?react';
 import ErrorDark from '@/assets/images/error-dark.svg?react';
 import Error from '@/assets/images/error.svg?react';
-import IdenRequestError from '@/assets/images/iden-states/request-error.png';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
 import { isIdenBrand } from '@/consts/brand';
 import Button from '@/ds-components/Button';
 import useTheme from '@/hooks/use-theme';
@@ -32,7 +32,7 @@ function AppError({ title, errorCode, errorMessage, callStack, children }: Props
   return (
     <div className={styles.container}>
       {isIdenBrand ? (
-        <img alt="" className={styles.illustration} src={IdenRequestError} />
+        <IdenStateIllustration className={styles.illustration} name="requestError" />
       ) : theme === Theme.Light ? (
         <Error />
       ) : (
