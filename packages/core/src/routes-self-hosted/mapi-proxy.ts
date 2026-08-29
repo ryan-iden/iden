@@ -30,6 +30,15 @@ const methodGuard: z.ZodType<Method> = z.enum([
   'OPTIONS',
 ]);
 const tokenCache = new Map<string, { token: string; expiresAt: number }>();
+const excludedResponseHeaders = new Set([
+  'connection',
+  'content-encoding',
+  'content-length',
+  'transfer-encoding',
+]);
+
+export const shouldForwardProxyResponseHeader = (name: string) =>
+  !excludedResponseHeaders.has(name.toLowerCase());
 
 const getProxyAccessToken = async (tenant: TenantContext, tenantId: string) => {
   const cached = tokenCache.get(tenantId);
@@ -66,7 +75,7 @@ export default function initSelfHostedMapiProxy(tenant: TenantContext): Koa {
   assertThat(tenant.id === adminTenantId, 'guard.not_allowed_for_admin_tenant');
   const router = new Router();
 
-  router.all('/:tenantId/(.*)', async (ctx, next) => {
+  router.all('/:tenantId/(.*)', async (ctx) => {
     assertThat(
       EnvSet.values.isSelfHostedParityEnabled,
       new RequestError({ code: 'auth.forbidden', status: 403 })
@@ -102,12 +111,13 @@ export default function initSelfHostedMapiProxy(tenant: TenantContext): Koa {
 
     ctx.status = response.statusCode;
     for (const [name, value] of Object.entries(response.headers)) {
-      if (value !== undefined && !['connection', 'transfer-encoding'].includes(name)) {
+      // `got` decompresses response bodies by default. Do not forward headers that describe the
+      // upstream wire representation; Koa will calculate them for the decompressed body.
+      if (value !== undefined && shouldForwardProxyResponseHeader(name)) {
         ctx.set(name, Array.isArray(value) ? value : String(value));
       }
     }
     ctx.body = response.rawBody;
-    return next();
   });
 
   const app = new Koa();
