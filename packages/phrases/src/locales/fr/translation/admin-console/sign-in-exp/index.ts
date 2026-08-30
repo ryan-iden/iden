@@ -210,6 +210,47 @@ const sign_in_exp = {
     delete_account_url: 'Supprimer le compte',
     delete_account_url_description:
       'Fournissez votre propre URL de point de terminaison pour gérer la suppression du compte avec une logique personnalisée.',
+    organization_center: {
+      title: 'CENTRE DES ORGANISATIONS',
+      description:
+        'Configurez l’expérience d’organisation prédéfinie afin que les utilisateurs puissent créer et gérer leurs organisations en autonomie.',
+      enabled: 'Activer le centre des organisations',
+      enabled_description:
+        'Affiche la gestion des organisations dans le centre de compte prédéfini et active ses API utilisateur.',
+      preview: 'Ouvrir l’aperçu du centre des organisations',
+      modules: 'Modules disponibles',
+      creation_policy: 'Création d’organisation',
+      creation_mode: 'Qui peut créer des organisations',
+      creation_disabled: 'Personne',
+      creation_all: 'Tous les utilisateurs connectés',
+      creation_roles: 'Utilisateurs possédant les rôles globaux sélectionnés',
+      allowed_roles: 'ID des rôles globaux autorisés',
+      allowed_roles_description:
+        'ID de rôles séparés par des virgules. Utilisés uniquement avec la stratégie des rôles sélectionnés.',
+      creation_limit: 'Nombre maximal d’organisations par utilisateur',
+      invitation_policy: 'Invitations',
+      invitation_registration: 'Autoriser l’inscription des utilisateurs invités',
+      invitation_expiry: 'Validité de l’invitation (jours)',
+      resource_allowlist: 'Liste des ressources partagées autorisées',
+      sso_connectors: 'ID des connecteurs SSO d’entreprise',
+      applications: 'ID des applications machine à machine',
+      business_roles: 'ID des rôles métier de l’organisation',
+      allowlist_description:
+        'ID séparés par des virgules. Une liste vide ne partage aucune ressource.',
+      module_labels: {
+        profile: 'Profil',
+        branding: 'Identité visuelle',
+        members: 'Membres',
+        invitations: 'Invitations',
+        managementRoles: 'Rôles de gestion',
+        businessRoles: 'Rôles métier',
+        security: 'Sécurité et MFA',
+        jit: 'Provisionnement JIT',
+        applications: 'Applications M2M',
+        activity: 'Activité',
+        deletion: 'Suppression de l’organisation',
+      },
+    },
     prebuilt_ui: {
       title: "INTÉGRER L'INTERFACE UTILISATEUR PRÉCONSTRUITE",
       description:

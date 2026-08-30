@@ -208,6 +208,47 @@ const sign_in_exp = {
     delete_account_url: 'Usuń konto',
     delete_account_url_description:
       'Podaj własny adres URL punktu końcowego, aby obsłużyć usuwanie konta za pomocą niestandardowej logiki.',
+    organization_center: {
+      title: 'CENTRUM ORGANIZACJI',
+      description:
+        'Skonfiguruj gotowe środowisko, aby użytkownicy końcowi mogli tworzyć organizacje i samodzielnie nimi zarządzać.',
+      enabled: 'Włącz centrum organizacji',
+      enabled_description:
+        'Udostępnia zarządzanie organizacjami w gotowym centrum konta i włącza interfejsy API dla użytkowników.',
+      preview: 'Otwórz podgląd centrum organizacji',
+      modules: 'Dostępne moduły',
+      creation_policy: 'Tworzenie organizacji',
+      creation_mode: 'Kto może tworzyć organizacje',
+      creation_disabled: 'Nikt',
+      creation_all: 'Wszyscy zalogowani użytkownicy',
+      creation_roles: 'Użytkownicy z wybranymi rolami globalnymi',
+      allowed_roles: 'Dozwolone identyfikatory ról globalnych',
+      allowed_roles_description:
+        'Identyfikatory ról oddzielone przecinkami. Używane tylko w zasadzie wybranych ról.',
+      creation_limit: 'Maksymalna liczba organizacji na użytkownika',
+      invitation_policy: 'Zaproszenia',
+      invitation_registration: 'Zezwalaj zaproszonym użytkownikom na rejestrację',
+      invitation_expiry: 'Ważność zaproszenia (dni)',
+      resource_allowlist: 'Lista dozwolonych zasobów współdzielonych',
+      sso_connectors: 'Identyfikatory konektorów korporacyjnego SSO',
+      applications: 'Identyfikatory aplikacji machine-to-machine',
+      business_roles: 'Identyfikatory ról biznesowych organizacji',
+      allowlist_description:
+        'Identyfikatory oddzielone przecinkami. Pusta lista nie udostępnia żadnych zasobów.',
+      module_labels: {
+        profile: 'Profil',
+        branding: 'Marka',
+        members: 'Członkowie',
+        invitations: 'Zaproszenia',
+        managementRoles: 'Role zarządzania',
+        businessRoles: 'Role biznesowe',
+        security: 'Bezpieczeństwo i MFA',
+        jit: 'Aprowizacja JIT',
+        applications: 'Aplikacje M2M',
+        activity: 'Aktywność',
+        deletion: 'Usuwanie organizacji',
+      },
+    },
     prebuilt_ui: {
       title: 'INTEGRUJ WSTĘPNIE ZBUDOWANY INTERFEJS',
       description:

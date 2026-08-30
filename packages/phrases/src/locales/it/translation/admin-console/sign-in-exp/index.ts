@@ -208,6 +208,47 @@ const sign_in_exp = {
     delete_account_url: "Elimina l'account",
     delete_account_url_description:
       'Fornisci il tuo URL endpoint per gestire l’eliminazione dell’account con logica personalizzata.',
+    organization_center: {
+      title: 'CENTRO ORGANIZZAZIONI',
+      description:
+        'Configura l’esperienza predefinita affinché gli utenti finali possano creare e gestire autonomamente le organizzazioni.',
+      enabled: 'Abilita il centro organizzazioni',
+      enabled_description:
+        'Mostra la gestione delle organizzazioni nel centro account predefinito e abilita le relative API utente.',
+      preview: 'Apri l’anteprima del centro organizzazioni',
+      modules: 'Moduli disponibili',
+      creation_policy: 'Creazione organizzazioni',
+      creation_mode: 'Chi può creare organizzazioni',
+      creation_disabled: 'Nessuno',
+      creation_all: 'Tutti gli utenti autenticati',
+      creation_roles: 'Utenti con i ruoli globali selezionati',
+      allowed_roles: 'ID dei ruoli globali consentiti',
+      allowed_roles_description:
+        'ID ruolo separati da virgole. Usati solo con la policy dei ruoli selezionati.',
+      creation_limit: 'Numero massimo di organizzazioni per utente',
+      invitation_policy: 'Inviti',
+      invitation_registration: 'Consenti la registrazione agli utenti invitati',
+      invitation_expiry: 'Validità dell’invito (giorni)',
+      resource_allowlist: 'Elenco consentito delle risorse condivise',
+      sso_connectors: 'ID dei connettori SSO aziendali',
+      applications: 'ID delle applicazioni machine-to-machine',
+      business_roles: 'ID dei ruoli aziendali dell’organizzazione',
+      allowlist_description:
+        'ID separati da virgole. Un elenco vuoto non condivide alcuna risorsa.',
+      module_labels: {
+        profile: 'Profilo',
+        branding: 'Branding',
+        members: 'Membri',
+        invitations: 'Inviti',
+        managementRoles: 'Ruoli di gestione',
+        businessRoles: 'Ruoli aziendali',
+        security: 'Sicurezza e MFA',
+        jit: 'Provisioning JIT',
+        applications: 'Applicazioni M2M',
+        activity: 'Attività',
+        deletion: 'Eliminazione organizzazione',
+      },
+    },
     prebuilt_ui: {
       title: 'INTEGRAZIONE UI PREDEFINITA',
       description:

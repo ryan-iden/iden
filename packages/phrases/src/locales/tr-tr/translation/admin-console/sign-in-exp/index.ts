@@ -207,6 +207,46 @@ const sign_in_exp = {
     delete_account_url: 'Hesabı sil',
     delete_account_url_description:
       'Hesap silme işlemini özel mantıkla yönetmek için kendi uç nokta URL’nizi sağlayın.',
+    organization_center: {
+      title: 'ORGANİZASYON MERKEZİ',
+      description:
+        'Son kullanıcıların organizasyon oluşturup bağımsız olarak yönetebilmesi için hazır organizasyon deneyimini yapılandırın.',
+      enabled: 'Organizasyon merkezini etkinleştir',
+      enabled_description:
+        'Hazır hesap merkezinde organizasyon yönetimini gösterir ve kullanıcı API’lerini etkinleştirir.',
+      preview: 'Organizasyon merkezi önizlemesini aç',
+      modules: 'Kullanılabilir modüller',
+      creation_policy: 'Organizasyon oluşturma',
+      creation_mode: 'Kimler organizasyon oluşturabilir',
+      creation_disabled: 'Hiç kimse',
+      creation_all: 'Oturum açmış tüm kullanıcılar',
+      creation_roles: 'Seçilen genel rollere sahip kullanıcılar',
+      allowed_roles: 'İzin verilen genel rol kimlikleri',
+      allowed_roles_description:
+        'Rol kimliklerini virgülle ayırın. Yalnızca seçili roller politikasında kullanılır.',
+      creation_limit: 'Kullanıcı başına en fazla organizasyon',
+      invitation_policy: 'Davetler',
+      invitation_registration: 'Davet edilen kullanıcıların kaydolmasına izin ver',
+      invitation_expiry: 'Davet geçerliliği (gün)',
+      resource_allowlist: 'Paylaşılan kaynak izin listesi',
+      sso_connectors: 'Kurumsal SSO bağlayıcı kimlikleri',
+      applications: 'Makineden makineye uygulama kimlikleri',
+      business_roles: 'Organizasyon iş rolü kimlikleri',
+      allowlist_description: 'Kimlikleri virgülle ayırın. Boş liste hiçbir kaynağı paylaşmaz.',
+      module_labels: {
+        profile: 'Profil',
+        branding: 'Marka',
+        members: 'Üyeler',
+        invitations: 'Davetler',
+        managementRoles: 'Yönetim rolleri',
+        businessRoles: 'İş rolleri',
+        security: 'Güvenlik ve MFA',
+        jit: 'JIT sağlama',
+        applications: 'M2M uygulamaları',
+        activity: 'Etkinlik',
+        deletion: 'Organizasyonu silme',
+      },
+    },
     prebuilt_ui: {
       title: 'ÖN TANIMLI ARAYÜZÜ ENTEGRE ET',
       description:

@@ -205,6 +205,46 @@ const sign_in_exp = {
     delete_account_url: 'حذف الحساب',
     delete_account_url_description:
       'قدّم عنوان URL لنقطة النهاية الخاصة بك لمعالجة حذف الحساب بمنطق مخصص.',
+    organization_center: {
+      title: 'مركز المؤسسات',
+      description:
+        'اضبط تجربة المؤسسات الجاهزة ليتمكن المستخدمون من إنشاء المؤسسات وإدارتها ذاتيًا.',
+      enabled: 'تفعيل مركز المؤسسات',
+      enabled_description:
+        'إتاحة إدارة المؤسسات في مركز الحساب الجاهز وتفعيل واجهات API المخصصة للمستخدمين.',
+      preview: 'فتح معاينة مركز المؤسسات',
+      modules: 'الوحدات المتاحة',
+      creation_policy: 'إنشاء المؤسسات',
+      creation_mode: 'من يمكنه إنشاء المؤسسات',
+      creation_disabled: 'لا أحد',
+      creation_all: 'جميع المستخدمين المسجلين',
+      creation_roles: 'المستخدمون ذوو الأدوار العامة المحددة',
+      allowed_roles: 'معرّفات الأدوار العامة المسموح بها',
+      allowed_roles_description:
+        'افصل معرّفات الأدوار بفواصل. تُستخدم فقط مع سياسة الأدوار المحددة.',
+      creation_limit: 'الحد الأقصى للمؤسسات لكل مستخدم',
+      invitation_policy: 'الدعوات',
+      invitation_registration: 'السماح للمستخدمين المدعوين بالتسجيل',
+      invitation_expiry: 'صلاحية الدعوة (بالأيام)',
+      resource_allowlist: 'قائمة الموارد المشتركة المسموح بها',
+      sso_connectors: 'معرّفات موصلات SSO للمؤسسات',
+      applications: 'معرّفات تطبيقات آلة إلى آلة',
+      business_roles: 'معرّفات أدوار المؤسسة',
+      allowlist_description: 'افصل المعرّفات بفواصل. تعني القائمة الفارغة عدم مشاركة أي موارد.',
+      module_labels: {
+        profile: 'الملف التعريفي',
+        branding: 'العلامة التجارية',
+        members: 'الأعضاء',
+        invitations: 'الدعوات',
+        managementRoles: 'أدوار الإدارة',
+        businessRoles: 'أدوار العمل',
+        security: 'الأمان وMFA',
+        jit: 'التوفير الفوري JIT',
+        applications: 'تطبيقات M2M',
+        activity: 'النشاط',
+        deletion: 'حذف المؤسسة',
+      },
+    },
     prebuilt_ui: {
       title: 'دمج واجهة المستخدم المُعدة مسبقًا',
       description:

@@ -1,5 +1,3 @@
-import { withOrganizationCenter } from '../../../organization-center.js';
-
 import actions from './actions.js';
 import api_resource_details from './api-resource-details.js';
 import api_resources from './api-resources.js';
@@ -78,7 +76,7 @@ const admin_console = {
   users,
   user_details,
   contact,
-  sign_in_exp: withOrganizationCenter(sign_in_exp),
+  sign_in_exp,
   dashboard,
   logs,
   log_details,

@@ -208,6 +208,46 @@ const sign_in_exp = {
     delete_account_url: 'アカウントを削除',
     delete_account_url_description:
       '独自のロジックでアカウント削除を処理するためのエンドポイント URL を指定してください。',
+    organization_center: {
+      title: '組織センター',
+      description:
+        'エンドユーザーが組織を作成し、自律的に管理できる組み込みの組織体験を設定します。',
+      enabled: '組織センターを有効にする',
+      enabled_description:
+        '組み込みアカウントセンターに組織管理を表示し、ユーザー向け API を有効にします。',
+      preview: '組織センターのプレビューを開く',
+      modules: '利用可能なモジュール',
+      creation_policy: '組織の作成',
+      creation_mode: '組織を作成できるユーザー',
+      creation_disabled: '誰も作成できない',
+      creation_all: 'すべてのサインイン済みユーザー',
+      creation_roles: '選択したグローバルロールを持つユーザー',
+      allowed_roles: '許可するグローバルロール ID',
+      allowed_roles_description:
+        'ロール ID をカンマで区切ります。選択ロールポリシーでのみ使用されます。',
+      creation_limit: 'ユーザーごとの組織作成上限',
+      invitation_policy: '招待',
+      invitation_registration: '招待されたユーザーの登録を許可',
+      invitation_expiry: '招待の有効期間（日）',
+      resource_allowlist: '共有リソースの許可リスト',
+      sso_connectors: 'エンタープライズ SSO コネクター ID',
+      applications: 'マシン間アプリケーション ID',
+      business_roles: '組織ビジネスロール ID',
+      allowlist_description: 'ID をカンマで区切ります。空のリストではリソースを共有しません。',
+      module_labels: {
+        profile: 'プロフィール',
+        branding: 'ブランディング',
+        members: 'メンバー',
+        invitations: '招待',
+        managementRoles: '管理ロール',
+        businessRoles: 'ビジネスロール',
+        security: 'セキュリティと MFA',
+        jit: 'JIT プロビジョニング',
+        applications: 'M2M アプリケーション',
+        activity: 'アクティビティ',
+        deletion: '組織の削除',
+      },
+    },
     prebuilt_ui: {
       title: '組み込み UI を統合',
       description:

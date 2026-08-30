@@ -208,6 +208,46 @@ const sign_in_exp = {
     delete_account_url: 'Удалить аккаунт',
     delete_account_url_description:
       'Укажите собственный URL конечной точки, чтобы обрабатывать удаление аккаунта с пользовательской логикой.',
+    organization_center: {
+      title: 'ЦЕНТР ОРГАНИЗАЦИЙ',
+      description:
+        'Настройте готовый интерфейс, чтобы конечные пользователи могли создавать организации и самостоятельно управлять ими.',
+      enabled: 'Включить центр организаций',
+      enabled_description:
+        'Добавляет управление организациями в готовый центр аккаунта и включает пользовательские API.',
+      preview: 'Открыть предпросмотр центра организаций',
+      modules: 'Доступные модули',
+      creation_policy: 'Создание организаций',
+      creation_mode: 'Кто может создавать организации',
+      creation_disabled: 'Никто',
+      creation_all: 'Все вошедшие пользователи',
+      creation_roles: 'Пользователи с выбранными глобальными ролями',
+      allowed_roles: 'Разрешённые ID глобальных ролей',
+      allowed_roles_description:
+        'ID ролей через запятую. Используются только с политикой выбранных ролей.',
+      creation_limit: 'Максимум организаций на пользователя',
+      invitation_policy: 'Приглашения',
+      invitation_registration: 'Разрешить регистрацию приглашённых пользователей',
+      invitation_expiry: 'Срок действия приглашения (дни)',
+      resource_allowlist: 'Список разрешённых общих ресурсов',
+      sso_connectors: 'ID корпоративных SSO-коннекторов',
+      applications: 'ID приложений machine-to-machine',
+      business_roles: 'ID бизнес-ролей организации',
+      allowlist_description: 'ID через запятую. Пустой список не предоставляет общих ресурсов.',
+      module_labels: {
+        profile: 'Профиль',
+        branding: 'Брендинг',
+        members: 'Участники',
+        invitations: 'Приглашения',
+        managementRoles: 'Роли управления',
+        businessRoles: 'Бизнес-роли',
+        security: 'Безопасность и MFA',
+        jit: 'JIT-подготовка',
+        applications: 'M2M-приложения',
+        activity: 'Активность',
+        deletion: 'Удаление организации',
+      },
+    },
     prebuilt_ui: {
       title: 'ИСПОЛЬЗОВАТЬ ГОТОВЫЙ ИНТЕРФЕЙС',
       description:

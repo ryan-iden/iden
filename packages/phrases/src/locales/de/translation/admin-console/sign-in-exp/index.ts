@@ -208,6 +208,46 @@ const sign_in_exp = {
     delete_account_url: 'Konto löschen',
     delete_account_url_description:
       'Geben Sie Ihre eigene Endpunkt-URL an, um die Kontolöschung mit benutzerdefinierter Logik zu verarbeiten.',
+    organization_center: {
+      title: 'ORGANISATIONSZENTRUM',
+      description:
+        'Konfiguriere die vorgefertigte Organisationserfahrung, damit Endbenutzer Organisationen erstellen und selbstständig verwalten können.',
+      enabled: 'Organisationszentrum aktivieren',
+      enabled_description:
+        'Stellt die Organisationsverwaltung im vorgefertigten Kontozentrum sowie die zugehörigen Benutzer-APIs bereit.',
+      preview: 'Vorschau des Organisationszentrums öffnen',
+      modules: 'Verfügbare Module',
+      creation_policy: 'Organisationserstellung',
+      creation_mode: 'Wer darf Organisationen erstellen',
+      creation_disabled: 'Niemand',
+      creation_all: 'Alle angemeldeten Benutzer',
+      creation_roles: 'Benutzer mit ausgewählten globalen Rollen',
+      allowed_roles: 'Zulässige globale Rollen-IDs',
+      allowed_roles_description:
+        'Kommagetrennte Rollen-IDs. Wird nur bei der Richtlinie für ausgewählte Rollen verwendet.',
+      creation_limit: 'Maximale Organisationen pro Benutzer',
+      invitation_policy: 'Einladungen',
+      invitation_registration: 'Registrierung eingeladener Benutzer zulassen',
+      invitation_expiry: 'Gültigkeit der Einladung (Tage)',
+      resource_allowlist: 'Freigabeliste für gemeinsame Ressourcen',
+      sso_connectors: 'IDs der Enterprise-SSO-Konnektoren',
+      applications: 'IDs der Machine-to-Machine-Anwendungen',
+      business_roles: 'IDs der geschäftlichen Organisationsrollen',
+      allowlist_description: 'Kommagetrennte IDs. Eine leere Liste gibt keine Ressourcen frei.',
+      module_labels: {
+        profile: 'Profil',
+        branding: 'Branding',
+        members: 'Mitglieder',
+        invitations: 'Einladungen',
+        managementRoles: 'Verwaltungsrollen',
+        businessRoles: 'Geschäftsrollen',
+        security: 'Sicherheit und MFA',
+        jit: 'JIT-Bereitstellung',
+        applications: 'M2M-Anwendungen',
+        activity: 'Aktivität',
+        deletion: 'Organisation löschen',
+      },
+    },
     prebuilt_ui: {
       title: 'INTEGRATE PREBUILT UI',
       description:

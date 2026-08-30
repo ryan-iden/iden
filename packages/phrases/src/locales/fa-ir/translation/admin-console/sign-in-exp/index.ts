@@ -208,6 +208,46 @@ const sign_in_exp = {
     delete_account_url: 'حذف حساب',
     delete_account_url_description:
       'آدرس endpoint خود را برای مدیریت حذف حساب با منطق سفارشی ارائه دهید.',
+    organization_center: {
+      title: 'مرکز سازمان‌ها',
+      description:
+        'تجربه آماده سازمان را برای ایجاد و مدیریت مستقل سازمان‌ها توسط کاربران نهایی پیکربندی کنید.',
+      enabled: 'فعال‌سازی مرکز سازمان‌ها',
+      enabled_description: 'مدیریت سازمان را در مرکز حساب آماده و APIهای کاربری آن فعال می‌کند.',
+      preview: 'باز کردن پیش‌نمایش مرکز سازمان‌ها',
+      modules: 'ماژول‌های در دسترس',
+      creation_policy: 'ایجاد سازمان',
+      creation_mode: 'چه کسانی می‌توانند سازمان ایجاد کنند',
+      creation_disabled: 'هیچ‌کس',
+      creation_all: 'همه کاربران واردشده',
+      creation_roles: 'کاربران دارای نقش‌های سراسری انتخاب‌شده',
+      allowed_roles: 'شناسه نقش‌های سراسری مجاز',
+      allowed_roles_description:
+        'شناسه نقش‌ها را با ویرگول جدا کنید. فقط در سیاست نقش‌های انتخاب‌شده استفاده می‌شود.',
+      creation_limit: 'حداکثر تعداد سازمان برای هر کاربر',
+      invitation_policy: 'دعوت‌ها',
+      invitation_registration: 'اجازه ثبت‌نام به کاربران دعوت‌شده',
+      invitation_expiry: 'اعتبار دعوت (روز)',
+      resource_allowlist: 'فهرست مجاز منابع مشترک',
+      sso_connectors: 'شناسه اتصال‌دهنده‌های SSO سازمانی',
+      applications: 'شناسه برنامه‌های ماشین‌به‌ماشین',
+      business_roles: 'شناسه نقش‌های کسب‌وکار سازمان',
+      allowlist_description:
+        'شناسه‌ها را با ویرگول جدا کنید. فهرست خالی هیچ منبعی را به اشتراک نمی‌گذارد.',
+      module_labels: {
+        profile: 'نمایه',
+        branding: 'برندسازی',
+        members: 'اعضا',
+        invitations: 'دعوت‌ها',
+        managementRoles: 'نقش‌های مدیریتی',
+        businessRoles: 'نقش‌های کسب‌وکار',
+        security: 'امنیت و MFA',
+        jit: 'تأمین JIT',
+        applications: 'برنامه‌های M2M',
+        activity: 'فعالیت',
+        deletion: 'حذف سازمان',
+      },
+    },
     prebuilt_ui: {
       title: 'یکپارچه‌سازی رابط کاربری از پیش‌ساخته',
       description:

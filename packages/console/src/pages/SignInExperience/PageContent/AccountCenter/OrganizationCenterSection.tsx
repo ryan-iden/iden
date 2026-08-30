@@ -1,10 +1,11 @@
 import { OrganizationCenterCreationMode, type OrganizationCenterSettings } from '@logto/schemas';
-import { useCallback, type FormEvent } from 'react';
+import { useCallback, useContext, type FormEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import FormCard from '@/components/FormCard';
 import { isSelfHostedParityEnabled } from '@/consts/env';
+import { AppDataContext } from '@/contexts/AppDataProvider';
 import FormField from '@/ds-components/FormField';
 import Select from '@/ds-components/Select';
 import Switch from '@/ds-components/Switch';
@@ -13,6 +14,7 @@ import TextInput from '@/ds-components/TextInput';
 import type { AccountCenterFormValues, SignInExperienceForm } from '../../types';
 
 import styles from './index.module.scss';
+import { getOrganizationCenterPreviewUrl } from './organization-center-preview';
 
 type OrganizationModule = keyof OrganizationCenterSettings['modules'];
 type ResourceAllowlist = keyof OrganizationCenterSettings['resourceAllowlist'];
@@ -42,6 +44,7 @@ const parseIdList = (value: string) => [
 
 function OrganizationCenterSection() {
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
+  const { tenantEndpoint } = useContext(AppDataContext);
   const {
     watch,
     setValue,
@@ -254,7 +257,7 @@ function OrganizationCenterSection() {
 
         <a
           className={styles.previewLink}
-          href="/account/organizations"
+          href={getOrganizationCenterPreviewUrl(tenantEndpoint)}
           target="_blank"
           rel="noreferrer"
         >
