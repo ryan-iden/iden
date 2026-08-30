@@ -7,6 +7,7 @@ import {
   jwtCustomizer,
   saml,
   trustedDevice,
+  organization,
 } from '@logto/schemas';
 import type { Log } from '@logto/schemas';
 import { pickDefault } from '@logto/shared/esm';
@@ -44,16 +45,17 @@ describe('logRoutes', () => {
     it('should call countLogs and findLogs with correct parameters', async () => {
       const userId = 'userIdValue';
       const applicationId = 'foo';
+      const organizationId = 'organizationIdValue';
       const logKey = 'SignInUsernamePassword';
       const page = 1;
       const pageSize = 5;
 
       await logRequest.get(
-        `/logs?userId=${userId}&applicationId=${applicationId}&logKey=${logKey}&page=${page}&page_size=${pageSize}`
+        `/logs?userId=${userId}&applicationId=${applicationId}&organizationId=${organizationId}&logKey=${logKey}&page=${page}&page_size=${pageSize}`
       );
       expect(countLogs).toHaveBeenCalledWith(
         {
-          payload: { userId, applicationId },
+          payload: { userId, applicationId, organizationId },
           logKey,
           startTime: undefined,
           endTime: undefined,
@@ -66,13 +68,14 @@ describe('logRoutes', () => {
             saml.prefix,
             action.prefix,
             trustedDevice.prefix,
+            organization.prefix,
             LogKeyUnknown,
           ],
         },
         { capped: false }
       );
       expect(findLogs).toHaveBeenCalledWith(5, 0, {
-        payload: { userId, applicationId },
+        payload: { userId, applicationId, organizationId },
         logKey,
         startTime: undefined,
         endTime: undefined,
@@ -85,6 +88,7 @@ describe('logRoutes', () => {
           saml.prefix,
           action.prefix,
           trustedDevice.prefix,
+          organization.prefix,
           LogKeyUnknown,
         ],
       });
