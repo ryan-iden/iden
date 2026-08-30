@@ -13,6 +13,8 @@ export const dataHookEventsLabel = Object.freeze({
   [DataHookSchema.User]: 'webhooks.schemas.user',
   [DataHookSchema.TrustedDevice]: 'webhooks.schemas.trusted_device',
   [DataHookSchema.Organization]: 'webhooks.schemas.organization',
+  [DataHookSchema.OrganizationInvitation]: 'webhooks.schemas.organization',
+  [DataHookSchema.OrganizationManagementRole]: 'webhooks.schemas.organization',
   [DataHookSchema.Role]: 'webhooks.schemas.role',
   [DataHookSchema.Scope]: 'webhooks.schemas.scope',
   [DataHookSchema.OrganizationRole]: 'webhooks.schemas.organization_role',
@@ -57,10 +59,12 @@ const hookEventSchemaOrder: {
   [DataHookSchema.User]: 0,
   [DataHookSchema.TrustedDevice]: 1,
   [DataHookSchema.Organization]: 2,
-  [DataHookSchema.Role]: 3,
-  [DataHookSchema.OrganizationRole]: 4,
-  [DataHookSchema.Scope]: 5,
-  [DataHookSchema.OrganizationScope]: 6,
+  [DataHookSchema.OrganizationInvitation]: 3,
+  [DataHookSchema.OrganizationManagementRole]: 4,
+  [DataHookSchema.Role]: 5,
+  [DataHookSchema.OrganizationRole]: 6,
+  [DataHookSchema.Scope]: 7,
+  [DataHookSchema.OrganizationScope]: 8,
 };
 
 export const schemaGroupedDataHookEvents = Array.from(schemaGroupedDataHookEventsMap.entries())

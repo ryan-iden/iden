@@ -123,12 +123,9 @@ async function handleSubmitRegister(
     String(client_id) === adminConsoleApplicationId &&
     !(await hasActiveUsers());
 
-  // If it's Logto Cloud, Check if the new user has any pending invitations, if yes, skip onboarding flow.
   const invitations =
     isCloud && userProfile.primaryEmail
-      ? await organizations.invitations.findEntities({
-          invitee: userProfile.primaryEmail,
-        })
+      ? await organizations.invitations.findEntities({ invitee: userProfile.primaryEmail })
       : [];
   const hasPendingInvitations = invitations.some(
     (invitation) => invitation.status === OrganizationInvitationStatus.Pending

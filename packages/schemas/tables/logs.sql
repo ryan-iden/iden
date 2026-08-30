@@ -22,5 +22,8 @@ create index logs__application_id
 create index logs__hook_id
   on logs (tenant_id, (payload->>'hookId'));
 
+create index logs__organization_id
+  on logs (tenant_id, (payload->>'organizationId'));
+
 create index logs__created_at_id
   on logs (tenant_id, created_at, id);

@@ -9,6 +9,8 @@ import {
   type SignUpIdentifier as SignUpIdentifierMethod,
   type SignUpProfileFields,
   type AccountCenterFieldControl,
+  type OrganizationCenterSettings,
+  defaultOrganizationCenterSettings,
 } from '@logto/schemas';
 
 /**
@@ -80,6 +82,7 @@ export type AccountCenterFormValues = {
    * the form is initialized (see `convertAccountCenterToForm`).
    */
   profileFields: AccountCenterProfileFields;
+  organizationCenter: OrganizationCenterSettings;
 };
 
 const createDefaultAccountCenterFormValues = (): AccountCenterFormValues => ({
@@ -91,6 +94,7 @@ const createDefaultAccountCenterFormValues = (): AccountCenterFormValues => ({
   webauthnRelatedOrigins: [],
   deleteAccountUrl: '',
   profileFields: [],
+  organizationCenter: structuredClone(defaultOrganizationCenterSettings),
 });
 
 export const normalizeWebauthnRelatedOrigins = (origins?: string[]): string[] =>
@@ -110,6 +114,8 @@ export const convertAccountCenterToForm = (
   deleteAccountUrl: normalizeDeleteAccountUrl(accountCenter?.deleteAccountUrl ?? undefined),
   customCss: accountCenter?.customCss ?? undefined,
   profileFields: accountCenter?.profileFields ?? [],
+  organizationCenter:
+    accountCenter?.organizationCenter ?? structuredClone(defaultOrganizationCenterSettings),
 });
 
 export const normalizeAccountCenterFieldsForSubmit = (

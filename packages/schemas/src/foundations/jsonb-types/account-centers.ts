@@ -57,6 +57,113 @@ export const accountCenterProfileFieldsGuard = z.array(accountCenterProfileField
 
 export type AccountCenterProfileFields = z.infer<typeof accountCenterProfileFieldsGuard>;
 
+export enum OrganizationCenterCreationMode {
+  Disabled = 'disabled',
+  All = 'all',
+  Roles = 'roles',
+}
+
+export enum OrganizationManagementPermission {
+  UpdateProfile = 'update_profile',
+  ManageBranding = 'manage_branding',
+  ViewMembers = 'view_members',
+  ManageMembers = 'manage_members',
+  ManageInvitations = 'manage_invitations',
+  AssignBusinessRoles = 'assign_business_roles',
+  ManageManagementRoles = 'manage_management_roles',
+  AssignManagementRoles = 'assign_management_roles',
+  ManageSecurity = 'manage_security',
+  ManageJit = 'manage_jit',
+  ManageApplications = 'manage_applications',
+  ViewActivity = 'view_activity',
+}
+
+export const organizationManagementPermissions = Object.freeze(
+  Object.values(OrganizationManagementPermission)
+);
+
+export const organizationCenterModulesGuard = z.object({
+  profile: z.boolean(),
+  branding: z.boolean(),
+  members: z.boolean(),
+  invitations: z.boolean(),
+  managementRoles: z.boolean(),
+  businessRoles: z.boolean(),
+  security: z.boolean(),
+  jit: z.boolean(),
+  applications: z.boolean(),
+  activity: z.boolean(),
+  deletion: z.boolean(),
+});
+
+export const organizationCenterSettingsGuard = z.object({
+  enabled: z.boolean(),
+  modules: organizationCenterModulesGuard,
+  creationPolicy: z.object({
+    mode: z.nativeEnum(OrganizationCenterCreationMode),
+    allowedRoleIds: z.array(z.string().min(1).max(21)),
+    maxOrganizationsPerUser: z.number().int().min(1).max(100),
+  }),
+  invitationPolicy: z.object({
+    allowRegistration: z.boolean(),
+    expiresInDays: z.number().int().min(1).max(30),
+  }),
+  resourceAllowlist: z.object({
+    ssoConnectorIds: z.array(z.string().min(1).max(128)),
+    applicationIds: z.array(z.string().min(1).max(21)),
+    organizationRoleIds: z.array(z.string().min(1).max(21)),
+  }),
+});
+
+/** Safe organization-center settings exposed to the prebuilt Account Center. */
+export const publicOrganizationCenterSettingsGuard = organizationCenterSettingsGuard.pick({
+  enabled: true,
+  modules: true,
+  creationPolicy: true,
+  invitationPolicy: true,
+});
+
+export type OrganizationCenterSettings = z.infer<typeof organizationCenterSettingsGuard>;
+
+export const defaultOrganizationCenterSettings = Object.freeze({
+  enabled: false,
+  modules: {
+    profile: true,
+    branding: true,
+    members: true,
+    invitations: true,
+    managementRoles: true,
+    businessRoles: true,
+    security: true,
+    jit: true,
+    applications: true,
+    activity: true,
+    deletion: true,
+  },
+  creationPolicy: {
+    mode: OrganizationCenterCreationMode.Disabled,
+    allowedRoleIds: [],
+    maxOrganizationsPerUser: 1,
+  },
+  invitationPolicy: {
+    allowRegistration: true,
+    expiresInDays: 7,
+  },
+  resourceAllowlist: {
+    ssoConnectorIds: [],
+    applicationIds: [],
+    organizationRoleIds: [],
+  },
+} satisfies OrganizationCenterSettings);
+
+export const organizationManagementPermissionsGuard = z.array(
+  z.nativeEnum(OrganizationManagementPermission)
+);
+
+export type OrganizationManagementPermissions = z.infer<
+  typeof organizationManagementPermissionsGuard
+>;
+
 export const deleteAccountUrlGuard = z
   .string()
   .max(2048)

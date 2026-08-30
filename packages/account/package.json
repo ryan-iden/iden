@@ -94,6 +94,7 @@
   },
   "prettier": "@silverhand/eslint-config/.prettierrc",
   "dependencies": {
+    "@blobatar/react": "^2.6.0",
     "date-fns": "^2.29.3",
     "lucide-react": "^0.468.0",
     "qrcode": "^1.5.4",

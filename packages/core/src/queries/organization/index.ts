@@ -17,6 +17,8 @@ import {
   type OrganizationInvitation,
   type OrganizationInvitationEntity,
   OrganizationInvitationRoleRelations,
+  OrganizationInvitationManagementRoleRelations,
+  OrganizationManagementRoles,
   OrganizationInvitationStatus,
   OrganizationRoleResourceScopeRelations,
   Scopes,
@@ -197,6 +199,11 @@ class OrganizationInvitationsQueries extends SchemaQueries<
     const { table, fields } = convertToIdentifiers(OrganizationInvitations, true);
     const roleRelations = convertToIdentifiers(OrganizationInvitationRoleRelations, true);
     const roles = convertToIdentifiers(OrganizationRoles, true);
+    const managementRoleRelations = convertToIdentifiers(
+      OrganizationInvitationManagementRoleRelations,
+      true
+    );
+    const managementRoles = convertToIdentifiers(OrganizationManagementRoles, true);
 
     return sql<OrganizationInvitationEntity>`
       select
@@ -214,19 +221,33 @@ class OrganizationInvitationsQueries extends SchemaQueries<
           else ${fields.status}
         end as "status",
         coalesce(
-          json_agg(
-            json_build_object(
+          jsonb_agg(distinct
+            jsonb_build_object(
               'id', ${roles.fields.id},
               'name', ${roles.fields.name}
-            ) order by ${roles.fields.name}
+            )
           ) filter (where ${roles.fields.id} is not null),
-          '[]'
+          '[]'::jsonb
         ) as "organizationRoles" -- left join could produce nulls
+        ,coalesce(
+          jsonb_agg(distinct
+            jsonb_build_object(
+              'id', ${managementRoles.fields.id},
+              'name', ${managementRoles.fields.name}
+            )
+          ) filter (where ${managementRoles.fields.id} is not null),
+          '[]'::jsonb
+        ) as "organizationManagementRoles"
       from ${table}
       left join ${roleRelations.table}
         on ${roleRelations.fields.organizationInvitationId} = ${fields.id}
       left join ${roles.table}
         on ${roles.fields.id} = ${roleRelations.fields.organizationRoleId}
+      left join ${managementRoleRelations.table}
+        on ${managementRoleRelations.fields.organizationInvitationId} = ${fields.id}
+      left join ${managementRoles.table}
+        on ${managementRoles.fields.id} =
+          ${managementRoleRelations.fields.organizationManagementRoleId}
       where true
       ${conditionalSql(invitationId, (id) => {
         return sql`and ${fields.id} = ${id}`;
@@ -306,6 +327,12 @@ export default class OrganizationQueries extends SchemaQueries<
       OrganizationInvitationRoleRelations.table,
       OrganizationInvitations,
       OrganizationRoles
+    ),
+    invitationsManagementRoles: new TwoRelationsQueries(
+      this.pool,
+      OrganizationInvitationManagementRoleRelations.table,
+      OrganizationInvitations,
+      OrganizationManagementRoles
     ),
   };
 

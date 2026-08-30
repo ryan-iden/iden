@@ -1,3 +1,5 @@
+import { withOrganizationCenter } from '../organization-center.js';
+
 import account_center from './account-center.js';
 import action from './action.js';
 import description from './description.js';
@@ -23,7 +25,7 @@ const en = {
     development_tenant,
     user_scopes,
     profile,
-    account_center,
+    account_center: withOrganizationCenter(account_center),
     passkey_sign_in,
   },
 };

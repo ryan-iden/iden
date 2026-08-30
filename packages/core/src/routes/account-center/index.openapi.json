@@ -40,6 +40,11 @@
                   },
                   "profileFields": {
                     "description": "Ordered list of custom profile fields to show in the prebuilt account center. Each entry references an existing field by name in the custom profile fields catalog."
+                  },
+                  "organizationCenter": {
+                    "description": "Configure the self-hosted organization center, including modules, creation and invitation policies, and shared-resource allowlists.",
+                    "x-logto-self-hosted-parity": true,
+                    "x-logto-self-hosted-only": true
                   }
                 }
               }

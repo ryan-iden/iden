@@ -1,6 +1,7 @@
 import { type DeepPartial } from '@silverhand/essentials';
 
 import type { LocalePhrase } from '../../types.js';
+import { withOrganizationCenter } from '../organization-center.js';
 
 import account_center from './account-center.js';
 import action from './action.js';
@@ -27,7 +28,7 @@ const fr = {
     development_tenant,
     user_scopes,
     profile,
-    account_center,
+    account_center: withOrganizationCenter(account_center),
     passkey_sign_in,
   },
 } satisfies DeepPartial<LocalePhrase>;

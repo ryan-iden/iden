@@ -70,6 +70,7 @@ const createRouters = (tenant: TenantContext) => {
   const managementRouter: ManagementApiRouter = new Router();
   managementRouter.use(koaAuth(tenant.envSet, getManagementApiResourceIndicator(tenant.id)));
   managementRouter.use(koaTenantGuard(tenant.id, tenant.queries));
+  managementRouter.use(koaAuditLog(tenant.queries));
   managementRouter.use(koaManagementApiHooks(tenant.libraries.hooks));
 
   applicationRoutes(managementRouter, tenant);
@@ -107,6 +108,7 @@ const createRouters = (tenant: TenantContext) => {
 
   const userRouter: UserRouter = new Router();
   userRouter.use(koaOidcAuth(tenant));
+  userRouter.use(koaAuditLog(tenant.queries));
   userRouter.use(koaEmailI18n(tenant.queries));
   // TODO(LOG-10147): Rename to koaApiHooks, this middleware is used for both management API and user API
   userRouter.use(koaManagementApiHooks(tenant.libraries.hooks));

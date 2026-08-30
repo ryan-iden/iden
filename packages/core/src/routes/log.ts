@@ -7,6 +7,7 @@ import {
   jwtCustomizer,
   saml,
   trustedDevice,
+  organization,
   type AuditLogPrefix,
 } from '@logto/schemas';
 import { yes } from '@silverhand/essentials';
@@ -30,6 +31,7 @@ export default function logRoutes<T extends ManagementApiRouter>(
       query: object({
         userId: string().optional(),
         applicationId: string().optional(),
+        organizationId: string().optional(),
         logKey: string().optional(),
         enableCap: string().optional(),
         start_time: string().optional(),
@@ -41,7 +43,7 @@ export default function logRoutes<T extends ManagementApiRouter>(
     async (ctx, next) => {
       const { limit, offset } = ctx.pagination;
       const {
-        query: { userId, applicationId, logKey, enableCap, start_time, end_time },
+        query: { userId, applicationId, organizationId, logKey, enableCap, start_time, end_time },
       } = ctx.guard;
 
       const startTime = parseTimestampParam(start_time, 'start_time');
@@ -57,6 +59,7 @@ export default function logRoutes<T extends ManagementApiRouter>(
         saml.prefix,
         action.prefix,
         trustedDevice.prefix,
+        organization.prefix,
         LogKeyUnknown,
       ];
 
@@ -65,7 +68,7 @@ export default function logRoutes<T extends ManagementApiRouter>(
         countLogs(
           {
             logKey,
-            payload: { applicationId, userId },
+            payload: { applicationId, userId, organizationId },
             startTime,
             endTime,
             includeKeyPrefix,
@@ -74,7 +77,7 @@ export default function logRoutes<T extends ManagementApiRouter>(
         ),
         findLogs(limit, offset, {
           logKey,
-          payload: { userId, applicationId },
+          payload: { userId, applicationId, organizationId },
           startTime,
           endTime,
           includeKeyPrefix,

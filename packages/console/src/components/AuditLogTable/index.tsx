@@ -34,9 +34,10 @@ type Props = {
   readonly applicationId?: string;
   readonly userId?: string;
   readonly className?: string;
+  readonly organizationId?: string;
 };
 
-function AuditLogTable({ applicationId, userId, className }: Props) {
+function AuditLogTable({ applicationId, userId, organizationId, className }: Props) {
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const pageSize = defaultPageSize;
 
@@ -84,6 +85,7 @@ function AuditLogTable({ applicationId, userId, className }: Props) {
     ...conditional(event && { logKey: event }),
     ...conditional(searchApplicationId && { applicationId: searchApplicationId }),
     ...conditional(userId && { userId }),
+    ...conditional(organizationId && { organizationId }),
     ...conditional(startTime !== undefined && { start_time: String(startTime) }),
     ...conditional(endTime !== undefined && { end_time: String(endTime) }),
   });

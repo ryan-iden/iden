@@ -111,6 +111,7 @@ export const identifyUserByVerificationRecord = async (
     | 'enterpriseSsoIdentity'
     | 'syncedEnterpriseSsoIdentity'
     | 'jitOrganizationIds'
+    | 'organizationInvitationId'
     | 'socialIdentity'
     | 'avatar'
     | 'name'
@@ -141,6 +142,8 @@ export const identifyUserByVerificationRecord = async (
         user: await verificationRecord.identifyUser(),
         syncedProfile: {
           jitOrganizationIds: verificationRecord.oneTimeTokenContext?.jitOrganizationIds,
+          organizationInvitationId:
+            verificationRecord.oneTimeTokenContext?.organizationInvitationId,
         },
       };
     }

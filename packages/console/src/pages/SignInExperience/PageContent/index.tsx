@@ -131,6 +131,9 @@ function PageContent({ data, onSignInExperienceUpdated, onAccountCenterUpdated }
             deleteAccountUrl,
             customCss: accountCenter.customCss?.length ? accountCenter.customCss : null,
             profileFields: accountCenter.profileFields,
+            ...(isSelfHostedParityEnabled && {
+              organizationCenter: accountCenter.organizationCenter,
+            }),
           },
         })
         .json<AccountCenterConfig>();

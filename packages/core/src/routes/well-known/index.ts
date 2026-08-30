@@ -15,7 +15,7 @@ export default function wellKnownRoutes<T extends AnonymousRouter>(
   router: T,
   { libraries, queries, id: tenantId }: TenantContext
 ) {
-  const { accountCenter: accountCenterApiGuard } = getAccountCenterApiGuards();
+  const { publicAccountCenter: accountCenterApiGuard } = getAccountCenterApiGuards();
   const {
     signInExperiences: { getFullSignInExperience },
     phrases: { getPhrases },

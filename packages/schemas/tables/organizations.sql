@@ -1,4 +1,4 @@
-/* init_order = 1 */
+/* init_order = 1.05 */
 
 /** Organizations defined by [RFC 0001](https://github.com/logto-io/rfcs/blob/HEAD/active/0001-organization.md). */
 create table organizations (
@@ -22,6 +22,8 @@ create table organizations (
   branding jsonb /* @use Branding */ not null default '{}'::jsonb,
   /** The custom CSS of the organization. */
   custom_css text,
+  /** The user who created the organization through the organization center. */
+  created_by varchar(21),
   /** When the organization was created. */
   created_at timestamptz not null default(now()),
   primary key (id)
@@ -29,3 +31,11 @@ create table organizations (
 
 create index organizations__id
   on organizations (tenant_id, id);
+
+create index organizations__created_by
+  on organizations (tenant_id, created_by);
+
+alter table organizations
+  add constraint organizations__created_by__fk
+  foreign key (tenant_id, created_by)
+    references users (tenant_id, id) on update cascade on delete set null;

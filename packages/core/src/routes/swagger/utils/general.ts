@@ -25,6 +25,8 @@ const selfHostedParityTag = 'Self-hosted parity';
 export const devFeatureSchemaExtension = 'x-logto-dev-feature';
 /** The OpenAPI extension that hides a schema property unless Cloud or self-hosted parity is active. */
 export const selfHostedParitySchemaExtension = 'x-logto-self-hosted-parity';
+/** The OpenAPI extension that exposes an operation or schema property only in self-hosted parity mode. */
+export const selfHostedOnlyExtension = 'x-logto-self-hosted-only';
 
 const reservedTags = new Set([cloudOnlyTag, devFeatureTag, selfHostedParityTag]);
 
@@ -278,6 +280,14 @@ export const removeUnnecessaryOperations = (
   document: DeepPartial<OpenAPIV3.Document>
 ): DeepPartial<OpenAPIV3.Document> => {
   const { isCloud, isDevFeaturesEnabled, isSelfHostedParityEnabled } = EnvSet.values;
+  const isSelfHostedOnlyDocument = Reflect.get(document, selfHostedOnlyExtension) === true;
+
+  Reflect.deleteProperty(document, selfHostedOnlyExtension);
+
+  if (isSelfHostedOnlyDocument && (isCloud || !isSelfHostedParityEnabled)) {
+    Reflect.set(document, 'paths', {});
+    return document;
+  }
 
   if ((isCloud && isDevFeaturesEnabled) || !document.paths) {
     return document;
@@ -353,8 +363,10 @@ const removeFeatureSchemaProperty = (
   const isMarked = isRecord(propertySchema) && propertySchema[devFeatureSchemaExtension] === true;
   const isSelfHostedParityMarked =
     isRecord(propertySchema) && propertySchema[selfHostedParitySchemaExtension] === true;
+  const isSelfHostedOnlyMarked =
+    isRecord(propertySchema) && propertySchema[selfHostedOnlyExtension] === true;
 
-  if (!isMarked && !isSelfHostedParityMarked) {
+  if (!isMarked && !isSelfHostedParityMarked && !isSelfHostedOnlyMarked) {
     return false;
   }
 
@@ -363,7 +375,8 @@ const removeFeatureSchemaProperty = (
     (isMarked &&
       !isDevFeaturesEnabled &&
       !(isSelfHostedParityMarked && isSelfHostedParityEnabled)) ||
-    (isSelfHostedParityMarked && !isCloud && !isSelfHostedParityEnabled);
+    (isSelfHostedParityMarked && !isCloud && !isSelfHostedParityEnabled) ||
+    (isSelfHostedOnlyMarked && (isCloud || !isSelfHostedParityEnabled));
 
   if (shouldRemove) {
     Reflect.deleteProperty(properties, propertyName);
@@ -375,6 +388,7 @@ const removeFeatureSchemaProperty = (
   if (isRecord(propertySchema)) {
     Reflect.deleteProperty(propertySchema, devFeatureSchemaExtension);
     Reflect.deleteProperty(propertySchema, selfHostedParitySchemaExtension);
+    Reflect.deleteProperty(propertySchema, selfHostedOnlyExtension);
   }
 
   return false;

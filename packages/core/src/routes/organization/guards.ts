@@ -3,9 +3,12 @@ import { Organizations, organizationWithOrganizationRolesGuard } from '@logto/sc
 import { EnvSet } from '#src/env-set/index.js';
 
 // DEV: MFA trusted devices
-export const organizationHiddenFields = EnvSet.values.isDevFeaturesEnabled
-  ? {}
-  : { isTrustedDeviceAllowed: true as const };
+export const organizationHiddenFields = {
+  ...(!EnvSet.values.isDevFeaturesEnabled && { isTrustedDeviceAllowed: true as const }),
+  ...((EnvSet.values.isCloud || !EnvSet.values.isSelfHostedParityEnabled) && {
+    createdBy: true as const,
+  }),
+};
 
 export const organizationResponseGuard = Organizations.guard.omit(organizationHiddenFields);
 

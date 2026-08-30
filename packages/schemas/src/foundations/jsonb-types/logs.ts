@@ -80,6 +80,11 @@ export const logContextPayloadGuard = z
      */
     cimdClientId: z.string().optional(),
     sessionId: z.string().optional(),
+    organizationId: z.string().optional(),
+    actorId: z.string().optional(),
+    source: z.enum(['Console', 'AccountApi', 'ExperienceApi', 'ManagementApi']).optional(),
+    target: z.record(z.string(), z.unknown()).optional(),
+    changes: z.record(z.string(), z.unknown()).optional(),
     params: z.record(z.string(), z.unknown()).optional(),
   })
   .catchall(z.unknown());

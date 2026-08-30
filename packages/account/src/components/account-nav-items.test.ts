@@ -1,4 +1,9 @@
-import { profileRoute, securityRoute, sessionsRoute } from '@ac/constants/routes';
+import {
+  organizationsRoute,
+  profileRoute,
+  securityRoute,
+  sessionsRoute,
+} from '@ac/constants/routes';
 
 import { buildAccountNavItems } from './account-nav-items';
 
@@ -21,5 +26,17 @@ describe('buildAccountNavItems', () => {
 
     expect(items).toHaveLength(1);
     expect(items[0]?.to).toBe(securityRoute);
+  });
+
+  it('adds the organization center only when it is enabled for the tenant', () => {
+    const items = buildAccountNavItems({
+      hasProfile: true,
+      hasSecurity: false,
+      hasSessions: false,
+      hasOrganizations: true,
+    });
+
+    expect(items).toHaveLength(2);
+    expect(items[1]?.to).toBe(organizationsRoute);
   });
 });

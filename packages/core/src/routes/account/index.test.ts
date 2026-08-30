@@ -1,4 +1,9 @@
-import { AccountCenterControlValue, type AccountCenter, type User } from '@logto/schemas';
+import {
+  AccountCenterControlValue,
+  type AccountCenter,
+  type User,
+  defaultOrganizationCenterSettings,
+} from '@logto/schemas';
 import { createMockUtils, pickDefault } from '@logto/shared/esm';
 
 import { mockSignInExperience, mockUser } from '#src/__mocks__/index.js';
@@ -56,6 +61,7 @@ const mockedQueries = {
         deleteAccountUrl: null,
         customCss: null,
         profileFields: [],
+        organizationCenter: defaultOrganizationCenterSettings,
       })
     ),
   },

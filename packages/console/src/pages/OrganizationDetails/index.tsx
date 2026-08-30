@@ -16,6 +16,7 @@ import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
 import Drawer from '@/components/Drawer';
 import OrganizationIcon from '@/components/OrganizationIcon';
 import PageMeta from '@/components/PageMeta';
+import { isSelfHostedParityEnabled } from '@/consts/env';
 import DeleteConfirmModal from '@/ds-components/DeleteConfirmModal';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import useApi, { type RequestError } from '@/hooks/use-api';
@@ -28,6 +29,7 @@ import { OrganizationDetailsTabs, type OrganizationDetailsOutletContext } from '
 
 const pathname = '/organizations';
 
+// eslint-disable-next-line complexity -- Organization details conditionally composes legacy and self-hosted parity tabs.
 function OrganizationDetails() {
   const { id } = useParams();
   const { navigate } = useTenantPathname();
@@ -140,6 +142,16 @@ function OrganizationDetails() {
               <TabNavItem href={`${pathname}/${id}/${OrganizationDetailsTabs.Branding}`}>
                 {t('organizations.branding')}
               </TabNavItem>
+              {isSelfHostedParityEnabled && (
+                <TabNavItem href={`${pathname}/${id}/${OrganizationDetailsTabs.ManagementAccess}`}>
+                  {t('organization_details.roles')}
+                </TabNavItem>
+              )}
+              {isSelfHostedParityEnabled && (
+                <TabNavItem href={`${pathname}/${id}/${OrganizationDetailsTabs.Activity}`}>
+                  {t('logs.title')}
+                </TabNavItem>
+              )}
             </TabNav>
             <Outlet
               context={

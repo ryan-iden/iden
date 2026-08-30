@@ -8,6 +8,8 @@ export type OneTimeTokenContext = {
   jitOrganizationIds?: string[];
   // Links a console invitation to its single-use authentication token.
   invitationId?: string;
+  // Links an end-user organization invitation to its registration token.
+  organizationInvitationId?: string;
   // Restricts this one-time token to a specific interaction event.
   interactionEvent?: InteractionEvent;
 };
@@ -16,6 +18,7 @@ export const oneTimeTokenContextGuard = z
   .object({
     jitOrganizationIds: z.string().array(),
     invitationId: z.string(),
+    organizationInvitationId: z.string(),
     interactionEvent: eventGuard,
   })
   .partial() satisfies ToZodObject<OneTimeTokenContext>;

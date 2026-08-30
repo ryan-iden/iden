@@ -7,6 +7,7 @@ import {
 import { yes } from '@silverhand/essentials';
 import { z } from 'zod';
 
+import { EnvSet } from '#src/env-set/index.js';
 import koaGuard from '#src/middleware/koa-guard.js';
 import koaPagination from '#src/middleware/koa-pagination.js';
 import { koaQuotaGuard, koaReportSubscriptionUpdates } from '#src/middleware/koa-quota-guard.js';
@@ -22,11 +23,15 @@ import { type ManagementApiRouter, type RouterInitArgs } from '../types.js';
 import applicationRoutes from './application/index.js';
 import { organizationHiddenFields, organizationResponseGuard } from './guards.js';
 import jitRoutes from './jit/index.js';
+import organizationManagementRoleRoutes from './management-roles.js';
 import userRoutes from './user/index.js';
 import { errorHandler } from './utils.js';
 
-type OrganizationWithFeaturedResponse = Omit<OrganizationWithFeatured, 'isTrustedDeviceAllowed'> &
-  Partial<Pick<OrganizationWithFeatured, 'isTrustedDeviceAllowed'>>;
+type OrganizationWithFeaturedResponse = Omit<
+  OrganizationWithFeatured,
+  'isTrustedDeviceAllowed' | 'createdBy'
+> &
+  Partial<Pick<OrganizationWithFeatured, 'isTrustedDeviceAllowed' | 'createdBy'>>;
 
 export default function organizationRoutes<T extends ManagementApiRouter>(
   ...args: RouterInitArgs<T>
@@ -36,7 +41,7 @@ export default function organizationRoutes<T extends ManagementApiRouter>(
     {
       id: tenantId,
       queries: { organizations },
-      libraries: { quota },
+      libraries: { quota, organizationAutonomy },
     },
   ] = args;
 
@@ -116,6 +121,9 @@ export default function organizationRoutes<T extends ManagementApiRouter>(
   userRoutes(router, organizations, quota);
   applicationRoutes(router, organizations);
   jitRoutes(router, organizations);
+  if (!EnvSet.values.isCloud && EnvSet.values.isSelfHostedParityEnabled) {
+    organizationManagementRoleRoutes(router, organizationAutonomy);
+  }
 
   // MARK: Mount sub-routes
   organizationRoleRoutes(...args);

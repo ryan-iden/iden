@@ -38,13 +38,20 @@ export const useAuthRedirect = ({
     useContext(PageContext);
   const isInitialAuthLoading = !isAuthenticated && isLoading;
   const hasAttemptedSilentReauth = useRef(false);
+  const currentParameters = new URLSearchParams(window.location.search);
+  const oneTimeToken = currentParameters.get(ExtraParamsKey.OneTimeToken);
+  const loginHint = currentParameters.get(ExtraParamsKey.LoginHint);
 
   useEffect(() => {
     if (isInCallback || isInitialAuthLoading || isLoadingExperience) {
       return;
     }
 
-    const extraParams = uiLocales ? { [ExtraParamsKey.UiLocales]: uiLocales } : undefined;
+    const extraParams = {
+      ...(uiLocales && { [ExtraParamsKey.UiLocales]: uiLocales }),
+      ...(oneTimeToken && { [ExtraParamsKey.OneTimeToken]: oneTimeToken }),
+      ...(loginHint && { [ExtraParamsKey.LoginHint]: loginHint }),
+    };
 
     if (isSilentAuthFailed && accountCenterSettings?.enabled) {
       // Prompt=none failed (no valid OIDC session); fall back to an explicit login.
@@ -62,6 +69,8 @@ export const useAuthRedirect = ({
     accountCenterSettings,
     signIn,
     uiLocales,
+    oneTimeToken,
+    loginHint,
   ]);
 
   useEffect(() => {

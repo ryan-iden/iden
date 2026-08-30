@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- The account shell intentionally keeps its complete route map in one place. */
 import LogtoSignature from '@experience/shared/components/LogtoSignature';
 import { ReservedScope, UserScope } from '@logto/core-kit';
 import { LogtoProvider, useLogto } from '@logto/react';
@@ -48,12 +49,15 @@ import {
   socialCallbackRoutePrefix,
   socialRoutePrefix,
   verifiedActionRoute,
+  organizationsRoute,
+  organizationInvitationsRoute,
 } from './constants/routes';
 import initI18n from './i18n/init';
 import BackupCodeBinding from './pages/BackupCodeBinding';
 import BackupCodeView from './pages/BackupCodeView';
 import Email from './pages/Email';
 import Home from './pages/Home';
+import OrganizationCenter from './pages/OrganizationCenter';
 import PasskeyBinding from './pages/PasskeyBinding';
 import PasskeyView from './pages/PasskeyView';
 import Password from './pages/Password';
@@ -128,6 +132,7 @@ export const Main = () => {
     hasProfile,
     hasSecurity,
     hasSessions,
+    hasOrganizations,
     navItems: accountNavItems,
   } = getAccountTabSettings({
     accountCenterSettings,
@@ -205,6 +210,19 @@ export const Main = () => {
       {hasSecurity && <Route path={securityRoute} element={<Security />} />}
       {hasSessions && <Route path={sessionsRoute} element={<Sessions />} />}
       {hasProfile && <Route path={profileRoute} element={<Profile />} />}
+      {hasOrganizations && (
+        <>
+          <Route path={organizationsRoute} element={<OrganizationCenter />} />
+          <Route
+            path={`${organizationInvitationsRoute}/:invitationId`}
+            element={<OrganizationCenter />}
+          />
+          <Route
+            path={`${organizationsRoute}/:organizationId/:section?`}
+            element={<OrganizationCenter />}
+          />
+        </>
+      )}
       <Route index element={<Home />} />
       <Route path="*" element={<Home />} />
     </Routes>
@@ -295,6 +313,8 @@ const App = () => (
           UserScope.CustomData,
           UserScope.Sessions,
           UserScope.TrustedDevices,
+          UserScope.Organizations,
+          UserScope.OrganizationRoles,
         ],
       }}
     >
@@ -310,3 +330,4 @@ const App = () => (
 );
 
 export default App;
+/* eslint-enable max-lines */

@@ -10,6 +10,7 @@ import { JwtCustomizerLibrary } from '#src/libraries/jwt-customizer.js';
 import type { LogtoConfigLibrary } from '#src/libraries/logto-config.js';
 import { OidcPrivateKeyLibrary } from '#src/libraries/oidc-private-key.js';
 import { createOneTimeTokenLibrary } from '#src/libraries/one-time-token.js';
+import { OrganizationAutonomyLibrary } from '#src/libraries/organization-autonomy.js';
 import { OrganizationInvitationLibrary } from '#src/libraries/organization-invitation.js';
 import { createPasscodeLibrary } from '#src/libraries/passcode.js';
 import { createPhraseLibrary } from '#src/libraries/phrase.js';
@@ -86,6 +87,8 @@ export default class Libraries {
     this.queries,
     this.connectors
   );
+
+  organizationAutonomy = new OrganizationAutonomyLibrary(this.queries);
 
   oidcPrivateKeys = new OidcPrivateKeyLibrary(this.queries);
 

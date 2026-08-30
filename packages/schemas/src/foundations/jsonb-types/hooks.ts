@@ -23,6 +23,8 @@ export enum DataHookSchema {
   Role = 'Role',
   Scope = 'Scope',
   Organization = 'Organization',
+  OrganizationInvitation = 'OrganizationInvitation',
+  OrganizationManagementRole = 'OrganizationManagementRole',
   OrganizationRole = 'OrganizationRole',
   OrganizationScope = 'OrganizationScope',
 }
@@ -40,10 +42,15 @@ type BasicDataHookEvent = `${DataHookSchema}.${DataHookBasicMutationType}`;
 
 // Custom DataHook mutable schemas
 type CustomDataHookMutableSchema =
-  | `${Exclude<DataHookSchema, DataHookSchema.TrustedDevice>}.Data`
+  | `${Exclude<
+      DataHookSchema,
+      DataHookSchema.TrustedDevice | DataHookSchema.OrganizationInvitation
+    >}.Data`
   | `${DataHookSchema.User}.SuspensionStatus`
   | `${DataHookSchema.Role}.Scopes`
+  | `${DataHookSchema.Organization}.Configuration`
   | `${DataHookSchema.Organization}.Membership`
+  | `${DataHookSchema.OrganizationInvitation}.Status`
   | `${DataHookSchema.OrganizationRole}.Scopes`;
 
 type DataHookPropertyUpdateEvent =
@@ -85,7 +92,14 @@ export const hookEvents = Object.freeze([
   'Organization.Created',
   'Organization.Deleted',
   'Organization.Data.Updated',
+  'Organization.Configuration.Updated',
   'Organization.Membership.Updated',
+  'OrganizationInvitation.Created',
+  'OrganizationInvitation.Deleted',
+  'OrganizationInvitation.Status.Updated',
+  'OrganizationManagementRole.Created',
+  'OrganizationManagementRole.Deleted',
+  'OrganizationManagementRole.Data.Updated',
   'OrganizationRole.Created',
   'OrganizationRole.Deleted',
   'OrganizationRole.Data.Updated',

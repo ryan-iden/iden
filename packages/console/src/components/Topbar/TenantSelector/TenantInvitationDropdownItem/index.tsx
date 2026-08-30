@@ -1,8 +1,4 @@
-import {
-  OrganizationInvitationStatus,
-  getTenantIdFromOrganizationId,
-  type TenantTag,
-} from '@logto/schemas';
+import { getTenantIdFromOrganizationId, type TenantTag } from '@logto/schemas';
 import { useContext } from 'react';
 
 import { useCloudApi } from '@/cloud/hooks/use-cloud-api';
@@ -39,7 +35,9 @@ function TenantInvitationDropdownItem({ data }: Props) {
         onClick={async () => {
           await cloudApi.patch(`/api/invitations/:invitationId/status`, {
             params: { invitationId: id },
-            body: { status: OrganizationInvitationStatus.Accepted },
+            // The hosted control-plane package has its own status enum version.
+            // eslint-disable-next-line no-restricted-syntax -- This literal bridges the independently versioned @logto/cloud router type.
+            body: { status: 'Accepted' as never },
           });
           const data = await cloudApi.get('/api/tenants');
           resetTenants(data);

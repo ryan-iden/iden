@@ -24,4 +24,6 @@ export enum OrganizationDetailsTabs {
   Members = 'members',
   MachineToMachine = 'machine-to-machine',
   Branding = 'branding',
+  ManagementAccess = 'management-access',
+  Activity = 'activity',
 }

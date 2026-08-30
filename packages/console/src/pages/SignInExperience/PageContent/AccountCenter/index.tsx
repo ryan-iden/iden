@@ -22,6 +22,7 @@ import SignInExperienceTabWrapper from '../components/SignInExperienceTabWrapper
 import AccountCenterField from './AccountCenterField';
 import DeleteAccountUrlField from './DeleteAccountUrlField';
 import IntegratePrebuiltUi from './IntegratePrebuiltUi';
+import OrganizationCenterSection from './OrganizationCenterSection';
 import SecretVaultSection from './SecretVaultSection';
 import WebauthnRelatedOriginsField from './WebauthnRelatedOriginsField';
 import { accountCenterSections } from './constants';
@@ -152,6 +153,7 @@ function AccountCenter({ isActive, data }: Props) {
         </div>
       </FormCard>
       <IntegratePrebuiltUi getProfileFieldDisabledReason={getProfileFieldDisabledReason} />
+      <OrganizationCenterSection />
       {accountCenterSections.map((section) => (
         <FormCard key={section.key} title={section.title} description={section.description}>
           <div className={styles.cardContent}>

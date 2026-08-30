@@ -8,6 +8,7 @@ import {
 } from '@logto/schemas';
 import { generateStandardId } from '@logto/shared';
 import { conditional, type Nullable, removeUndefinedKeys } from '@silverhand/essentials';
+import { sql } from '@silverhand/slonik';
 
 import RequestError from '#src/errors/RequestError/index.js';
 import OrganizationQueries from '#src/queries/organization/index.js';
@@ -30,6 +31,7 @@ const endingStatuses = Object.freeze([
   OrganizationInvitationStatus.Accepted,
   OrganizationInvitationStatus.Expired,
   OrganizationInvitationStatus.Revoked,
+  OrganizationInvitationStatus.Declined,
 ]);
 
 /** Class for managing organization invitations. */
@@ -59,11 +61,18 @@ export class OrganizationInvitationLibrary {
     data: Pick<
       CreateOrganizationInvitation,
       'inviterId' | 'invitee' | 'organizationId' | 'expiresAt'
-    > & { organizationRoleIds?: string[] },
+    > & { organizationRoleIds?: string[]; organizationManagementRoleIds?: string[] },
     messagePayload: SendMessagePayload | false,
     ip?: string
   ) {
-    const { inviterId, invitee, organizationId, expiresAt, organizationRoleIds } = data;
+    const {
+      inviterId,
+      invitee,
+      organizationId,
+      expiresAt,
+      organizationRoleIds,
+      organizationManagementRoleIds,
+    } = data;
 
     if (await this.queries.organizations.relations.users.isMember(organizationId, invitee)) {
       throw new RequestError({
@@ -94,6 +103,15 @@ export class OrganizationInvitationLibrary {
           ...organizationRoleIds.map((roleId) => ({
             organizationInvitationId: invitation.id,
             organizationRoleId: roleId,
+          }))
+        );
+      }
+
+      if (organizationManagementRoleIds?.length) {
+        await organizationQueries.relations.invitationsManagementRoles.insert(
+          ...organizationManagementRoleIds.map((roleId) => ({
+            organizationInvitationId: invitation.id,
+            organizationManagementRoleId: roleId,
           }))
         );
       }
@@ -130,7 +148,7 @@ export class OrganizationInvitationLibrary {
    */
   async updateStatus(
     id: string,
-    status: OrganizationInvitationStatus.Revoked
+    status: OrganizationInvitationStatus.Revoked | OrganizationInvitationStatus.Declined
   ): Promise<OrganizationInvitationEntity>;
   /**
    * Updates the status of an organization invitation to `Accepted`, and assigns the user to the
@@ -203,9 +221,24 @@ export class OrganizationInvitationLibrary {
               }))
             );
           }
+          if (entity.organizationManagementRoles.length > 0) {
+            await Promise.all(
+              entity.organizationManagementRoles.map(async (role) =>
+                organizationQueries.relations.invitationsManagementRoles.pool.query(sql`
+                  insert into organization_management_role_user_relations (
+                    organization_id,
+                    user_id,
+                    organization_management_role_id
+                  ) values (${entity.organizationId}, ${acceptedUserId}, ${role.id})
+                  on conflict do nothing
+                `)
+              )
+            );
+          }
           break;
         }
-        case OrganizationInvitationStatus.Revoked: {
+        case OrganizationInvitationStatus.Revoked:
+        case OrganizationInvitationStatus.Declined: {
           break;
         }
         default: {

@@ -56,6 +56,12 @@ export const createOneTimeTokenQueries = (pool: CommonQueryMethods) => {
 
   const deleteOneTimeTokenById = buildDeleteByIdWithPool(pool, OneTimeTokens.table);
 
+  const deleteOneTimeTokensByOrganizationInvitationId = async (organizationInvitationId: string) =>
+    pool.query(sql`
+      delete from ${table}
+      where ${fields.context}->>'organizationInvitationId' = ${organizationInvitationId}
+    `);
+
   const updateExpiredOneTimeTokensStatusByEmail = async (email: string) =>
     pool.query(sql`
       update ${table}
@@ -75,6 +81,7 @@ export const createOneTimeTokenQueries = (pool: CommonQueryMethods) => {
 
   return {
     deleteOneTimeTokenById,
+    deleteOneTimeTokensByOrganizationInvitationId,
     findTotalNumberOfOneTimeTokens,
     getOneTimeTokens,
     getOneTimeTokenById,

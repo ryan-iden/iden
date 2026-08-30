@@ -1,6 +1,6 @@
 /* init_order = 3 */
 
-create type organization_invitation_status as enum ('Pending', 'Accepted', 'Expired', 'Revoked');
+create type organization_invitation_status as enum ('Pending', 'Accepted', 'Declined', 'Expired', 'Revoked');
 
 /** The invitation entry defined in RFC 0003. It stores the invitation information for a user to join an organization. */
 create table organization_invitations (

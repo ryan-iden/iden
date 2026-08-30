@@ -11,6 +11,7 @@ import {
 import { conditional } from '@silverhand/essentials';
 import { z } from 'zod';
 
+import { EnvSet } from '#src/env-set/index.js';
 import RequestError from '#src/errors/RequestError/index.js';
 import { buildUserPasswordPayloadFromPassword } from '#src/libraries/user.utils.js';
 import koaGuard from '#src/middleware/koa-guard.js';
@@ -28,6 +29,7 @@ import identitiesRoutes from './identities.js';
 import logtoConfigRoutes from './logto-config.js';
 import mfaVerificationsRoutes from './mfa-verifications.js';
 import koaAccountCenter from './middlewares/koa-account-center.js';
+import accountOrganizationRoutes from './organizations.js';
 import accountSessionRoutes from './sessions.js';
 import thirdPartyTokensRoutes from './third-party-tokens.js';
 import accountTrustedDeviceRoutes from './trusted-device.js';
@@ -48,6 +50,10 @@ export default function accountRoutes<T extends UserRouter>(...args: RouterInitA
   } = libraries;
 
   router.use(koaAccountCenter(queries));
+
+  if (!EnvSet.values.isCloud && EnvSet.values.isSelfHostedParityEnabled) {
+    accountOrganizationRoutes(...args);
+  }
 
   router.get(
     `${accountApiPrefix}`,

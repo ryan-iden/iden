@@ -21,6 +21,10 @@ export const passkeyAddRoute = '/passkey/add';
 export const passkeyManageRoute = '/passkey/manage';
 export const passkeySuccessRoute = '/passkey/success';
 export const verifiedActionRoute = '/verified-action';
+export const organizationsRoute = '/organizations';
+export const organizationInvitationsRoute = '/organizations/invitations';
+export const getOrganizationRoute = (organizationId: string, section = 'overview') =>
+  `${organizationsRoute}/${organizationId}/${section}`;
 export const socialSuccessRoute = '/social/success';
 export const socialRoutePrefix = '/social';
 export const socialCallbackRoutePrefix = '/callback/social';

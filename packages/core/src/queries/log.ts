@@ -20,7 +20,12 @@ type AllowedKeyPrefix = AuditLogPrefix | WebhookLogPrefix;
 
 type LogCondition = {
   logKey?: string;
-  payload?: { applicationId?: string; userId?: string; hookId?: string };
+  payload?: {
+    applicationId?: string;
+    userId?: string;
+    hookId?: string;
+    organizationId?: string;
+  };
   /** Inclusive lower bound on `createdAt`, in unix milliseconds. */
   startTime?: number;
   /**

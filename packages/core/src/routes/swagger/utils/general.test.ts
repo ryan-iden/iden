@@ -7,6 +7,7 @@ import {
   devFeatureSchemaExtension,
   removeDevFeatureSchemaProperties,
   removeUnnecessaryOperations,
+  selfHostedOnlyExtension,
   selfHostedParitySchemaExtension,
 } from './general.js';
 
@@ -85,6 +86,12 @@ const createDevFeatureOperationDocument = (): DeepPartial<OpenAPIV3.Document> =>
     },
   },
 });
+
+const createSelfHostedDocument = () =>
+  ({
+    [selfHostedOnlyExtension]: true,
+    paths: { '/api/self-hosted': { get: { tags: ['Self-hosted parity'] } } },
+  }) as unknown as DeepPartial<OpenAPIV3.Document>;
 
 describe('swagger general utils', () => {
   afterEach(() => {
@@ -185,6 +192,17 @@ describe('swagger general utils', () => {
     expect(document.paths).toHaveProperty('/api/parity');
   });
 
+  it('exposes self-hosted-only documents only when self-hosted parity is enabled', () => {
+    Reflect.set(EnvSet.values, 'isCloud', true);
+    setSelfHostedParityEnabled(true);
+    expect(removeUnnecessaryOperations(createSelfHostedDocument()).paths).toEqual({});
+
+    Reflect.set(EnvSet.values, 'isCloud', false);
+    expect(removeUnnecessaryOperations(createSelfHostedDocument()).paths).toHaveProperty(
+      '/api/self-hosted'
+    );
+  });
+
   it('should prune parity schema properties when parity is disabled', () => {
     Reflect.set(EnvSet.values, 'isCloud', false);
     setSelfHostedParityEnabled(false);
@@ -215,5 +233,39 @@ describe('swagger general utils', () => {
     removeDevFeatureSchemaProperties(document);
 
     expect(JSON.stringify(document)).not.toContain('parity');
+  });
+
+  it('should prune self-hosted-only schema properties in Cloud', () => {
+    Reflect.set(EnvSet.values, 'isCloud', true);
+    setSelfHostedParityEnabled(true);
+    const document = {
+      paths: {
+        '/api/mock': {
+          get: {
+            responses: {
+              200: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        organizationCenter: {
+                          type: 'object',
+                          [selfHostedOnlyExtension]: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    } as unknown as DeepPartial<OpenAPIV3.Document>;
+
+    removeDevFeatureSchemaProperties(document);
+
+    expect(JSON.stringify(document)).not.toContain('organizationCenter');
   });
 });

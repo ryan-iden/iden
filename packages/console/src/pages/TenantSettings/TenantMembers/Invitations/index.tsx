@@ -79,7 +79,9 @@ function Invitations() {
 
     await cloudApi.patch(`/api/tenants/:tenantId/invitations/:invitationId/status`, {
       params: { tenantId: currentTenantId, invitationId },
-      body: { status: OrganizationInvitationStatus.Revoked },
+      // The hosted control-plane package has its own status enum version.
+      // eslint-disable-next-line no-restricted-syntax -- This literal bridges the independently versioned @logto/cloud router type.
+      body: { status: 'Revoked' as never },
     });
     mutateSubscriptionQuotaAndUsages();
     void mutate();

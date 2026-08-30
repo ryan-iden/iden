@@ -22,6 +22,7 @@ import { generateStandardId } from '@logto/shared';
 import { condArray, conditional, conditionalArray, trySafe } from '@silverhand/essentials';
 
 import { EnvSet } from '#src/env-set/index.js';
+import RequestError from '#src/errors/RequestError/index.js';
 import { truncateMembershipDelta } from '#src/libraries/hook/utils.js';
 import { buildUserPasswordPayload } from '#src/libraries/user.utils.js';
 import { type JitOrganization } from '#src/queries/organization/email-domains.js';
@@ -121,6 +122,7 @@ export class ProvisionLibrary {
       enterpriseSsoIdentity,
       syncedEnterpriseSsoIdentity,
       jitOrganizationIds,
+      organizationInvitationId,
       socialConnectorTokenSetSecret,
       enterpriseSsoConnectorTokenSetSecret,
       passwordEncrypted,
@@ -190,6 +192,8 @@ export class ProvisionLibrary {
     }
 
     await this.provisionNewUserJitOrganizations(user.id, profile);
+
+    await this.acceptOrganizationInvitation(user.id, organizationInvitationId);
 
     this.ctx.appendDataHookContext('User.Created', { user });
 
@@ -278,6 +282,55 @@ export class ProvisionLibrary {
     this.appendMembershipUpdatedHooks(payload.userId, provisionedOrganizations);
 
     return provisionedOrganizations;
+  }
+
+  async acceptOrganizationInvitation(userId: string, invitationId?: string): Promise<void> {
+    if (!invitationId) {
+      return;
+    }
+
+    const { isCloud, isSelfHostedParityEnabled } = EnvSet.values;
+    const { organizationCenter } =
+      await this.tenantContext.queries.accountCenters.findDefaultAccountCenter();
+    if (
+      isCloud ||
+      !isSelfHostedParityEnabled ||
+      !organizationCenter.enabled ||
+      !organizationCenter.invitationPolicy.allowRegistration
+    ) {
+      throw new RequestError({ code: 'auth.forbidden', status: 403 });
+    }
+
+    const existingInvitation =
+      await this.tenantContext.queries.organizations.invitations.findById(invitationId);
+    if (existingInvitation.status === OrganizationInvitationStatus.Accepted) {
+      return;
+    }
+
+    const invitation = await this.tenantContext.libraries.organizationInvitations.updateStatus(
+      invitationId,
+      OrganizationInvitationStatus.Accepted,
+      userId
+    );
+    await this.tenantContext.queries.oneTimeTokens.deleteOneTimeTokensByOrganizationInvitationId(
+      invitationId
+    );
+    const log = this.ctx.createLog('Organization.Invitation.Accept');
+    log.append({
+      actorId: userId,
+      userId,
+      organizationId: invitation.organizationId,
+      source: 'ExperienceApi',
+      target: { type: 'organizationInvitation', id: invitation.id },
+    });
+    this.ctx.appendDataHookContext('OrganizationInvitation.Status.Updated', {
+      organizationId: invitation.organizationId,
+      invitation,
+    });
+    this.ctx.appendDataHookContext('Organization.Membership.Updated', {
+      organizationId: invitation.organizationId,
+      addedUserIds: [userId],
+    });
   }
 
   /**

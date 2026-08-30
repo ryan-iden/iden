@@ -1,0 +1,41 @@
+{
+  "x-logto-self-hosted-only": true,
+  "paths": {
+    "/api/organizations/{id}/management-roles": {
+      "get": {
+        "tags": ["Self-hosted parity"],
+        "summary": "List organization management roles as a tenant administrator"
+      },
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Create an organization management role as a tenant administrator"
+      }
+    },
+    "/api/organizations/{id}/management-roles/bootstrap-owner": {
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Initialize the first Owner of a historical organization"
+      }
+    },
+    "/api/organizations/{id}/management-roles/{roleId}": {
+      "patch": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Update an organization management role as a tenant administrator"
+      },
+      "delete": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Delete an organization management role as a tenant administrator"
+      }
+    },
+    "/api/organizations/{id}/management-roles/{roleId}/users/{userId}": {
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Assign an organization management role as a tenant administrator"
+      },
+      "delete": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Unassign an organization management role as a tenant administrator"
+      }
+    }
+  }
+}

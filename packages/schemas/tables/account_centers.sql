@@ -13,5 +13,7 @@ create table account_centers (
   custom_css text,
   /** Ordered list of custom profile fields to show in the prebuilt account center */
   profile_fields jsonb /* @use AccountCenterProfileFields */,
+  /** Configuration for the prebuilt self-service organization center. */
+  organization_center jsonb /* @use OrganizationCenterSettings */ not null default ('{"enabled":false,"modules":{"profile":true,"branding":true,"members":true,"invitations":true,"managementRoles":true,"businessRoles":true,"security":true,"jit":true,"applications":true,"activity":true,"deletion":true},"creationPolicy":{"mode":"disabled","allowedRoleIds":[],"maxOrganizationsPerUser":1},"invitationPolicy":{"allowRegistration":true,"expiresInDays":7},"resourceAllowlist":{"ssoConnectorIds":[],"applicationIds":[],"organizationRoleIds":[]}}'::jsonb),
   primary key (tenant_id, id)
 );

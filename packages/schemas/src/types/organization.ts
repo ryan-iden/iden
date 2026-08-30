@@ -8,7 +8,9 @@ import {
   type OrganizationInvitation,
   OrganizationInvitations,
   type Application,
+  OrganizationManagementRoles,
 } from '../db-entries/index.js';
+import { organizationManagementPermissionsGuard } from '../foundations/index.js';
 import { type ToZodObject } from '../utils/zod.js';
 
 import { applicationResponseGuard } from './application.js';
@@ -134,9 +136,44 @@ export type ApplicationWithOrganizationRolesResponse = z.infer<
  */
 export type OrganizationInvitationEntity = OrganizationInvitation & {
   organizationRoles: OrganizationRoleEntity[];
+  organizationManagementRoles: OrganizationRoleEntity[];
 };
 
 export const organizationInvitationEntityGuard: ToZodObject<OrganizationInvitationEntity> =
   OrganizationInvitations.guard.extend({
     organizationRoles: organizationRoleEntityGuard.array(),
+    organizationManagementRoles: organizationRoleEntityGuard.array(),
   });
+
+/** Safe organization data and the current member's effective management access. */
+export const organizationCenterOrganizationGuard = Organizations.guard
+  .pick({
+    id: true,
+    name: true,
+    description: true,
+    color: true,
+    branding: true,
+    customCss: true,
+    isMfaRequired: true,
+    createdAt: true,
+    createdBy: true,
+  })
+  .extend({
+    isOwner: z.boolean(),
+    permissions: organizationManagementPermissionsGuard,
+  });
+
+export type OrganizationCenterOrganization = z.infer<typeof organizationCenterOrganizationGuard>;
+
+export const organizationManagementRoleResponseGuard = OrganizationManagementRoles.guard;
+
+/** Member fields safe for organization-local administrators. */
+export const organizationCenterMemberGuard = userInfoGuard
+  .pick({ id: true, name: true, avatar: true, primaryEmail: true, createdAt: true })
+  .extend({
+    organizationRoles: organizationRoleEntityGuard.array(),
+    organizationManagementRoles: organizationRoleEntityGuard.array(),
+    isOwner: z.boolean(),
+  });
+
+export type OrganizationCenterMember = z.infer<typeof organizationCenterMemberGuard>;

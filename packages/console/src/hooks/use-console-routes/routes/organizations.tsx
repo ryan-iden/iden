@@ -2,6 +2,7 @@ import { condArray } from '@silverhand/essentials';
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { safeLazy } from 'react-safe-lazy';
 
+import { isSelfHostedParityEnabled } from '@/consts/env';
 import { OrganizationDetailsTabs } from '@/pages/OrganizationDetails/types';
 
 const Organizations = safeLazy(async () => import('@/pages/Organizations'));
@@ -12,6 +13,12 @@ const MachineToMachine = safeLazy(
 const Members = safeLazy(async () => import('@/pages/OrganizationDetails/Members'));
 const Settings = safeLazy(async () => import('@/pages/OrganizationDetails/Settings'));
 const Branding = safeLazy(async () => import('@/pages/OrganizationDetails/Branding'));
+const ManagementAccess = safeLazy(
+  async () => import('@/pages/OrganizationDetails/ManagementAccess')
+);
+const OrganizationActivity = safeLazy(
+  async () => import('@/pages/OrganizationDetails/OrganizationActivity')
+);
 
 export const organizations: RouteObject = {
   path: 'organizations',
@@ -33,6 +40,16 @@ export const organizations: RouteObject = {
           path: OrganizationDetailsTabs.Branding,
           element: <Branding />,
         },
+        ...condArray(
+          isSelfHostedParityEnabled && {
+            path: OrganizationDetailsTabs.ManagementAccess,
+            element: <ManagementAccess />,
+          },
+          isSelfHostedParityEnabled && {
+            path: OrganizationDetailsTabs.Activity,
+            element: <OrganizationActivity />,
+          }
+        ),
       ],
     }
   ),

@@ -66,7 +66,7 @@ function AcceptInvitation() {
   }, [error?.status, invitationId, isAuthenticated, isLoading, oneTimeToken, redirectUri, signIn]);
 
   useEffect(() => {
-    if (!invitation || invitation.status !== OrganizationInvitationStatus.Pending) {
+    if (!invitation || invitation.status !== 'Pending') {
       return;
     }
 
@@ -76,7 +76,9 @@ function AcceptInvitation() {
       // Accept the invitation and redirect to the tenant page.
       await cloudApi.patch(`/api/invitations/:invitationId/status`, {
         params: { invitationId: id },
-        body: { status: OrganizationInvitationStatus.Accepted },
+        // The hosted control-plane package has its own status enum version.
+        // eslint-disable-next-line no-restricted-syntax -- This literal bridges the independently versioned @logto/cloud router type.
+        body: { status: 'Accepted' as never },
       });
 
       const data = await cloudApi.get('/api/tenants');

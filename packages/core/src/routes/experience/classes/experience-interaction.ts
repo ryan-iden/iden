@@ -576,6 +576,7 @@ export default class ExperienceInteraction {
       enterpriseSsoIdentity,
       syncedEnterpriseSsoIdentity,
       jitOrganizationIds,
+      organizationInvitationId,
       socialConnectorTokenSetSecret,
       enterpriseSsoConnectorTokenSetSecret,
       passwordEncrypted,
@@ -659,6 +660,10 @@ export default class ExperienceInteraction {
         userId: user.id,
         organizationIds: jitOrganizationIds,
       });
+    }
+
+    if (organizationInvitationId) {
+      await this.provisionLibrary.acceptOrganizationInvitation(user.id, organizationInvitationId);
     }
 
     await this.triggerPostSignInAction(user.id);

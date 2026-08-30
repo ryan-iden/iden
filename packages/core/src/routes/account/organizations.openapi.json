@@ -1,0 +1,132 @@
+{
+  "x-logto-self-hosted-only": true,
+  "tags": [
+    {
+      "name": "Self-hosted organization center",
+      "description": "Prebuilt organization autonomy APIs for self-hosted iden deployments."
+    }
+  ],
+  "paths": {
+    "/api/account/organizations": {
+      "get": { "tags": ["Self-hosted parity"], "summary": "List the current user's organizations" },
+      "post": { "tags": ["Self-hosted parity"], "summary": "Create an organization" }
+    },
+    "/api/account/organizations/{organizationId}": {
+      "get": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Get an organization for the current member"
+      },
+      "patch": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Update an organization as an organization administrator"
+      },
+      "delete": { "tags": ["Self-hosted parity"], "summary": "Delete an organization as an Owner" }
+    },
+    "/api/account/organizations/{organizationId}/members": {
+      "get": { "tags": ["Self-hosted parity"], "summary": "List organization members" }
+    },
+    "/api/account/organizations/{organizationId}/members/{userId}": {
+      "delete": { "tags": ["Self-hosted parity"], "summary": "Remove an organization member" }
+    },
+    "/api/account/organizations/{organizationId}/invitations": {
+      "get": { "tags": ["Self-hosted parity"], "summary": "List organization invitations" },
+      "post": { "tags": ["Self-hosted parity"], "summary": "Invite an organization member" }
+    },
+    "/api/account/organizations/{organizationId}/invitations/{invitationId}": {
+      "delete": { "tags": ["Self-hosted parity"], "summary": "Revoke an organization invitation" }
+    },
+    "/api/account/organizations/{organizationId}/invitations/{invitationId}/resend": {
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Resend an organization invitation with a rotated token"
+      }
+    },
+    "/api/account/organization-invitations": {
+      "get": { "tags": ["Self-hosted parity"], "summary": "List invitations for the current user" }
+    },
+    "/api/account/organization-invitations/{invitationId}/accept": {
+      "post": { "tags": ["Self-hosted parity"], "summary": "Accept an organization invitation" }
+    },
+    "/api/account/organization-invitations/{invitationId}/decline": {
+      "post": { "tags": ["Self-hosted parity"], "summary": "Decline an organization invitation" }
+    },
+    "/api/account/organizations/{organizationId}/activity": {
+      "get": { "tags": ["Self-hosted parity"], "summary": "List redacted organization activity" }
+    },
+    "/api/account/organizations/{organizationId}/available-resources": {
+      "get": {
+        "tags": ["Self-hosted parity"],
+        "summary": "List resources shared with organization administrators"
+      }
+    },
+    "/api/account/organizations/{organizationId}/jit/sso-connectors": {
+      "put": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Replace organization JIT SSO connectors"
+      }
+    },
+    "/api/account/organizations/{organizationId}/applications": {
+      "put": { "tags": ["Self-hosted parity"], "summary": "Replace organization M2M applications" }
+    },
+    "/api/account/organizations/{organizationId}/members/{userId}/business-roles": {
+      "put": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Replace a member's organization business roles"
+      }
+    },
+    "/api/account/organizations/{organizationId}/jit/business-roles": {
+      "put": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Replace organization JIT business roles"
+      }
+    },
+    "/api/account/organizations/{organizationId}/jit/email-domains": {
+      "get": {
+        "tags": ["Self-hosted parity"],
+        "summary": "List verified and pending JIT email domains"
+      }
+    },
+    "/api/account/organizations/{organizationId}/jit/email-domain-verifications": {
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Create a JIT email-domain DNS challenge"
+      }
+    },
+    "/api/account/organizations/{organizationId}/jit/email-domain-verifications/{verificationId}/verify": {
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Verify a JIT email-domain DNS challenge"
+      }
+    },
+    "/api/account/organizations/{organizationId}/jit/email-domains/{domain}": {
+      "delete": { "tags": ["Self-hosted parity"], "summary": "Remove a verified JIT email domain" }
+    },
+    "/api/account/organizations/{organizationId}/management-roles": {
+      "get": { "tags": ["Self-hosted parity"], "summary": "List organization management roles" },
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Create an organization management role"
+      }
+    },
+    "/api/account/organizations/{organizationId}/management-roles/{roleId}": {
+      "patch": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Update an organization management role"
+      },
+      "delete": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Delete an organization management role"
+      }
+    },
+    "/api/account/organizations/{organizationId}/management-roles/{roleId}/users/{userId}": {
+      "post": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Assign an organization management role"
+      },
+      "delete": {
+        "tags": ["Self-hosted parity"],
+        "summary": "Unassign an organization management role"
+      }
+    }
+  }
+}

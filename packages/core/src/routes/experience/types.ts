@@ -56,6 +56,8 @@ export type InteractionProfile = {
    * This is from one-time token verification. User will be automatically added to the specified organizations.
    */
   jitOrganizationIds?: string[];
+  /** The invitation authorized by a verified one-time token. */
+  organizationInvitationId?: string;
   // Syncing the existing enterprise SSO identity detail
   syncedEnterpriseSsoIdentity?: Pick<UserSsoIdentity, 'identityId' | 'issuer' | 'detail'>;
   /**
@@ -135,6 +137,7 @@ const interactionProfileGuard = Users.createGuard
       })
       .optional(),
     jitOrganizationIds: z.array(z.string()).optional(),
+    organizationInvitationId: z.string().optional(),
     socialConnectorTokenSetSecret: z
       .object({
         encryptedTokenSet: encryptedTokenSetGuard,

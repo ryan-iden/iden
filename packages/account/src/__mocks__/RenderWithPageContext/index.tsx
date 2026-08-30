@@ -8,6 +8,7 @@ import {
   SignInMode,
   Theme,
   defaultUsernamePolicy,
+  defaultOrganizationCenterSettings,
   type AccountCenter,
   type UserProfileResponse,
 } from '@logto/schemas';
@@ -43,6 +44,7 @@ export const mockAccountCenterSettings = {
   webauthnRelatedOrigins: [],
   deleteAccountUrl: null,
   customCss: null,
+  organizationCenter: structuredClone(defaultOrganizationCenterSettings),
 } satisfies AccountCenter;
 
 export const mockSignInExperienceSettings = {

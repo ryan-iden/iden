@@ -18,8 +18,11 @@ export default function accountCentersRoutes<T extends ManagementApiRouter>(
   const [router, { queries, libraries }] = args;
   const { findDefaultAccountCenter, updateDefaultAccountCenter } = queries.accountCenters;
   const { normalizeProfileFields } = libraries.customProfileFields;
-  const { accountCenter: accountCenterApiGuard, fields: accountCenterFieldsApiGuard } =
-    getAccountCenterApiGuards();
+  const {
+    accountCenter: accountCenterApiGuard,
+    fields: accountCenterFieldsApiGuard,
+    organizationCenter: organizationCenterApiGuard,
+  } = getAccountCenterApiGuards();
   router.get(
     '/account-center',
     koaGuard({
@@ -43,6 +46,9 @@ export default function accountCentersRoutes<T extends ManagementApiRouter>(
         deleteAccountUrl: deleteAccountUrlGuard.nullable().optional(),
         customCss: z.string().nullish(),
         profileFields: accountCenterProfileFieldsGuard.nullable().optional(),
+        organizationCenter: organizationCenterApiGuard
+          ? organizationCenterApiGuard.optional()
+          : z.never().optional(),
       }),
       response: accountCenterApiGuard,
       status: [200, 400],
@@ -56,6 +62,7 @@ export default function accountCentersRoutes<T extends ManagementApiRouter>(
         deleteAccountUrl,
         customCss,
         profileFields,
+        organizationCenter,
       } = ctx.guard.body;
       const normalizedDeleteAccountUrl = deleteAccountUrl === '' ? null : deleteAccountUrl;
       const normalizedProfileFields = await normalizeProfileFields(profileFields);
@@ -73,6 +80,7 @@ export default function accountCentersRoutes<T extends ManagementApiRouter>(
         ...(normalizedProfileFields !== undefined && {
           profileFields: normalizedProfileFields,
         }),
+        ...(organizationCenter !== undefined && { organizationCenter }),
       });
 
       ctx.body = updatedAccountCenter;

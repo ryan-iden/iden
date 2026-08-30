@@ -25,11 +25,18 @@ export const getAccountTabSettings = ({
   );
   const hasSessions = hasVisibleSessionsPage(accountCenterSettings);
   const hasProfile = hasVisibleProfilePage(accountCenterSettings, experienceSettings);
+  const hasOrganizations = accountCenterSettings?.organizationCenter.enabled === true;
 
   return {
     hasProfile,
     hasSecurity,
     hasSessions,
-    navItems: buildAccountNavItems({ hasProfile, hasSecurity, hasSessions }),
+    hasOrganizations,
+    navItems: buildAccountNavItems({
+      hasProfile,
+      hasSecurity,
+      hasSessions,
+      hasOrganizations,
+    }),
   };
 };

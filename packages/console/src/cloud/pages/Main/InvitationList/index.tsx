@@ -1,4 +1,4 @@
-import { OrganizationInvitationStatus, getTenantIdFromOrganizationId } from '@logto/schemas';
+import { getTenantIdFromOrganizationId } from '@logto/schemas';
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -46,7 +46,9 @@ function InvitationList({ invitations }: Props) {
                 try {
                   await cloudApi.patch(`/api/invitations/:invitationId/status`, {
                     params: { invitationId: id },
-                    body: { status: OrganizationInvitationStatus.Accepted },
+                    // The hosted control-plane package has its own status enum version.
+                    // eslint-disable-next-line no-restricted-syntax -- This literal bridges the independently versioned @logto/cloud router type.
+                    body: { status: 'Accepted' as never },
                   });
                   const data = await cloudApi.get('/api/tenants');
                   resetTenants(data);
