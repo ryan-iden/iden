@@ -243,6 +243,7 @@ services:
         export DB_URL="postgres://logto:$${postgres_password}@postgres:5432/logto"
         export PROTECTED_APP_GATEWAY_SHARED_SECRET="$$(cat /run/secrets/logto_protected_app_gateway_shared_secret)"
         npm run cli db seed -- --swe
+        npm run cli db alteration deploy next
         exec npm start
     environment:
       TRUST_PROXY_HEADER: "1"
