@@ -73,6 +73,7 @@ import Username from './pages/Username';
 import VerifiedAction from './pages/VerifiedAction';
 import { useAuthRedirect } from './use-auth-redirect';
 import { accountCenterBasePath, handleAccountCenterRoute } from './utils/account-center-route';
+import { isAccountFullPageRoute } from './utils/account-full-page-route';
 import { getAccountTabSettings } from './utils/account-tabs';
 import '@experience/shared/scss/normalized.scss';
 import './scss/normalized.scss';
@@ -237,7 +238,10 @@ const Layout = () => {
     () => getAccountTabSettings({ accountCenterSettings, experienceSettings }).navItems,
     [accountCenterSettings, experienceSettings]
   );
-  const isFullPage = accountNavItems.some(({ to }) => to === pathname);
+  const isFullPage = isAccountFullPageRoute(
+    pathname,
+    accountNavItems.map(({ to }) => to)
+  );
   const showsMultiPageNav = isFullPage && accountNavItems.length > 1;
   const showsMobileTabNav = platform === 'mobile' && showsMultiPageNav;
   const showsSidebar = platform !== 'mobile' && showsMultiPageNav;

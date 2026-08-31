@@ -139,9 +139,8 @@
 .editorPanel,
 .detailPanel {
   padding: _.unit(5);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  background: var(--color-bg-float-base);
+  border-radius: 12px;
+  background: var(--color-bg-body);
 }
 
 .editorPanel label,
@@ -263,6 +262,9 @@
 .rows {
   display: flex;
   flex-direction: column;
+  border-radius: 12px;
+  background: var(--color-bg-body);
+  overflow: clip;
 }
 
 .row,
@@ -273,7 +275,8 @@
   display: flex;
   align-items: center;
   gap: _.unit(3);
-  padding: _.unit(2.5) 0;
+  box-sizing: border-box;
+  padding: _.unit(3) _.unit(5);
   border: none;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-type-primary);
@@ -286,14 +289,18 @@
 
   &:hover {
     color: #5b5cf6;
+    background: rgba(91, 92, 246, 5%);
   }
 }
 
 .highlightedRow {
-  margin-inline: -#{_.unit(2)};
-  padding-inline: _.unit(2);
-  border-radius: 12px;
   background: rgba(91, 92, 246, 8%);
+}
+
+.row:last-child,
+.highlightedRow:last-child,
+.organizationRow:last-child {
+  border-bottom: none;
 }
 
 .rowMain {
