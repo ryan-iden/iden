@@ -1104,7 +1104,8 @@ export class OrganizationAutonomyLibrary {
     pool: CommonQueryMethods,
     { organizationId, userId, roleId }: { organizationId: string; userId: string; roleId: string }
   ): Promise<void> {
-    const relations = convertToIdentifiers(OrganizationManagementRoleUserRelations, true);
+    // PostgreSQL does not allow table-qualified identifiers in an INSERT target column list.
+    const relations = convertToIdentifiers(OrganizationManagementRoleUserRelations);
     await pool.query(sql`
       insert into ${relations.table} (
         ${relations.fields.organizationId},

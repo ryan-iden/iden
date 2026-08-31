@@ -13,6 +13,13 @@ const { jest } = import.meta;
 
 const createLibrary = () => new OrganizationAutonomyLibrary({} as Queries);
 
+type ManagementRoleAssignmentWriter = {
+  insertManagementRoleAssignment: (
+    pool: CommonQueryMethods,
+    data: { organizationId: string; userId: string; roleId: string }
+  ) => Promise<void>;
+};
+
 describe('OrganizationAutonomyLibrary access control', () => {
   it('rejects users without an organization membership without exposing the organization', async () => {
     const pool = {
@@ -72,5 +79,26 @@ describe('OrganizationAutonomyLibrary access control', () => {
       isOwner: true,
       permissions: [...organizationManagementPermissions],
     });
+  });
+
+  it('uses unqualified INSERT target columns for management role assignments', async () => {
+    const query = jest.fn().mockResolvedValue(null);
+    const pool = { query } as unknown as CommonQueryMethods;
+
+    await (
+      createLibrary() as unknown as ManagementRoleAssignmentWriter
+    ).insertManagementRoleAssignment(pool, {
+      organizationId: 'organization-id',
+      userId: 'user-id',
+      roleId: 'role-id',
+    });
+
+    const [{ sql: statement }] = query.mock.calls[0] as unknown as [{ sql: string }];
+    expect(statement).toContain(
+      'insert into "organization_management_role_user_relations" (\n        "organization_id",\n        "user_id",\n        "organization_management_role_id"'
+    );
+    expect(statement).not.toContain(
+      '"organization_management_role_user_relations"."organization_id"'
+    );
   });
 });
