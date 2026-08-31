@@ -166,4 +166,37 @@ describe('AvatarUploadField (account center)', () => {
     });
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it('supports a scoped uploader and an optional remove action', async () => {
+    const uploadFile = jest.fn().mockResolvedValue({ url: 'https://example.com/org.png' });
+    const onChange = jest.fn();
+    const onRemove = jest.fn().mockResolvedValue(undefined);
+
+    const { container, getByTestId, getByText } = render(
+      <AvatarUploadField
+        label="Organization avatar"
+        uploadFile={uploadFile}
+        value="https://example.com/old-org.png"
+        onChange={onChange}
+        onRemove={onRemove}
+      />
+    );
+
+    fireEvent.click(getByText('remove'));
+    await waitFor(() => {
+      expect(onRemove).toHaveBeenCalledTimes(1);
+    });
+
+    selectFile(container, validImageFile());
+    await waitFor(() => {
+      expect(getByTestId('crop-modal')).toBeTruthy();
+    });
+    fireEvent.click(getByText('action.save'));
+
+    await waitFor(() => {
+      expect(uploadFile).toHaveBeenCalledTimes(1);
+    });
+    expect(uploadAccountAvatar).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith('https://example.com/org.png');
+  });
 });

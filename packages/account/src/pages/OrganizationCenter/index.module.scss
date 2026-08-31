@@ -435,6 +435,12 @@
   }
 }
 
+.formStack .organizationAvatarField {
+  min-height: 56px;
+  padding: 0 0 _.unit(4);
+  border-bottom: 1px solid var(--color-border);
+}
+
 .brandingGrid,
 .resourceColumns {
   display: grid;

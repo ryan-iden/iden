@@ -1,5 +1,4 @@
 import { Theme } from '@logto/schemas';
-import { type ReactNode } from 'react';
 
 import UserRoleIconDark from '@/assets/icons/role-feature-dark.svg?react';
 import UserRoleIcon from '@/assets/icons/role-feature.svg?react';
@@ -8,20 +7,20 @@ import useTheme from '@/hooks/use-theme';
 
 import { IdenProductIcon } from '../IdenProductIcon';
 
-const themeToRoleIcon = Object.freeze({
-  [Theme.Light]: <UserRoleIcon />,
-  [Theme.Dark]: <UserRoleIconDark />,
-} satisfies Record<Theme, ReactNode>);
+type Props = {
+  readonly className?: string;
+};
 
 /** Render a role icon according to the current theme. */
-function RoleIcon() {
+function RoleIcon({ className }: Props) {
   const theme = useTheme();
 
   if (!isCloud) {
-    return <IdenProductIcon name="roleAccess" />;
+    return <IdenProductIcon className={className} name="roleAccess" />;
   }
 
-  return themeToRoleIcon[theme];
+  const Icon = theme === Theme.Light ? UserRoleIcon : UserRoleIconDark;
+  return <Icon className={className} />;
 }
 
 export default RoleIcon;

@@ -68,6 +68,7 @@ type Props = {
 export function IdenProductIcon({ name, className, isDark = false, size }: Props) {
   const theme = useTheme();
   const source = isDark || theme === Theme.Dark ? sources[name].dark : sources[name].light;
+  const resolvedSize = size ?? (className ? undefined : 40);
 
   return (
     <img
@@ -75,7 +76,7 @@ export function IdenProductIcon({ name, className, isDark = false, size }: Props
       alt=""
       className={classNames(styles.icon, className)}
       src={source}
-      style={{ width: size, height: size }}
+      style={resolvedSize ? { width: resolvedSize, height: resolvedSize } : undefined}
     />
   );
 }

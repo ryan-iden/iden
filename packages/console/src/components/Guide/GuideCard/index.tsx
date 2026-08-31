@@ -80,7 +80,7 @@ function GuideCard({ data, onClick, hasBorder, hasButton, paywallTag, isBeta }: 
         <Suspense fallback={<div className={styles.logoSkeleton} />}>
           <div className={styles.logo}>
             {idenIconName ? (
-              <IdenProductIcon isDark={theme === Theme.Dark} name={idenIconName} />
+              <IdenProductIcon isDark={theme === Theme.Dark} name={idenIconName} size={36} />
             ) : theme === Theme.Dark && DarkLogo ? (
               <DarkLogo />
             ) : (

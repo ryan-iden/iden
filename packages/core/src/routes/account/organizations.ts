@@ -9,6 +9,8 @@ import {
   OrganizationManagementPermission,
   OrganizationManagementRoles,
   Organizations,
+  uploadFileGuard,
+  userAssetsGuard,
   organizationCenterOrganizationGuard,
   organizationCenterMemberGuard,
   organizationInvitationEntityGuard,
@@ -21,8 +23,11 @@ import { z } from 'zod';
 import { EnvSet, getTenantEndpoint } from '#src/env-set/index.js';
 import RequestError from '#src/errors/RequestError/index.js';
 import koaGuard from '#src/middleware/koa-guard.js';
+import SystemContext from '#src/tenants/SystemContext.js';
 import assertThat from '#src/utils/assert-that.js';
+import { getConsoleLogFromContext } from '#src/utils/console.js';
 
+import { uploadAvatar } from '../avatar-upload.js';
 import type { RouterInitArgs, UserRouter } from '../types.js';
 
 const organizationAccountApiPrefix = '/account/organizations';
@@ -198,6 +203,84 @@ export default function accountOrganizationRoutes<T extends UserRouter>(
         userId,
         ctx.guard.body
       );
+      ctx.body = organization;
+      ctx.appendDataHookContext('Organization.Data.Updated', { organization });
+      return next();
+    }
+  );
+
+  router.post(
+    `${organizationAccountApiPrefix}/:organizationId/avatar`,
+    koaGuard({
+      params: z.object({ organizationId: z.string().min(1) }),
+      files: z.object({ file: uploadFileGuard.array().min(1) }),
+      response: userAssetsGuard,
+      status: [200, 400, 401, 403, 404, 500],
+    }),
+    async (ctx, next) => {
+      const { id: userId, scopes } = ctx.auth;
+      const { organizationId } = ctx.guard.params;
+      assertOrganizationScopes(scopes);
+      const [file] = ctx.guard.files.file;
+      assertThat(file, 'guard.invalid_input');
+
+      await organizationAutonomy.assertModule('branding');
+      await organizationAutonomy.assertPermission(
+        organizationId,
+        userId,
+        OrganizationManagementPermission.ManageBranding
+      );
+      const { storageProviderConfig } = SystemContext.shared;
+      const uploaded = await uploadAvatar({
+        file,
+        storageProviderConfig,
+        objectKeyPrefix: `${tenantId}/organizations/${organizationId}`,
+        logError: (error) => {
+          getConsoleLogFromContext(ctx).error(error);
+        },
+      });
+      const organization = await organizationAutonomy.updateOrganizationAvatar(
+        organizationId,
+        userId,
+        uploaded.url
+      );
+      const log = ctx.createLog('Organization.Branding.Update');
+      log.append({
+        actorId: userId,
+        userId,
+        organizationId,
+        source: 'AccountApi',
+        changes: { avatar: 'updated' },
+      });
+      ctx.body = uploaded;
+      ctx.appendDataHookContext('Organization.Data.Updated', { organization });
+      return next();
+    }
+  );
+
+  router.delete(
+    `${organizationAccountApiPrefix}/:organizationId/avatar`,
+    koaGuard({
+      params: z.object({ organizationId: z.string().min(1) }),
+      response: organizationCenterOrganizationGuard,
+      status: [200, 401, 403, 404],
+    }),
+    async (ctx, next) => {
+      const { id: userId, scopes } = ctx.auth;
+      const { organizationId } = ctx.guard.params;
+      assertOrganizationScopes(scopes);
+      const organization = await organizationAutonomy.updateOrganizationAvatar(
+        organizationId,
+        userId
+      );
+      const log = ctx.createLog('Organization.Branding.Update');
+      log.append({
+        actorId: userId,
+        userId,
+        organizationId,
+        source: 'AccountApi',
+        changes: { avatar: 'removed' },
+      });
       ctx.body = organization;
       ctx.appendDataHookContext('Organization.Data.Updated', { organization });
       return next();

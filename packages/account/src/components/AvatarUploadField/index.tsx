@@ -5,8 +5,9 @@ import DefaultUserAvatar from '@experience/shared/components/DefaultUserAvatar';
 import { avatarFileAccept } from '@experience/utils/avatar-upload';
 import { resolveDefaultAvatarSeed } from '@logto/core-kit';
 import { useLogto } from '@logto/react';
+import type { UserAssets } from '@logto/schemas';
 import classNames from 'classnames';
-import { useCallback, useId, useRef } from 'react';
+import { type ReactNode, useCallback, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { uploadAccountAvatar } from '@ac/apis/avatar';
@@ -21,15 +22,32 @@ type Props = {
   readonly label: string;
   readonly value?: string;
   readonly avatarSeed?: string;
+  readonly placeholder?: ReactNode;
+  readonly uploadFile?: (
+    accessToken: string,
+    file: File,
+    options: { signal: AbortSignal }
+  ) => Promise<UserAssets>;
   readonly onChange: (value: string) => void | Promise<void>;
+  readonly onRemove?: () => void | Promise<void>;
 };
 
-const AvatarUploadField = ({ className, label, value = '', avatarSeed, onChange }: Props) => {
+const AvatarUploadField = ({
+  className,
+  label,
+  value = '',
+  avatarSeed,
+  placeholder,
+  uploadFile = uploadAccountAvatar,
+  onChange,
+  onRemove,
+}: Props) => {
   const { t } = useTranslation();
   const { t: tAvatar } = useTranslation(undefined, { keyPrefix: 'profile.avatar_upload' });
   const { getAccessToken } = useLogto();
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const upload = useCallback(
     async (file: File, options: { signal: AbortSignal }) => {
@@ -39,9 +57,9 @@ const AvatarUploadField = ({ className, label, value = '', avatarSeed, onChange 
         throw new Error('Session expired');
       }
 
-      return uploadAccountAvatar(accessToken, file, options);
+      return uploadFile(accessToken, file, options);
     },
-    [getAccessToken]
+    [getAccessToken, uploadFile]
   );
 
   const {
@@ -55,12 +73,25 @@ const AvatarUploadField = ({ className, label, value = '', avatarSeed, onChange 
   } = useAvatarCropUpload({ upload, onChange });
 
   const openFilePicker = useCallback(() => {
-    if (isUploading) {
+    if (isUploading || isRemoving) {
       return;
     }
 
     inputRef.current?.click();
-  }, [isUploading]);
+  }, [isRemoving, isUploading]);
+
+  const handleRemove = useCallback(async () => {
+    if (!onRemove || isUploading || isRemoving) {
+      return;
+    }
+
+    setIsRemoving(true);
+    try {
+      await onRemove();
+    } finally {
+      setIsRemoving(false);
+    }
+  }, [isRemoving, isUploading, onRemove]);
 
   const actionLabel = isUploading
     ? tAvatar('uploading')
@@ -78,11 +109,21 @@ const AvatarUploadField = ({ className, label, value = '', avatarSeed, onChange 
           <button
             type="button"
             className={profileStyles.changeButton}
-            disabled={isUploading}
+            disabled={isUploading || isRemoving}
             onClick={openFilePicker}
           >
             {actionLabel}
           </button>
+          {value && onRemove && (
+            <button
+              type="button"
+              className={profileStyles.changeButton}
+              disabled={isUploading || isRemoving}
+              onClick={handleRemove}
+            >
+              {tAvatar('remove')}
+            </button>
+          )}
         </div>
       </div>
       <div className={profileStyles.value}>
@@ -99,10 +140,12 @@ const AvatarUploadField = ({ className, label, value = '', avatarSeed, onChange 
               referrerPolicy="no-referrer"
             />
           ) : (
-            <DefaultUserAvatar
-              className={styles.placeholder}
-              seed={resolveDefaultAvatarSeed(avatarSeed)}
-            />
+            (placeholder ?? (
+              <DefaultUserAvatar
+                className={styles.placeholder}
+                seed={resolveDefaultAvatarSeed(avatarSeed)}
+              />
+            ))
           )}
           {uploadError && !cropImageSource && (
             <span className={styles.errorText} role="alert">

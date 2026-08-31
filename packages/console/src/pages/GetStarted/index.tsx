@@ -181,7 +181,7 @@ function GetStarted() {
               {isCloud ? (
                 <PreviewIcon />
               ) : (
-                <IdenProductIcon isDark={theme === Theme.Dark} name="signInPreview" />
+                <IdenProductIcon isDark={theme === Theme.Dark} name="signInPreview" size={48} />
               )}
             </div>
             <div className={styles.columnWrapper}>
@@ -208,7 +208,7 @@ function GetStarted() {
               {isCloud ? (
                 <SocialIcon />
               ) : (
-                <IdenProductIcon isDark={theme === Theme.Dark} name="connectors" />
+                <IdenProductIcon isDark={theme === Theme.Dark} name="connectors" size={48} />
               )}
             </div>
             <div className={styles.columnWrapper}>
@@ -240,7 +240,7 @@ function GetStarted() {
         <div className={styles.borderBox}>
           <div className={styles.rowWrapper}>
             <div className={styles.icon}>
-              {isCloud ? <RbacIcon /> : <IdenProductIcon name="roleAccess" />}
+              {isCloud ? <RbacIcon /> : <IdenProductIcon name="roleAccess" size={48} />}
             </div>
             <div className={styles.columnWrapper}>
               <div className={styles.title}>{t('get_started.manage.rbac.title')}</div>

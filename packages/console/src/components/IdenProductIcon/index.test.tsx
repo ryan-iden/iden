@@ -24,5 +24,18 @@ describe('IdenProductIcon', () => {
     const { container } = render(<IdenProductIcon name="managementApi" />);
 
     expect(container.querySelector('img')?.getAttribute('src')).toBe(expectedSource);
+    expect(container.querySelector('img')?.getAttribute('style')).toBe(
+      'width: 40px; height: 40px;'
+    );
+  });
+
+  it('lets a layout class control dimensions when no explicit size is provided', () => {
+    mockedUseTheme.mockReturnValue(Theme.Light);
+
+    const { container } = render(
+      <IdenProductIcon className="layout-controlled" name="managementApi" />
+    );
+
+    expect(container.querySelector('img')?.getAttribute('style')).toBeNull();
   });
 });

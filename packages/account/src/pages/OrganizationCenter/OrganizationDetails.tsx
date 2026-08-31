@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import PageContext from '@ac/Providers/PageContextProvider/PageContext';
+import { removeOrganizationAvatar, uploadOrganizationAvatar } from '@ac/apis/organization-avatar';
 import {
   createJitEmailDomainVerification,
   createOrganizationInvitation,
@@ -51,6 +52,7 @@ import {
   updateOrganization,
   verifyJitEmailDomain,
 } from '@ac/apis/organizations';
+import AvatarUploadField from '@ac/components/AvatarUploadField';
 import VerificationMethodList from '@ac/components/VerificationMethodList';
 import { organizationsRoute, getOrganizationRoute } from '@ac/constants/routes';
 import useApi from '@ac/hooks/use-api';
@@ -185,6 +187,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
   const replaceApplicationsRequest = useApi(replaceOrganizationApplications);
   const replaceJitRolesRequest = useApi(replaceJitOrganizationRoles);
   const replaceMemberRolesRequest = useApi(replaceMemberOrganizationRoles);
+  const removeAvatarRequest = useApi(removeOrganizationAvatar);
 
   const loadOrganization = useCallback(async () => {
     const [requestError, data] = await getOrganizationRequest(organizationId);
@@ -343,6 +346,34 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
     setOrganization(data);
     setToast(t('account_center.update_success.default.description'));
   }, [description, name, organizationId, setToast, t, updateOrganizationRequest]);
+
+  const uploadAvatarFile = useCallback(
+    async (accessToken: string, file: File, options: { signal: AbortSignal }) =>
+      uploadOrganizationAvatar(accessToken, organizationId, file, options),
+    [organizationId]
+  );
+
+  const handleAvatarUploaded = useCallback(
+    (avatarUrl: string) => {
+      setOrganization((previous) =>
+        previous
+          ? { ...previous, branding: { ...previous.branding, logoUrl: avatarUrl } }
+          : previous
+      );
+      setToast(t('account_center.update_success.default.description'));
+    },
+    [setToast, t]
+  );
+
+  const removeAvatar = useCallback(async () => {
+    const [requestError, data] = await removeAvatarRequest(organizationId);
+    if (requestError || !data) {
+      setToast(t('account_center.organizations.load_failed'));
+      return;
+    }
+    setOrganization(data);
+    setToast(t('account_center.organizations.avatar_removed'));
+  }, [organizationId, removeAvatarRequest, setToast, t]);
 
   const saveBranding = useCallback(async () => {
     if (!verificationId) {
@@ -748,7 +779,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
         <ArrowLeft size={17} /> {t('account_center.organizations.title')}
       </button>
       <header className={styles.organizationHeader}>
-        <OrganizationAvatar seed={organization.id} size={52} />
+        <OrganizationAvatar seed={organization.id} size={52} src={organization.branding.logoUrl} />
         <div>
           <h1>{organization.name}</h1>
           <p>
@@ -779,6 +810,18 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
       <section className={styles.detailPanel}>
         {activeSection === 'overview' && (
           <div className={styles.formStack}>
+            {modules?.branding !== false &&
+              hasPermission(OrganizationManagementPermission.ManageBranding) && (
+                <AvatarUploadField
+                  className={styles.organizationAvatarField}
+                  label={t('account_center.organizations.avatar')}
+                  placeholder={<OrganizationAvatar seed={organization.id} size={32} />}
+                  uploadFile={uploadAvatarFile}
+                  value={organization.branding.logoUrl}
+                  onChange={handleAvatarUploaded}
+                  onRemove={removeAvatar}
+                />
+              )}
             <label>
               <span>{t('account_center.organizations.name')}</span>
               <input
@@ -1181,13 +1224,21 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
             <div className={styles.brandPreviews}>
               <div className={styles.brandPreview} style={brandPreviewStyle}>
                 <span>{t('account_center.organizations.branding.light')}</span>
-                <OrganizationAvatar seed={organization.id} size={64} />
+                <OrganizationAvatar
+                  seed={organization.id}
+                  size={64}
+                  src={organization.branding.logoUrl}
+                />
                 <strong>{organization.name}</strong>
                 <button type="button">{t('account_center.organizations.branding.preview')}</button>
               </div>
               <div className={styles.darkBrandPreview} style={brandPreviewStyle}>
                 <span>{t('account_center.organizations.branding.dark')}</span>
-                <OrganizationAvatar seed={organization.id} size={64} />
+                <OrganizationAvatar
+                  seed={organization.id}
+                  size={64}
+                  src={organization.branding.darkLogoUrl ?? organization.branding.logoUrl}
+                />
                 <strong>{organization.name}</strong>
                 <button type="button">{t('account_center.organizations.branding.preview')}</button>
               </div>

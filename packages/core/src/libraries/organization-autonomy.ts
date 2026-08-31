@@ -290,6 +290,29 @@ export class OrganizationAutonomyLibrary {
     return this.getOrganization(organizationId, userId);
   }
 
+  async updateOrganizationAvatar(
+    organizationId: string,
+    userId: string,
+    avatarUrl?: string
+  ): Promise<OrganizationCenterOrganization> {
+    await this.assertModule('branding');
+    await this.assertPermission(
+      organizationId,
+      userId,
+      OrganizationManagementPermission.ManageBranding
+    );
+    const organization = await this.queries.organizations.findById(organizationId);
+    const branding: Organization['branding'] = Object.fromEntries(
+      Object.entries(organization.branding).filter(([key]) => key !== 'logoUrl')
+    );
+
+    await this.queries.organizations.updateById(organizationId, {
+      branding: avatarUrl ? { ...branding, logoUrl: avatarUrl } : branding,
+    });
+
+    return this.getOrganization(organizationId, userId);
+  }
+
   async deleteOrganization(organizationId: string, userId: string): Promise<void> {
     const { isOwner } = await this.getAccess(organizationId, userId);
 

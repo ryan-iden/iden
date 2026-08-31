@@ -229,7 +229,7 @@ const OrganizationList = () => {
                 navigate(getOrganizationRoute(organization.id));
               }}
             >
-              <OrganizationAvatar seed={organization.id} />
+              <OrganizationAvatar seed={organization.id} src={organization.branding.logoUrl} />
               <div className={styles.rowMain}>
                 <strong>{organization.name}</strong>
                 <span>

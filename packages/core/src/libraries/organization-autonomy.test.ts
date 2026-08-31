@@ -1,4 +1,5 @@
 import {
+  type OrganizationCenterOrganization,
   OrganizationManagementPermission,
   OrganizationManagementRoleType,
   organizationManagementPermissions,
@@ -100,5 +101,52 @@ describe('OrganizationAutonomyLibrary access control', () => {
     expect(statement).not.toContain(
       '"organization_management_role_user_relations"."organization_id"'
     );
+  });
+
+  it('updates and removes an organization avatar without discarding other branding fields', async () => {
+    const findById = jest.fn().mockResolvedValue({
+      branding: {
+        logoUrl: 'https://example.com/old.png',
+        darkLogoUrl: 'https://example.com/dark.png',
+      },
+    });
+    const updateById = jest.fn().mockResolvedValue(null);
+    const library = new OrganizationAutonomyLibrary({
+      organizations: { findById, updateById },
+    } as unknown as Queries);
+    const response: OrganizationCenterOrganization = {
+      id: 'organization-id',
+      name: 'Organization',
+      description: null,
+      color: {},
+      branding: {},
+      customCss: null,
+      isMfaRequired: false,
+      createdAt: 1,
+      createdBy: 'user-id',
+      isOwner: false,
+      permissions: [OrganizationManagementPermission.ManageBranding],
+    };
+    jest.spyOn(library, 'assertModule').mockResolvedValue({} as never);
+    jest.spyOn(library, 'assertPermission').mockResolvedValue({
+      isOwner: false,
+      permissions: [OrganizationManagementPermission.ManageBranding],
+    });
+    jest.spyOn(library, 'getOrganization').mockResolvedValue(response);
+
+    await expect(
+      library.updateOrganizationAvatar('organization-id', 'user-id', 'https://example.com/new.png')
+    ).resolves.toBe(response);
+    expect(updateById).toHaveBeenLastCalledWith('organization-id', {
+      branding: {
+        logoUrl: 'https://example.com/new.png',
+        darkLogoUrl: 'https://example.com/dark.png',
+      },
+    });
+
+    await library.updateOrganizationAvatar('organization-id', 'user-id');
+    expect(updateById).toHaveBeenLastCalledWith('organization-id', {
+      branding: { darkLogoUrl: 'https://example.com/dark.png' },
+    });
   });
 });
