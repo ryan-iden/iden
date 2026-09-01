@@ -53,7 +53,9 @@ SELF_HOSTED_PARITY_ENABLED=true pnpm dev
 
 ## SDK 与协议兼容
 
-iden 保持既有协议端点、公开字段和 SDK 包名兼容。应用可以继续使用 `@logto/*`、`io.logto.sdk:*`、`logto_dart_sdk` 等 SDK，只需将 endpoint 指向 iden 实例。
+iden 保持既有协议端点、公开字段和 SDK API 兼容，同时为各语言维护独立的
+iden 包坐标。当前产品与全部 SDK 的版本均为 **0.0.1**；完整坐标和独立版本策略见
+[`IDEN_RELEASES.md`](./IDEN_RELEASES.md)。公开类名、协议常量等兼容标识在会破坏应用时继续保留原名。
 
 SDK 镜像维护在 [`ryan-iden`](https://github.com/ryan-iden) 组织：
 
@@ -67,6 +69,7 @@ SDK 镜像维护在 [`ryan-iden`](https://github.com/ryan-iden) 组织：
 - PHP：[`ryan-iden/php`](https://github.com/ryan-iden/php)
 - Python：[`ryan-iden/python`](https://github.com/ryan-iden/python)
 - Ruby：[`ryan-iden/ruby`](https://github.com/ryan-iden/ruby)
+- 第三方社交 SDK 兼容资源：[`ryan-iden/social-sdks`](https://github.com/ryan-iden/social-sdks)
 
 ## 构建与发布
 

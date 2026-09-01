@@ -16,7 +16,8 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/logto-personal
+  IMAGE_NAME: ${{ github.repository_owner }}/iden
+  IDEN_VERSION: 0.0.1
 
 jobs:
   validate:
@@ -95,7 +96,9 @@ jobs:
 
       - name: Resolve immutable image name
         id: image
-        run: echo "image=${REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+        run: |
+          test "$(cat VERSION)" = "$IDEN_VERSION"
+          echo "image=${REGISTRY}/${IMAGE_NAME}:${IDEN_VERSION}-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push image
         uses: docker/build-push-action@v7
@@ -105,8 +108,11 @@ jobs:
           push: true
           tags: |
             ${{ steps.image.outputs.image }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IDEN_VERSION }}-personal
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:personal
           labels: |
+            org.opencontainers.image.title=iden
+            org.opencontainers.image.version=${{ env.IDEN_VERSION }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
           build-args: |
@@ -205,8 +211,11 @@ jobs:
             -o StrictHostKeyChecking=yes
             -o "UserKnownHostsFile=${SWARM_KNOWN_HOSTS_FILE}"
           )
+          # Values intentionally expand on the trusted runner before SSH.
+          # shellcheck disable=SC2029
           printf '%s' "$GHCR_TOKEN" | ssh "${ssh_args[@]}" "$target" \
             "docker login '${REGISTRY}' --username '${GITHUB_ACTOR}' --password-stdin"
+          # shellcheck disable=SC2029
           ssh "${ssh_args[@]}" "$target" \
             "LOGTO_IMAGE='${LOGTO_IMAGE}' TRAEFIK_VERSION='${TRAEFIK_VERSION}' LOGTO_HOST='${LOGTO_HOST}' LOGTO_ADMIN_HOST='${LOGTO_ADMIN_HOST}' LOGTO_ADMIN_PORT='${LOGTO_ADMIN_PORT}' LOGTO_PLACEMENT_HOSTNAME='${LOGTO_PLACEMENT_HOSTNAME}' PROTECTED_APP_GATEWAY_DOMAIN='${PROTECTED_APP_GATEWAY_DOMAIN}' ACME_EMAIL='${ACME_EMAIL}' bash releases/deploy.sh releases/logto-stack.yml '${STACK_NAME}' '${LOGTO_IMAGE}'"
 
