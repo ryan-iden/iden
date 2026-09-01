@@ -11,8 +11,8 @@ The current iden product and SDK release is **0.0.1**.
 | `ryan-iden/kotlin` | `io.github.ryan-wong-coder.iden:{kotlin,android}` | `0.0.1` |
 | `ryan-iden/swift` | SwiftPM Git URL | `0.0.1` |
 | `ryan-iden/dart` | `iden_sdk` | `0.0.1` |
-| `ryan-iden/csharp` | `Iden.AspNetCore.Authentication` | `0.0.1` |
-| `ryan-iden/go` | `github.com/ryan-iden/go` | `0.0.1` |
+| `ryan-iden/csharp` | `RyanIden.AspNetCore.Authentication` | `0.0.1` |
+| `ryan-iden/go-sdk` | `github.com/ryan-iden/go-sdk` | `0.0.1` |
 | `ryan-iden/php` | `ryan-iden/sdk` | `0.0.1` |
 | `ryan-iden/python` | `iden-sdk` (`import iden`) | `0.0.1` |
 | `ryan-iden/ruby` | `iden` | `0.0.1` |

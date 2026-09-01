@@ -65,7 +65,7 @@ SDK 镜像维护在 [`ryan-iden`](https://github.com/ryan-iden) 组织：
 - Flutter / Dart：[`ryan-iden/dart`](https://github.com/ryan-iden/dart)
 - React Native / Expo：[`ryan-iden/react-native`](https://github.com/ryan-iden/react-native)
 - .NET：[`ryan-iden/csharp`](https://github.com/ryan-iden/csharp)
-- Go：[`ryan-iden/go`](https://github.com/ryan-iden/go)
+- Go：[`ryan-iden/go-sdk`](https://github.com/ryan-iden/go-sdk)
 - PHP：[`ryan-iden/php`](https://github.com/ryan-iden/php)
 - Python：[`ryan-iden/python`](https://github.com/ryan-iden/python)
 - Ruby：[`ryan-iden/ruby`](https://github.com/ryan-iden/ruby)
