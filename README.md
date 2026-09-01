@@ -1,117 +1,89 @@
 <p align="center">
-  <a href="https://logto.io/?utm_source=github&utm_medium=readme" target="_blank" align="center" alt="Go to Logto website">
-    <picture>
-      <source width="200" media="(prefers-color-scheme: dark)" srcset="https://github.com/logto-io/.github/raw/master/profile/logto-logo-dark.svg">
-      <source width="200" media="(prefers-color-scheme: light)" srcset="https://github.com/logto-io/.github/raw/master/profile/logto-logo-light.svg">
-      <img width="200" src="https://github.com/logto-io/logto/raw/master/logo.png" alt="Logto logo">
-    </picture>
-  </a>
+  <img src="./packages/toolkit/core-kit/assets/iden-app-icon.svg" width="96" alt="iden logo">
 </p>
 
-[![discord](https://img.shields.io/discord/965845662535147551?color=5865f2&label=discord)](https://discord.gg/vRvwuwgpVX)
-[![checks](https://img.shields.io/github/checks-status/logto-io/logto/master)](https://github.com/logto-io/logto/actions?query=branch%3Amaster)
-[![release](https://img.shields.io/github/v/release/logto-io/logto?color=3a3c3f)](https://github.com/logto-io/logto/releases)
-[![core coverage](https://img.shields.io/codecov/c/github/logto-io/logto?label=core%20coverage)](https://app.codecov.io/gh/logto-io/logto)
-[![cloud](https://img.shields.io/badge/cloud-available-7958ff)](https://cloud.logto.io/?sign_up=true&utm_source=github&utm_medium=repo_logto)
-[![gitpod](https://img.shields.io/badge/gitpod-available-f09439)](https://gitpod.io/#https://github.com/logto-io/demo)
-[![render](https://img.shields.io/badge/render-deploy-5364e9)](https://render.com/deploy?repo=https://github.com/logto-io/logto)
+<h1 align="center">iden</h1>
 
-# Logto
-
-**Logto is the modern, open-source auth infrastructure for SaaS and AI apps.**
-
-It takes the pain out of OIDC and OAuth 2.1 and makes it easy to build secure, production-ready auth with multi-tenancy, enterprise SSO, and RBAC.
+<p align="center"><strong>Identity, Unified.</strong></p>
 
 <p align="center">
-  <a href="https://logto.io/">website</a> •
-  <a href="https://cloud.logto.io/">cloud</a> •
-  <a href="https://docs.logto.io">docs</a> •
-  <a href="https://openapi.logto.io/">api</a> •
-  <a href="https://blog.logto.io/">blog</a> •
-  <a href="https://auth-wiki.logto.io/">auth wiki</a> •
-  <a href="https://logto.io/subscribe">newsletter</a>
+  <a href="https://github.com/ryan-iden/iden/actions/workflows/self-hosted-release.yml"><img src="https://github.com/ryan-iden/iden/actions/workflows/self-hosted-release.yml/badge.svg?branch=ryan-wong-coder-personal" alt="Self-hosted release"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-5B5CF6" alt="MPL-2.0"></a>
 </p>
 
-![Logto features](./assets/logto-features.png)
+iden 是面向单实例自托管环境的身份与访问管理平台，提供统一的登录体验、用户中心、组织自治、应用接入和 API 授权能力。项目以简洁、现代的管理体验为目标，同时保持对 OIDC、OAuth 2.1、SAML 及现有 SDK 生态的兼容。
 
-## Why Logto?
+## 主要能力
 
-Built for teams scaling SaaS, AI, and agent-based platforms without the usual auth headaches.
+- 登录、注册、账号恢复和多因素认证
+- Passkey、社交登录和企业 SSO
+- 用户、应用、API 资源、角色与审计日志管理
+- 多租户控制台和控制台协作者
+- 组织中心、成员邀请、Owner 与细粒度组织管理角色
+- 组织品牌、头像、安全策略、JIT 和 M2M 关联
+- 组织角色、全局 RBAC 和组织上下文授权
+- Protected App 网关和自定义登录 UI
+- SMTP、SendGrid、兼容邮件供应商及本地发件箱
+- 本地化内置帮助中心和明暗主题
 
-With Logto, you get:
+## 分支策略
 
-- **Multi-tenancy, enterprise SSO, and RBAC**: ready to use, no workarounds.
-- **Pre-built sign-in flows**, customizable UIs, and SDKs for 30+ frameworks.
-- **Full support for OIDC, OAuth 2.1, and SAML** without the protocol pain.
-- **Works out-of-the-box for Model Context Protocol and agent-based AI architectures**.
+| 分支 | 用途 |
+| --- | --- |
+| `ryan-wong-coder-personal` | iden 的主开发与生产发布分支 |
+| `master` | 保持上游同步的基线分支 |
 
-[🗺️ See all features →](https://docs.logto.io/?ref=readme)
+上游更新先同步到 `master`，验证后再合并到 `ryan-wong-coder-personal`。生产环境不会直接从 `master` 发布。
 
-## Get started
+## 本地开发
 
-Pick your path:
+### 环境要求
 
-- [**Logto Cloud**](https://cloud.logto.io/?sign_up=true&ref=readme): The fastest way to try Logto. Fully managed, zero setup.
-- [**Launch Logto in GitPod**](https://gitpod.io/#https://github.com/logto-io/demo): Start Logto OSS in seconds.
+- Node.js 22
+- pnpm 10
+- PostgreSQL
 
-  Wait for the message `App is running at https://3002-...gitpod.io`, then click the URL starting with `https://3002-` to continue.
+```bash
+pnpm install --frozen-lockfile
+pnpm prepack
+SELF_HOSTED_PARITY_ENABLED=true pnpm dev
+```
 
-- **Local development:**  
+`SELF_HOSTED_PARITY_ENABLED` 默认关闭。自托管扩展部署需要显式设置为 `true`，Cloud 构建不会启用这些能力。
 
-  ```bash
-  # Using Docker Compose(requires Docker Desktop)
-  curl -fsSL https://raw.githubusercontent.com/logto-io/logto/HEAD/docker-compose.yml | \
-  docker compose -p logto -f - up
-  
-  # Using Node.js (requires PostgreSQL)
-  npm init @logto
-  ```
+## SDK 与协议兼容
 
-[📚 Full OSS installation guide →](https://docs.logto.io/logto-oss/get-started-with-oss?ref=readme)
+iden 保持既有协议端点、公开字段和 SDK 包名兼容。应用可以继续使用 `@logto/*`、`io.logto.sdk:*`、`logto_dart_sdk` 等 SDK，只需将 endpoint 指向 iden 实例。
 
-## Integrate anywhere
+SDK 镜像维护在 [`ryan-iden`](https://github.com/ryan-iden) 组织：
 
-Logto supports all your apps, APIs, and services with industry-standard protocols.
+- JavaScript / TypeScript：[`ryan-iden/js`](https://github.com/ryan-iden/js)
+- Android Kotlin / Java：[`ryan-iden/kotlin`](https://github.com/ryan-iden/kotlin)
+- Swift：[`ryan-iden/swift`](https://github.com/ryan-iden/swift)
+- Flutter / Dart：[`ryan-iden/dart`](https://github.com/ryan-iden/dart)
+- React Native / Expo：[`ryan-iden/react-native`](https://github.com/ryan-iden/react-native)
+- .NET：[`ryan-iden/csharp`](https://github.com/ryan-iden/csharp)
+- Go：[`ryan-iden/go`](https://github.com/ryan-iden/go)
+- PHP：[`ryan-iden/php`](https://github.com/ryan-iden/php)
+- Python：[`ryan-iden/python`](https://github.com/ryan-iden/python)
+- Ruby：[`ryan-iden/ruby`](https://github.com/ryan-iden/ruby)
 
-- **SDKs for 30+ frameworks**: React, Next.js, Angular, Vue, Flutter, Go, Python, and more.
-- **Connect to any IdP**: Google, Facebook, Azure AD, Okta, and more.
-- **Flexible integration**: SPAs, web apps, mobile apps, APIs, M2M, CLI tools.
-- **Ready for Model Context Protocol and agent-based architectures**.
+## 构建与发布
 
-[🚀 Explore quick starts →](https://docs.logto.io/quick-starts?ref=readme)
+推送到 `ryan-wong-coder-personal` 后，GitHub Actions 会依次执行：
 
-[🔌 See all connectors →](https://docs.logto.io/integrations?ref=readme)
+1. 工作区构建、类型检查、lint 和测试
+2. 自托管与兼容构建验证
+3. 构建不可变 GHCR 镜像
+4. 滚动发布到生产 Swarm
+5. 验证 Core、Console 和内置帮助中心健康状态
 
-## Showcase
+Swarm 部署清单位于 [`deploy/swarm`](./deploy/swarm)，发布工作流位于 [`.github/workflows/self-hosted-release.yml`](./.github/workflows/self-hosted-release.yml)。
 
-**Developer-first SDKs**: Install in minutes with clear guides.
+## 开源声明
 
-![Logto auth SDK showcase](./assets/showcase-logto-auth-sdks.gif)
+iden is based on [Logto](https://github.com/logto-io/logto), open-source software licensed under the Mozilla Public License 2.0.
 
-**User-friendly auth flows**: Sign-up, sign-in, social login, Google One Tap, MFA, SSO.
+本仓库保留上游的协议、SDK、数据库和内部兼容名称。iden 的品牌和自托管扩展由当前 fork 独立维护；Logto 名称仅用于必要的技术兼容与开源归属说明。
 
-![Logto sign-in experience showcase](./assets/showcase-logto-sign-in-exeperience.gif)
-
-**Multi-tenancy & organizations**: Organization RBAC, member invites, just-in-time provisioning, and more.
-
-![Logto multi-tenancy showcase](./assets/showcase-logto-multi-tenancy.gif)
-
-## Support Logto
-
-If you find Logto helpful, here's how you can support us:
-
-- ⭐ **Star this repo** to show your support!
-- 💬 [Join our Discord](https://discord.gg/vRvwuwgpVX) for live discussions.
-- 📢 Share Logto on [Twitter](https://twitter.com/intent/tweet?text=Hey%20devs%21%20Need%20a%20better%20auth%20solution%3F%20Check%20out%20%40logto_io%20%E2%80%94%20it%E2%80%99s%20like%20Auth0%2FCognito%2FFirebase%20but%20open-source%2C%20modern%2C%20and%20way%20easier%20to%20use%21%20Supports%20OIDC%2C%20OAuth%202.0%2C%20SAML%2C%20and%20also%20works%20perfectly%20for%20SaaS%20apps.%20%E2%9C%A8%20https%3A%2F%2Flogto.io%20%23Auth%20%23Identity%20%23OpenSource%20%23DevTools), [LinkedIn](https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Flogto.io), [Reddit](https://reddit.com/submit?url=https%3A%2F%2Flogto.io&title=Tired%20of%20Auth0%2FCognito%2FFirebase%3F%20Logto%20is%20the%20open-source%20auth%20alternative%20you%E2%80%99ve%20been%20missing%21%20Supports%20OIDC%2C%20OAuth%202.0%2C%20SAML%2C%20and%20works%20like%20magic%20for%20modern%20apps%20and%20SaaS%20products.), [Telegram](https://t.me/share/url?url=https%3A%2F%2Flogto.io&text=Check%20out%20Logto%20%E2%80%94%20the%20better%20auth%20and%20identity%20infrastructure%21%20Open-source%2FCloud%20alternative%20to%20Auth0%2C%20Cognito%2C%20and%20Firebase.%20Supports%20all%20the%20standards%20%28OIDC%2C%20OAuth%2C%20SAML%29%20and%20is%20perfect%20for%20modern%20apps%20or%20SaaS%20products.%20https%3A%2F%2Flogto.io), [WhatsApp](https://api.whatsapp.com/send?text=Hey%21%20%F0%9F%91%8B%20Found%20this%20awesome%20auth%20tool%20called%20%2ALogto%2A%20%E2%80%94%20it%E2%80%99s%20open-source%2C%20way%20simpler%20than%20Auth0%2FCognito%2FFirebase%2C%20and%20supports%20OIDC%2FOAuth%2FSAML.%20Perfect%20for%20building%20CIAM%20system%20without%20the%20hassle.%20You%20gotta%20try%20it%3A%20https%3A%2F%2Flogto.io).
-- 🏆 Write a review or tutorial on [dev.to](https://dev.to/logto), [Medium](https://medium.com/@logto), [G2](https://www.g2.com/products/logto/reviewer_verification) or your blog.
-- 💬 [Share your use case](mailto:contact@logto.io?subject=[Share%20Logto%20User%20Story]) with us and get featured on the [Logto website](https://logto.io/).
-- 🙋 [Open an issue](https://github.com/logto-io/logto/issues/new) to report bugs or suggest features.
-- 💻 [Contribute to Logto](https://github.com/logto-io/logto/blob/master/.github/CONTRIBUTING.md) - we'd love your help! Check out [Logto awesome](https://github.com/logto-io/logto/blob/master/AWESOME.md) of community-contributed resources.
-
-## Licensing
-
-[MPL-2.0](LICENSE).
-
-<p align="right">
-⬆️ <a href="#logto">Back to top</a>
-</p>
+许可条款见 [MPL-2.0](./LICENSE)。
