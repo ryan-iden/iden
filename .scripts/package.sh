@@ -48,5 +48,6 @@ if [[ "${SKIP_TAR:-}" == @(1|true|y|yes|yep|yeah) ]]; then
 fi
 
 echo Tar the package
-cd ..
-tar -czf /tmp/logto.tar.gz logto
+# The installer strips the first path component; it does not require a checkout named logto.
+package_directory="$(basename "$PWD")"
+tar -czf "${PACKAGE_ARCHIVE_PATH:-/tmp/logto.tar.gz}" -C .. -- "$package_directory"

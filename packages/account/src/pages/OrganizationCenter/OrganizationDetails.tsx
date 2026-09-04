@@ -1,11 +1,8 @@
 /* eslint-disable max-lines -- Organization modules remain co-located while sharing one loaded organization context. */
-import DefaultUserAvatar from '@experience/shared/components/DefaultUserAvatar';
-import { resolveDefaultAvatarSeed } from '@logto/core-kit';
 import {
   OrganizationManagementPermission,
   OrganizationManagementRoleType,
   organizationManagementPermissions,
-  type OrganizationCenterMember,
   type OrganizationCenterOrganization,
 } from '@logto/schemas';
 import {
@@ -57,8 +54,15 @@ import VerificationMethodList from '@ac/components/VerificationMethodList';
 import { organizationsRoute, getOrganizationRoute } from '@ac/constants/routes';
 import useApi from '@ac/hooks/use-api';
 
+import MemberListItem from './MemberListItem';
 import OrganizationAvatar from './OrganizationAvatar';
 import styles from './index.module.scss';
+import {
+  getMemberDisplayName,
+  getManagementRoleName,
+  getManagementRoleDescription,
+  getOrganizationActivityLabel,
+} from './presentation';
 
 type Props = {
   readonly organizationId: string;
@@ -133,7 +137,7 @@ const sectionMeta = [
 
 // eslint-disable-next-line complexity -- This route shell composes all permission-gated organization modules.
 const OrganizationDetails = ({ organizationId, section }: Props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { accountCenterSettings, verificationId, setToast } = useContext(PageContext);
   const [organization, setOrganization] = useState<OrganizationCenterOrganization>();
@@ -211,7 +215,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
     (permission?: OrganizationManagementPermission) =>
       !permission ||
       organization?.isOwner === true ||
-      organization?.permissions.includes(permission),
+      organization?.permissions.includes(permission) === true,
     [organization]
   );
   const canManageResources =
@@ -860,99 +864,30 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
         {activeSection === 'members' && (
           <div className={styles.rows}>
             {members?.map((member) => (
-              <div key={member.id} className={styles.row}>
-                <MemberAvatar member={member} />
-                <div className={styles.rowMain}>
-                  <strong>
-                    {member.name !== null && member.name.length > 0
-                      ? member.name
-                      : member.primaryEmail !== null && member.primaryEmail.length > 0
-                        ? member.primaryEmail
-                        : member.id}
-                  </strong>
-                  <span>{member.primaryEmail}</span>
-                </div>
-                <div className={styles.chips}>
-                  {member.isOwner && <span>{t('account_center.organizations.owner')}</span>}
-                  {member.organizationManagementRoles.map(({ id, name }) => (
-                    <span key={id}>
-                      {name}
-                      {hasPermission(OrganizationManagementPermission.AssignManagementRoles) && (
-                        <button
-                          type="button"
-                          className={styles.chipButton}
-                          aria-label={t('account_center.organizations.roles.unassign')}
-                          onClick={async () => {
-                            await unassignRole(id, member.id);
-                          }}
-                        >
-                          ×
-                        </button>
-                      )}
-                    </span>
-                  ))}
-                  {member.organizationRoles.map(({ id, name }) => (
-                    <span key={id}>{name}</span>
-                  ))}
-                </div>
-                {canManageBusinessRoles && (
-                  <button
-                    type="button"
-                    className={styles.secondaryButton}
-                    onClick={() => {
-                      setBusinessRoleMemberId((current) =>
-                        current === member.id ? '' : member.id
-                      );
-                      setBusinessRoleIds(member.organizationRoles.map(({ id }) => id));
-                    }}
-                  >
-                    {t('account_center.organizations.members.business_roles')}
-                  </button>
+              <MemberListItem
+                key={member.id}
+                member={member}
+                isEditing={businessRoleMemberId === member.id}
+                isOwner={organization.isOwner}
+                hasBusinessRolePermission={canManageBusinessRoles}
+                hasRemoveMemberPermission={hasPermission(
+                  OrganizationManagementPermission.ManageMembers
                 )}
-                {hasPermission(OrganizationManagementPermission.ManageMembers) && (
-                  <button
-                    type="button"
-                    className={styles.secondaryButton}
-                    onClick={async () => {
-                      await removeMember(member.id);
-                    }}
-                  >
-                    <Trash2 size={15} />
-                    {t('account_center.organizations.members.remove')}
-                  </button>
-                )}
-                {businessRoleMemberId === member.id && (
-                  <div className={styles.memberRoleEditor}>
-                    {resources?.organizationRoles.map((role) => (
-                      <label key={role.id}>
-                        <input
-                          type="checkbox"
-                          className={styles.businessRoleCheckbox}
-                          checked={businessRoleIds.includes(role.id)}
-                          onChange={(event) => {
-                            setBusinessRoleIds((previous) =>
-                              event.target.checked
-                                ? [...previous, role.id]
-                                : previous.filter((id) => id !== role.id)
-                            );
-                          }}
-                        />
-                        {role.name}
-                      </label>
-                    ))}
-                    <button
-                      type="button"
-                      className={styles.primaryButton}
-                      onClick={async () => {
-                        await saveMemberBusinessRoles();
-                      }}
-                    >
-                      <Save size={15} />
-                      {t('account_center.organizations.save')}
-                    </button>
-                  </div>
-                )}
-              </div>
+                hasUnassignRolePermission={canAssignManagementRoles}
+                availableRoles={resources?.organizationRoles ?? []}
+                selectedRoleIds={businessRoleIds}
+                onToggleEditor={() => {
+                  setBusinessRoleMemberId((current) => (current === member.id ? '' : member.id));
+                  setBusinessRoleIds(member.organizationRoles.map(({ id }) => id));
+                }}
+                onCancel={() => {
+                  setBusinessRoleMemberId('');
+                }}
+                onChangeRoles={setBusinessRoleIds}
+                onSave={saveMemberBusinessRoles}
+                onRemove={async () => removeMember(member.id)}
+                onUnassignRole={async (roleId) => unassignRole(roleId, member.id)}
+              />
             ))}
             {members?.length === 0 && (
               <div className={styles.emptyState}>
@@ -1027,7 +962,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                           );
                         }}
                       />
-                      {role.name}
+                      {getManagementRoleName(role, t)}
                     </label>
                   ))}
               </fieldset>
@@ -1040,7 +975,9 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                   </div>
                   <div className={styles.rowMain}>
                     <strong>{invitation.invitee}</strong>
-                    <span>{invitation.status}</span>
+                    <span>
+                      {t(`account_center.organizations.invitations.status.${invitation.status}`)}
+                    </span>
                   </div>
                   <div className={styles.rowActions}>
                     {invitation.status !== 'Accepted' && invitation.status !== 'Declined' && (
@@ -1111,7 +1048,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                       );
                     }}
                   />
-                  {permission.replaceAll('_', ' ')}
+                  {t(`account_center.organizations.roles.permission_labels.${permission}`)}
                 </label>
               ))}
             </fieldset>
@@ -1130,7 +1067,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                     </option>
                     {members?.map((member) => (
                       <option key={member.id} value={member.id}>
-                        {member.name ?? member.primaryEmail ?? member.id}
+                        {getMemberDisplayName(member)}
                       </option>
                     ))}
                   </select>
@@ -1146,7 +1083,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                     <option value="">{t('account_center.organizations.roles.select_role')}</option>
                     {roles?.map((role) => (
                       <option key={role.id} value={role.id}>
-                        {role.name}
+                        {getManagementRoleName(role, t)}
                       </option>
                     ))}
                   </select>
@@ -1170,11 +1107,12 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                     <UserRoundCog size={20} />
                   </div>
                   <div className={styles.rowMain}>
-                    <strong>{role.name}</strong>
+                    <strong>{getManagementRoleName(role, t)}</strong>
                     <span>
-                      {role.description !== null && role.description.length > 0
-                        ? role.description
-                        : `${role.permissions.length} ${t('account_center.organizations.roles.permissions')}`}
+                      {getManagementRoleDescription(role, t) ??
+                        t('account_center.organizations.roles.permission_count', {
+                          count: role.permissions.length,
+                        })}
                     </span>
                   </div>
                 </div>
@@ -1295,7 +1233,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                   <Check size={20} />
                   <div className={styles.rowMain}>
                     <strong>{emailDomain}</strong>
-                    <span>Verified</span>
+                    <span>{t('account_center.organizations.jit.verified')}</span>
                   </div>
                   <button
                     type="button"
@@ -1348,7 +1286,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
             {canManageJitResources && (
               <>
                 <ResourceList
-                  title="SSO"
+                  title={t('account_center.organizations.applications.sso')}
                   items={resources?.ssoConnectors ?? []}
                   saveLabel={t('account_center.organizations.save')}
                   onToggle={(resourceId) => {
@@ -1359,7 +1297,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                   }}
                 />
                 <ResourceList
-                  title={t('account_center.organizations.tabs.roles')}
+                  title={t('account_center.organizations.members.business_roles')}
                   items={resources?.organizationRoles ?? []}
                   saveLabel={t('account_center.organizations.save')}
                   onToggle={(resourceId) => {
@@ -1373,7 +1311,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
             )}
             {canManageApplications && (
               <ResourceList
-                title={t('account_center.organizations.tabs.applications')}
+                title={t('account_center.organizations.applications.m2m')}
                 items={resources?.applications ?? []}
                 saveLabel={t('account_center.organizations.save')}
                 onToggle={(resourceId) => {
@@ -1394,8 +1332,8 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
                   <Activity size={18} />
                 </div>
                 <div className={styles.rowMain}>
-                  <strong>{log.key}</strong>
-                  <span>{new Date(log.createdAt).toLocaleString()}</span>
+                  <strong>{getOrganizationActivityLabel(log.key, t)}</strong>
+                  <span>{new Date(log.createdAt).toLocaleString(i18n.language)}</span>
                 </div>
               </div>
             ))}
@@ -1489,16 +1427,6 @@ const ResourceList = ({
     </button>
   </div>
 );
-
-const MemberAvatar = ({ member }: { readonly member: OrganizationCenterMember }) => {
-  const seed = resolveDefaultAvatarSeed(member.id, member.primaryEmail, member.name);
-
-  return member.avatar ? (
-    <img className={styles.memberAvatar} src={member.avatar} alt="" referrerPolicy="no-referrer" />
-  ) : (
-    <DefaultUserAvatar className={styles.memberAvatar} seed={seed} />
-  );
-};
 
 export default OrganizationDetails;
 /* eslint-enable max-lines */

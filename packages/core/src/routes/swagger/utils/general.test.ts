@@ -90,6 +90,8 @@ const createDevFeatureOperationDocument = (): DeepPartial<OpenAPIV3.Document> =>
 const createSelfHostedDocument = () =>
   ({
     [selfHostedOnlyExtension]: true,
+    tags: [{ name: 'Account', description: 'Self-hosted organization management.' }],
+    components: { schemas: { Organization: { type: 'object' } } },
     paths: { '/api/self-hosted': { get: { tags: ['Self-hosted parity'] } } },
   }) as unknown as DeepPartial<OpenAPIV3.Document>;
 
@@ -195,9 +197,13 @@ describe('swagger general utils', () => {
   it('exposes self-hosted-only documents only when self-hosted parity is enabled', () => {
     Reflect.set(EnvSet.values, 'isCloud', true);
     setSelfHostedParityEnabled(true);
-    expect(removeUnnecessaryOperations(createSelfHostedDocument()).paths).toEqual({});
+    expect(removeUnnecessaryOperations(createSelfHostedDocument())).toEqual({});
 
     Reflect.set(EnvSet.values, 'isCloud', false);
+    setSelfHostedParityEnabled(false);
+    expect(removeUnnecessaryOperations(createSelfHostedDocument())).toEqual({});
+
+    setSelfHostedParityEnabled(true);
     expect(removeUnnecessaryOperations(createSelfHostedDocument()).paths).toHaveProperty(
       '/api/self-hosted'
     );

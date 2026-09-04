@@ -22,6 +22,7 @@ import {
   ZodUnknown,
   ZodDefault,
   ZodIntersection,
+  ZodNever,
 } from 'zod';
 
 import RequestError from '#src/errors/RequestError/index.js';
@@ -148,6 +149,11 @@ const zodLiteralToSwagger = (zodLiteral: ZodLiteral<unknown>): OpenAPIV3.SchemaO
 export const zodTypeToSwagger = (
   config: unknown
 ): OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject => {
+  if (config instanceof ZodNever) {
+    // Disabled fields may be pruned after generation. Until then, preserve their deny-all contract.
+    return { not: {} };
+  }
+
   if (config === jsonObjectGuard) {
     return {
       type: 'object',

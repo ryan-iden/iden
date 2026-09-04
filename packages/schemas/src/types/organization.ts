@@ -171,8 +171,15 @@ export const organizationManagementRoleResponseGuard = OrganizationManagementRol
 export const organizationCenterMemberGuard = userInfoGuard
   .pick({ id: true, name: true, avatar: true, primaryEmail: true, createdAt: true })
   .extend({
+    // Optional for clients consuming responses from older self-hosted instances.
+    username: userInfoGuard.shape.username.optional(),
     organizationRoles: organizationRoleEntityGuard.array(),
-    organizationManagementRoles: organizationRoleEntityGuard.array(),
+    organizationManagementRoles: organizationRoleEntityGuard
+      .extend({
+        type: OrganizationManagementRoles.guard.shape.type.optional(),
+        description: OrganizationManagementRoles.guard.shape.description.optional(),
+      })
+      .array(),
     isOwner: z.boolean(),
   });
 

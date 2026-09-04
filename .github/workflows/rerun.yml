@@ -5,16 +5,22 @@ on:
   workflow_dispatch:
     inputs:
       run_id:
+        description: ID of the failed integration workflow run
         required: true
+        type: string
+permissions:
+  actions: write
 jobs:
   rerun:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: rerun ${{ inputs.run_id }}
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
-          GH_DEBUG: api
+          RUN_ID: ${{ inputs.run_id }}
         run: |
-          gh run watch ${{ inputs.run_id }} > /dev/null 2>&1
-          gh run rerun ${{ inputs.run_id }} --failed
+          [[ "$RUN_ID" =~ ^[1-9][0-9]*$ ]] || { echo "Invalid run ID" >&2; exit 1; }
+          gh run watch "$RUN_ID" --interval 30 > /dev/null 2>&1
+          gh run rerun "$RUN_ID" --failed

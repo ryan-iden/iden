@@ -73,6 +73,11 @@
   gap: _.unit(1.5);
   cursor: pointer;
   font: var(--font-label-2);
+  white-space: nowrap;
+
+  svg {
+    flex: none;
+  }
 }
 
 .primaryButton {
@@ -161,14 +166,14 @@
   height: 20px;
 }
 
-.editorPanel input,
 .editorPanel textarea,
-.formStack input,
 .formStack textarea,
 .formStack select,
 .assignmentPanel select,
 .dangerZone input,
-.inlineForm input {
+.inlineForm input,
+.editorPanel input:not([type='checkbox'], [type='radio']),
+.formStack input:not([type='checkbox'], [type='radio']) {
   width: 100%;
   box-sizing: border-box;
   border: 1px solid var(--color-border);
@@ -221,9 +226,9 @@
   label {
     display: flex;
     align-items: center;
+    flex-direction: row;
     gap: _.unit(2);
     color: var(--color-type-primary);
-    text-transform: capitalize;
   }
 }
 
@@ -231,12 +236,18 @@
   width: 16px;
   height: 16px;
   accent-color: #5b5cf6;
+  flex: none;
+  padding: 0;
+  margin: 0;
 }
 
 .businessRoleCheckbox {
   width: 16px;
   height: 16px;
   accent-color: #5b5cf6;
+  flex: none;
+  padding: 0;
+  margin: 0;
 }
 
 .formStack input[type='color'] {
@@ -356,24 +367,68 @@
   flex-wrap: wrap;
 }
 
-.memberRoleEditor {
+.memberItem {
+  min-width: 0;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.memberSummary {
   width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
+  gap: _.unit(3);
+  padding: _.unit(3) _.unit(5);
+
+  .rowMain strong {
+    white-space: nowrap;
+  }
+}
+
+.memberActions {
+  display: flex;
+  flex: none;
   flex-wrap: wrap;
   gap: _.unit(2);
-  padding: _.unit(3);
-  border-radius: 10px;
-  background: var(--color-bg-body);
+}
 
-  label {
-    display: inline-flex;
-    align-items: center;
-    gap: _.unit(1.5);
+.memberRoleEditor {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: _.unit(3);
+  padding: _.unit(3) _.unit(5) _.unit(5);
+  border-top: 1px solid var(--color-border);
+
+  .permissionGrid {
+    min-width: 0;
+    margin: 0;
+  }
+}
+
+.roleEditorHint {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--color-type-secondary);
+  font: var(--font-body-2);
+}
+
+@media (max-width: 768px) {
+  .memberSummary {
+    flex-wrap: wrap;
+    padding: _.unit(3) 0;
   }
 
-  button {
-    margin-inline-start: auto;
+  .memberActions {
+    width: 100%;
+  }
+
+  .memberRoleEditor {
+    padding: _.unit(3) 0;
   }
 }
 
@@ -505,6 +560,7 @@
 .activityIcon {
   width: 42px;
   height: 42px;
+  flex: none;
   border-radius: 12px;
   display: grid;
   place-items: center;

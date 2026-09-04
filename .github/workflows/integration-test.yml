@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - ryan-wong-coder-personal
   pull_request:
 
 concurrency:
@@ -28,6 +29,7 @@ jobs:
         with:
           artifact-name: integration-test-${{ github.sha }}-dev-features-${{ matrix.dev-features-enabled }}
           pnpm-version: 10
+          node-version: ^22.14.0
 
   run-logto:
     strategy:
@@ -65,11 +67,16 @@ jobs:
   # From this genius: https://github.com/orgs/community/discussions/67654#discussioncomment-8038649
   rerun-on-failure:
     needs: run-logto
-    if: failure() && fromJSON(github.run_attempt) < 3
+    if: >-
+      failure() && needs.run-logto.result == 'failure' && fromJSON(github.run_attempt) < 3 &&
+      (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+    permissions:
+      actions: write
     runs-on: ubuntu-22.04
     steps:
       - env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
-          GH_DEBUG: api
-        run: gh workflow run rerun.yml -r ${{ github.head_ref || github.ref_name }} -F run_id=${{ github.run_id }}
+          WORKFLOW_REF: ${{ github.head_ref || github.ref_name }}
+          RUN_ID: ${{ github.run_id }}
+        run: gh workflow run rerun.yml --ref "$WORKFLOW_REF" -F run_id="$RUN_ID"

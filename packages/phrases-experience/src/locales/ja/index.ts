@@ -11,6 +11,7 @@ import error from './error/index.js';
 import input from './input.js';
 import list from './list.js';
 import mfa from './mfa.js';
+import organizations from './organizations.js';
 import passkey_sign_in from './passkey-sign-in.js';
 import profile from './profile.js';
 import secondary from './secondary.js';
@@ -28,7 +29,7 @@ const ja = {
     development_tenant,
     user_scopes,
     profile,
-    account_center: withOrganizationCenter(account_center),
+    account_center: withOrganizationCenter(account_center, organizations),
     passkey_sign_in,
   },
 } satisfies DeepPartial<LocalePhrase>;

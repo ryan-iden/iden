@@ -20,6 +20,7 @@ import {
   devFeatureTag,
   findSupplementFiles,
   pruneSwaggerDocument,
+  pruneUnavailableBaseOperations,
   removeDevFeatureSchemaProperties,
   removeUnnecessaryOperations,
   shouldThrow,
@@ -259,23 +260,13 @@ export const getSupplementDocuments = async (
 
   const supplementPaths = await findSupplementFiles(routesDirectory, option);
 
-  const allSupplementDocuments = await Promise.all(
-    supplementPaths.map(async (path) =>
-      removeUnnecessaryOperations(
-        // eslint-disable-next-line no-restricted-syntax -- trust the type here as we'll validate it later
+  return Promise.all(
+    supplementPaths.map(
+      async (path) =>
+        // eslint-disable-next-line no-restricted-syntax -- Supplements are validated during assembly.
         JSON.parse(await fs.readFile(path, 'utf8')) as DeepPartial<OpenAPIV3.Document>
-      )
     )
   );
-
-  // Filter out supplement documents that are for dev features when dev features are disabled.
-  const supplementDocuments = allSupplementDocuments.filter(
-    (supplement) =>
-      EnvSet.values.isDevFeaturesEnabled ||
-      !supplement.tags?.find((tag) => tag?.name === devFeatureTag)
-  );
-
-  return supplementDocuments;
 };
 
 export const assembleSwaggerDocument = <ContextT extends IRouterParamContext>(
@@ -283,12 +274,25 @@ export const assembleSwaggerDocument = <ContextT extends IRouterParamContext>(
   baseDocument: OpenAPIV3.Document,
   ctx: ContextT
 ) => {
-  const data = supplementDocuments.reduce<OpenAPIV3.Document>(
+  const visibleSupplements = supplementDocuments.map<DeepPartial<OpenAPIV3.Document>>(
+    (supplement) =>
+      EnvSet.values.isDevFeaturesEnabled ||
+      !supplement.tags?.some((tag) => tag?.name === devFeatureTag)
+        ? removeUnnecessaryOperations(structuredClone(supplement))
+        : {}
+  );
+  const visibleBaseDocument = pruneUnavailableBaseOperations(
+    baseDocument,
+    supplementDocuments,
+    visibleSupplements
+  );
+
+  const data = visibleSupplements.reduce<OpenAPIV3.Document>(
     (document, supplement) =>
       deepmerge<OpenAPIV3.Document, DeepPartial<OpenAPIV3.Document>>(document, supplement, {
         arrayMerge: mergeParameters,
       }),
-    baseDocument
+    visibleBaseDocument
   );
 
   /**
@@ -304,8 +308,8 @@ export const assembleSwaggerDocument = <ContextT extends IRouterParamContext>(
   }
   // Don't throw for integrity check in production as it has no benefit.
   else if (shouldThrow()) {
-    for (const document of supplementDocuments) {
-      validateSupplement(baseDocument, document);
+    for (const document of visibleSupplements) {
+      validateSupplement(visibleBaseDocument, document);
     }
     validateSwaggerDocument(data);
   }
