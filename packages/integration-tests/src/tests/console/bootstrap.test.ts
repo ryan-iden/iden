@@ -187,13 +187,29 @@ describe('smoke testing for console admin account creation and sign-in', () => {
   it('opens the mobile navigation drawer and highlights the selected page', async () => {
     await page.setViewport({ width: 390, height: 844 });
     const toggle = 'button[aria-controls=iden-console-navigation]';
-    await page.locator(toggle).click();
+    const openNavigation = async () => {
+      // Resizing and route changes animate the drawer over the toggle until it is fully closed.
+      await page.waitForFunction(
+        (selector) => {
+          const button = document.querySelector(selector);
+          if (!button) {
+            return false;
+          }
+          const { x, y, width, height } = button.getBoundingClientRect();
+          return button.contains(document.elementFromPoint(x + width / 2, y + height / 2));
+        },
+        {},
+        toggle
+      );
+      await page.locator(toggle).click();
+    };
+    await openNavigation();
     await expect(page).toMatchElement(`${toggle}[aria-expanded=true]`);
     await expectNavigation(
       page.locator('#iden-console-navigation a[href$="/applications"]').click()
     );
     await expect(page).toMatchElement(`${toggle}[aria-expanded=false]`);
-    await page.locator(toggle).click();
+    await openNavigation();
     await expect(page).toMatchElement(`#iden-console-navigation a${cls('active')}`, {
       text: 'Applications',
     });
