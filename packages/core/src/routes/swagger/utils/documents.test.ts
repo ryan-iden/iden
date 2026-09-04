@@ -8,6 +8,8 @@ import { assembleSwaggerDocument } from './documents.js';
 import { devFeatureSchemaExtension } from './general.js';
 
 const originalIsDevFeaturesEnabled = EnvSet.values.isDevFeaturesEnabled;
+const originalIsCloud = EnvSet.values.isCloud;
+const originalIsSelfHostedParityEnabled = EnvSet.values.isSelfHostedParityEnabled;
 
 const setDevFeaturesEnabled = (isDevFeaturesEnabled: boolean) => {
   // eslint-disable-next-line @silverhand/fp/no-mutation -- Tests need to cover both dev-feature states.
@@ -88,6 +90,27 @@ const assemble = () =>
 describe('assembleSwaggerDocument', () => {
   afterEach(() => {
     setDevFeaturesEnabled(originalIsDevFeaturesEnabled);
+    Reflect.set(EnvSet.values, 'isCloud', originalIsCloud);
+    Reflect.set(EnvSet.values, 'isSelfHostedParityEnabled', originalIsSelfHostedParityEnabled);
+  });
+
+  it.each([
+    [false, false, false],
+    [false, true, true],
+    [true, false, true],
+  ])('filters generated parity routes in Cloud=%s parity=%s', (isCloud, parity, exposed) => {
+    Reflect.set(EnvSet.values, 'isCloud', isCloud);
+    Reflect.set(EnvSet.values, 'isSelfHostedParityEnabled', parity);
+    setDevFeaturesEnabled(false);
+    const base = createBaseDocument();
+    const document = assembleSwaggerDocument(
+      [{ paths: { '/api/users/{userId}': { get: { tags: ['Self-hosted parity'] } } } }],
+      base,
+      createContextWithRouteParameters()
+    );
+
+    expect(Boolean(document.paths['/api/users/{userId}']?.get)).toBe(exposed);
+    expect(base.paths['/api/users/{userId}']?.get).toBeDefined();
   });
 
   it('should prune dev feature properties from the assembled document when dev features are disabled', () => {

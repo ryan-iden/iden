@@ -15,6 +15,7 @@ import {
   literal,
   union,
   preprocess,
+  never,
 } from 'zod';
 
 import RequestError from '#src/errors/RequestError/index.js';
@@ -23,6 +24,14 @@ import type { ZodStringCheck } from './zod.js';
 import { zodTypeToSwagger } from './zod.js';
 
 describe('zodTypeToSwagger', () => {
+  it('represents disabled fields as a deny-all schema before document pruning', () => {
+    expect(zodTypeToSwagger(never())).toEqual({ not: {} });
+    expect(zodTypeToSwagger(object({ disabled: never().optional() }))).toMatchObject({
+      type: 'object',
+      properties: { disabled: { not: {} } },
+    });
+  });
+
   it('arbitrary object guard', () => {
     expect(zodTypeToSwagger(jsonObjectGuard)).toEqual({
       type: 'object',

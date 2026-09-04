@@ -2,7 +2,7 @@
   "x-logto-self-hosted-only": true,
   "tags": [
     {
-      "name": "Self-hosted organization center",
+      "name": "Account",
       "description": "Prebuilt organization autonomy APIs for self-hosted iden deployments."
     }
   ],

@@ -285,8 +285,8 @@ export const removeUnnecessaryOperations = (
   Reflect.deleteProperty(document, selfHostedOnlyExtension);
 
   if (isSelfHostedOnlyDocument && (isCloud || !isSelfHostedParityEnabled)) {
-    Reflect.set(document, 'paths', {});
-    return document;
+    // Discard the entire supplement, including tags and components for unavailable routes.
+    return {};
   }
 
   if ((isCloud && isDevFeaturesEnabled) || !document.paths) {
@@ -331,6 +331,35 @@ export const removeUnnecessaryOperations = (
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> => isObject(value);
+
+export const pruneUnavailableBaseOperations = (
+  baseDocument: OpenAPIV3.Document,
+  supplementDocuments: Array<DeepPartial<OpenAPIV3.Document>>,
+  visibleSupplements: Array<DeepPartial<OpenAPIV3.Document>>
+) => {
+  const visibleBaseDocument = structuredClone(baseDocument);
+
+  // A disabled route may still be registered to return an unavailable-feature error. Remove its
+  // generated operation too, instead of just stripping the supplement's summary and description.
+  for (const [index, supplement] of supplementDocuments.entries()) {
+    for (const [path, pathItem] of Object.entries(supplement.paths ?? {})) {
+      const basePath = visibleBaseDocument.paths[path];
+      if (!basePath) {
+        continue;
+      }
+      for (const method of Object.values(OpenAPIV3.HttpMethods)) {
+        if (pathItem?.[method] && !visibleSupplements[index]?.paths?.[path]?.[method]) {
+          Reflect.deleteProperty(basePath, method);
+        }
+      }
+      if (Object.keys(basePath).length === 0) {
+        Reflect.deleteProperty(visibleBaseDocument.paths, path);
+      }
+    }
+  }
+
+  return visibleBaseDocument;
+};
 
 const removeRequiredProperty = (
   schema: Record<string, unknown>,

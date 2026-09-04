@@ -158,11 +158,19 @@ describe('smoke testing for console admin account creation and sign-in', () => {
     await expect(page).toClick('div[class^=ReactModal__Overlay]');
   });
 
-  it('renders SVG correctly with viewbox property', async () => {
-    await page.waitForSelector('div[class$=topbar] > svg[viewbox][class$=logo]', { visible: true });
+  it('renders the iden wordmark and SVG mask at the expected size', async () => {
+    const logoSelector = 'div[class$=topbar] > button[aria-label=iden]';
+    await expect(page).toMatchElement(logoSelector, { text: 'iden', visible: true });
+    const markStyle = await page.$eval(`${logoSelector} > span[class$=mark]`, (mark) => {
+      const style = getComputedStyle(mark);
+      return { width: style.width, height: style.height, maskImage: style.maskImage };
+    });
+    expect(markStyle).toMatchObject({ width: '32px', height: '32px' });
+    expect(markStyle.maskImage).toMatch(/^url\(/);
   });
 
   it('can highlight the current tab in the sidebar', async () => {
+    await page.setViewport({ width: 1440, height: 900 });
     const activeSelector = [dcls('sidebar'), 'a' + cls('row') + cls('active'), dcls('title')].join(
       ' '
     );
@@ -174,6 +182,22 @@ describe('smoke testing for console admin account creation and sign-in', () => {
       })
     );
     await expect(page).toMatchElement(activeSelector, { text: 'Dashboard', visible: true });
+  });
+
+  it('opens the mobile navigation drawer and highlights the selected page', async () => {
+    await page.setViewport({ width: 390, height: 844 });
+    const toggle = 'button[aria-controls=iden-console-navigation]';
+    await page.locator(toggle).click();
+    await expect(page).toMatchElement(`${toggle}[aria-expanded=true]`);
+    await expectNavigation(
+      page.locator('#iden-console-navigation a[href$="/applications"]').click()
+    );
+    await expect(page).toMatchElement(`${toggle}[aria-expanded=false]`);
+    await page.locator(toggle).click();
+    await expect(page).toMatchElement(`#iden-console-navigation a${cls('active')}`, {
+      text: 'Applications',
+    });
+    await page.setViewport({ width: 1440, height: 900 });
   });
 
   it(`should ${isDevFeaturesEnabled ? '' : 'not '}show the dev features label`, async () => {
