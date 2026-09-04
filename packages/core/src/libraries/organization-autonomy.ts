@@ -339,12 +339,13 @@ export class OrganizationAutonomyLibrary {
     return Promise.all(
       members.map(async (member) => {
         const assignedManagementRoles = await this.queries.pool.any<
-          Pick<OrganizationManagementRole, 'id' | 'name' | 'type'>
+          Pick<OrganizationManagementRole, 'id' | 'name' | 'type' | 'description'>
         >(sql`
           select
             ${managementRoles.fields.id},
             ${managementRoles.fields.name},
-            ${managementRoles.fields.type}
+            ${managementRoles.fields.type},
+            ${managementRoles.fields.description}
           from ${managementRelations.table}
           join ${managementRoles.table}
             on ${managementRelations.fields.organizationManagementRoleId} =
@@ -356,15 +357,20 @@ export class OrganizationAutonomyLibrary {
 
         return {
           id: member.id,
+          username: member.username,
           name: member.name,
           avatar: member.avatar,
           primaryEmail: member.primaryEmail,
           createdAt: member.createdAt,
           organizationRoles: member.organizationRoles,
-          organizationManagementRoles: assignedManagementRoles.map(({ id, name }) => ({
-            id,
-            name,
-          })),
+          organizationManagementRoles: assignedManagementRoles.map(
+            ({ id, name, type, description }) => ({
+              id,
+              name,
+              type,
+              description,
+            })
+          ),
           isOwner: assignedManagementRoles.some(
             ({ type }) => type === OrganizationManagementRoleType.Owner
           ),

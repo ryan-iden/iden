@@ -2,6 +2,7 @@ import {
   type OrganizationCenterOrganization,
   OrganizationManagementPermission,
   OrganizationManagementRoleType,
+  organizationCenterMemberGuard,
   organizationManagementPermissions,
 } from '@logto/schemas';
 import { type CommonQueryMethods } from '@silverhand/slonik';
@@ -22,6 +23,75 @@ type ManagementRoleAssignmentWriter = {
 };
 
 describe('OrganizationAutonomyLibrary access control', () => {
+  it('returns safe member usernames and management role metadata without leaking user secrets', async () => {
+    const assignedRole = {
+      id: 'owner-role',
+      name: 'Owner',
+      type: OrganizationManagementRoleType.Owner,
+      description: 'Organization owners with exclusive control over ownership and deletion.',
+    };
+    const getUsersByOrganizationId = jest.fn().mockResolvedValue([
+      1,
+      [
+        {
+          id: 'member-id',
+          username: 'ryan',
+          name: null,
+          avatar: null,
+          primaryEmail: null,
+          createdAt: 1,
+          organizationRoles: [],
+          passwordEncrypted: 'secret',
+          customData: { secret: true },
+        },
+      ],
+    ]);
+    const library = new OrganizationAutonomyLibrary({
+      organizations: { relations: { users: { getUsersByOrganizationId } } },
+      pool: { any: jest.fn().mockResolvedValue([assignedRole]) },
+    } as unknown as Queries);
+    const assertPermission = jest.spyOn(library, 'assertPermission').mockResolvedValue({
+      isOwner: true,
+      permissions: [...organizationManagementPermissions],
+    });
+    const members = await library.listMembers('organization-id', 'viewer-id');
+    expect(assertPermission).toHaveBeenCalledWith(
+      'organization-id',
+      'viewer-id',
+      OrganizationManagementPermission.ViewMembers
+    );
+    expect(getUsersByOrganizationId).toHaveBeenCalledWith('organization-id', {
+      limit: 1000,
+      offset: 0,
+    });
+    expect(members).toEqual([
+      {
+        id: 'member-id',
+        username: 'ryan',
+        name: null,
+        avatar: null,
+        primaryEmail: null,
+        createdAt: 1,
+        organizationRoles: [],
+        organizationManagementRoles: [assignedRole],
+        isOwner: true,
+      },
+    ]);
+    expect(organizationCenterMemberGuard.array().parse(members)).toEqual(members);
+  });
+
+  it('does not read member profiles when the caller lacks permission', async () => {
+    const getUsersByOrganizationId = jest.fn();
+    const library = new OrganizationAutonomyLibrary({
+      organizations: { relations: { users: { getUsersByOrganizationId } } },
+    } as unknown as Queries);
+    jest.spyOn(library, 'assertPermission').mockRejectedValue(new Error('Forbidden'));
+    await expect(library.listMembers('organization-id', 'outsider-id')).rejects.toThrow(
+      'Forbidden'
+    );
+    expect(getUsersByOrganizationId).not.toHaveBeenCalled();
+  });
+
   it('rejects users without an organization membership without exposing the organization', async () => {
     const pool = {
       exists: jest.fn().mockResolvedValue(false),

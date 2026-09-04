@@ -23,7 +23,11 @@
       "delete": { "tags": ["Self-hosted parity"], "summary": "Delete an organization as an Owner" }
     },
     "/api/account/organizations/{organizationId}/members": {
-      "get": { "tags": ["Self-hosted parity"], "summary": "List organization members" }
+      "get": {
+        "tags": ["Self-hosted parity"],
+        "summary": "List organization members",
+        "description": "Returns safe member profile fields, including the nullable username, and assigned business and management roles. Management role summaries include type and description for localized display. These additive fields may be absent in responses from older instances. Requires organization membership and permission to view members."
+      }
     },
     "/api/account/organizations/{organizationId}/members/{userId}": {
       "delete": { "tags": ["Self-hosted parity"], "summary": "Remove an organization member" }
