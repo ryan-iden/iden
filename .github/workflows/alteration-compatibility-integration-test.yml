@@ -26,21 +26,25 @@ jobs:
       # if the event is a pull request, we need to compare the merge base with HEAD, otherwise we compare the current commit with the previous commit
       - name: Check for alteration changes
         id: changes-detection
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BASE=$(git merge-base origin/${{ github.base_ref }} HEAD)
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            BASE=$(git merge-base "origin/$BASE_REF" HEAD)
           else
-            BASE=${{ github.event.before }}
+            BASE=$BEFORE_SHA
           fi
 
-          CHANGE_FILES=$(git diff --name-only $BASE | grep 'packages/schemas/alterations/' || true)
+          CHANGE_FILES=$(git diff --name-only "$BASE" -- packages/schemas/alterations/)
 
           if [ -n "$CHANGE_FILES" ]; then
             echo "$CHANGE_FILES"
-            echo "has-alteration-changes=true" >> $GITHUB_OUTPUT
+            echo "has-alteration-changes=true" >> "$GITHUB_OUTPUT"
             echo "Alteration changes detected"
           else
-            echo "has-alteration-changes=false" >> $GITHUB_OUTPUT
+            echo "has-alteration-changes=false" >> "$GITHUB_OUTPUT"
             echo "No alteration changes detected"
           fi
 
@@ -57,6 +61,7 @@ jobs:
           artifact-name: alteration-integration-test-${{ github.sha }}
           branch: ${{ github.base_ref }}
           pnpm-version: 10
+          node-version: ^22.14.0
 
   run-logto:
     strategy:
@@ -95,7 +100,11 @@ jobs:
   # From this genius: https://github.com/orgs/community/discussions/67654#discussioncomment-8038649
   rerun-on-failure:
     needs: run-logto
-    if: failure() && fromJSON(github.run_attempt) < 3
+    if: >-
+      failure() && needs.run-logto.result == 'failure' && fromJSON(github.run_attempt) < 3 &&
+      (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+    permissions:
+      actions: write
     # An error will occur if we use a newer version of Ubuntu in the CI environment, as it has restrictions on unprivileged user namespaces and sandbox usage, which prevents Chromium (used by Puppeteer) from launching properly during integration tests. So we lock the Ubuntu version to 22.04.
     # See error record: https://github.com/logto-io/logto/actions/runs/12803809008/job/35697654974
     runs-on: ubuntu-22.04
@@ -103,8 +112,9 @@ jobs:
       - env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
-          GH_DEBUG: api
-        run: gh workflow run rerun.yml -F run_id=${{ github.run_id }}
+          WORKFLOW_REF: ${{ github.head_ref || github.ref_name }}
+          RUN_ID: ${{ github.run_id }}
+        run: gh workflow run rerun.yml --ref "$WORKFLOW_REF" -F run_id="$RUN_ID"
 
   alteration-compatibility-conclusion:
     needs: run-logto

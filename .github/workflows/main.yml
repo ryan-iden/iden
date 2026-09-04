@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - ryan-wong-coder-personal
       - "push-action/**"
   pull_request:
 
@@ -152,14 +153,17 @@ jobs:
           fetch-depth: 0
           path: ./fresh
 
-      # Fetch the current version by finding the latest tag starts with "v", e.g. "v1.0.0-beta.19"
-      - id: version
+      # Forks have independent release versions and may not carry upstream release tags.
+      # Compare against the PR merge base (or the previous pushed revision), including `next` scripts.
+      - id: baseline
         working-directory: ./fresh
-        run: echo "current=$(git describe --match "@logto/core@*" --abbrev=0)" >> $GITHUB_OUTPUT
+        env:
+          ALTERATION_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node .scripts/alteration-baseline.mjs >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ steps.version.outputs.current }}
+          ref: ${{ steps.baseline.outputs.ref }}
           path: ./alteration
       # ** End **
 
@@ -224,8 +228,9 @@ jobs:
 
       - name: Revert fresh database to old
         working-directory: ./fresh
-        run: pnpm cli db alt r v$(echo ${{ steps.version.outputs.current }} | cut -d@ -f3)
+        run: pnpm cli db alt rollback-to-timestamp "$ALTERATION_BASE_TIMESTAMP"
         env:
+          ALTERATION_BASE_TIMESTAMP: ${{ steps.baseline.outputs.timestamp }}
           ALTERATION_TEST: true
           DB_URL: postgres://postgres:postgres@localhost:5432/fresh
 
@@ -236,4 +241,6 @@ jobs:
 
       - name: Check alteration sequence
         working-directory: ./fresh
+        env:
+          ALTERATION_BASE_REF: ${{ steps.baseline.outputs.ref }}
         run: node .scripts/check-alterations-sequence.js

@@ -3,7 +3,7 @@
  * Newest files should come last.
  */
 
-import { execSync } from "child_process";
+import { execFileSync, execSync } from "child_process";
 
 const alterationFilePrefix = "packages/schemas/alterations/";
 
@@ -14,17 +14,28 @@ const allAlterations = execSync("pnpm cli db alter list", {
   .filter((filename) => Boolean(filename))
   .map((filename) => filename.replace(".js", ""));
 
-const diffFiles = execSync("git diff HEAD~1 HEAD --name-only --diff-filter=ACR", {
-  encoding: "utf-8",
-});
+const diffFiles = execFileSync(
+  "git",
+  [
+    "diff",
+    process.env.ALTERATION_BASE_REF || "HEAD~1",
+    "HEAD",
+    "--name-only",
+    "--diff-filter=ACR",
+  ],
+  {
+    encoding: "utf-8",
+  },
+);
 const committedAlterations = diffFiles
   .split("\n")
-  .filter((filename) => 
-    filename.startsWith(alterationFilePrefix) && 
-    !filename.slice(alterationFilePrefix.length).includes("/")
+  .filter(
+    (filename) =>
+      filename.startsWith(alterationFilePrefix) &&
+      !filename.slice(alterationFilePrefix.length).includes("/"),
   )
   .map((filename) =>
-    filename.replace(alterationFilePrefix, "").replace(".ts", "")
+    filename.replace(alterationFilePrefix, "").replace(".ts", ""),
   );
 
 for (const alteration of committedAlterations) {
@@ -32,7 +43,7 @@ for (const alteration of committedAlterations) {
 
   if (index < allAlterations.length - committedAlterations.length) {
     throw new Error(
-      `Wrong alteration sequence for committed file: ${alteration}\nAll timestamps of committed alteration files should be greater than the biggest one in the base branch.`
+      `Wrong alteration sequence for committed file: ${alteration}\nAll timestamps of committed alteration files should be greater than the biggest one in the base branch.`,
     );
   }
 
