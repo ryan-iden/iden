@@ -35,7 +35,7 @@ export class LogtoUserPassword extends LogtoProfileItemElement {
   protected getItemLabelInfo() {
     return {
       icon: passwordIcon,
-      label: 'Password',
+      label: this.localization.message('password'),
     };
   }
 
@@ -47,7 +47,7 @@ export class LogtoUserPassword extends LogtoProfileItemElement {
         html`<div slot="content">
           <div class="status">
             <span class="status-dot"></span>
-            Configured
+            ${this.localization.message('configured')}
           </div>
         </div>`
     );

@@ -9,6 +9,8 @@ const security = {
     general: '常规',
   },
   bot_protection: {
+    custom_ui_captcha_notice:
+      '你正在使用自定义界面。要在其中启用人机验证，需要额外配置。<a>查看配置指南</a>。',
     title: '机器人保护',
     description: '启用验证码以阻止注册、登录和密码恢复中的自动化威胁。',
     captcha: {
@@ -30,25 +32,25 @@ const security = {
         '谷歌的企业级验证码解决方案，提供先进的威胁检测和详细的安全分析，以保护你的网站免受欺诈活动的侵害。',
     },
     turnstile: {
-      name: 'Cloudflare 验证',
+      name: 'Cloudflare验证',
       description:
-        'Cloudflare 的智能验证码替代方案，提供非侵入性的机器人保护，同时确保无视觉难题的无缝用户体验。',
+        'Cloudflare的智能验证码替代方案，提供非侵入性的机器人保护，同时确保无视觉难题的无缝用户体验。',
     },
   },
   captcha_details: {
     back_to_security: '返回安全',
     page_title: '验证码详情',
-    check_readme: '查看 README',
+    check_readme: '查看自述文件（README）',
     options_change_captcha: '更改验证码提供商',
     connection: '连接',
     description: '配置你的验证码连接。',
     site_key: '站点密钥',
     secret_key: '秘密密钥',
-    project_id: '项目 ID',
+    project_id: '项目标识',
     domain: '域名（可选）',
-    domain_placeholder: 'www.google.com（默认）或 recaptcha.net',
-    recaptcha_key_id: 'reCAPTCHA 密钥 ID',
-    recaptcha_api_key: '项目的 API 密钥',
+    domain_placeholder: 'www.google.com（默认）或recaptcha.net',
+    recaptcha_key_id: 'reCAPTCHA密钥标识',
+    recaptcha_api_key: '项目的接口密钥',
     deletion_description: '你确定要删除此验证码提供商吗？',
     captcha_deleted: '验证码提供商删除成功',
     setup_captcha: '设置验证码',
@@ -56,13 +58,13 @@ const security = {
     mode_invisible: '无感验证',
     mode_checkbox: '复选框验证',
     mode_notice:
-      '验证模式在 Google Cloud Console 的 reCAPTCHA 密钥设置中定义。更改此处的模式需要匹配的密钥类型。',
+      '验证模式在Google Cloud Console的reCAPTCHA密钥设置中定义。更改此处的模式需要匹配的密钥类型。',
   },
   password_policy: {
     password_requirements: '密码要求',
     password_requirements_description: '增强密码要求以防止凭证填充和弱密码攻击。',
     minimum_length: '最小长度',
-    minimum_length_description: 'NIST 建议在 Web 产品中使用至少 8 个字符。',
+    minimum_length_description: 'NIST建议在Web产品中使用至少 8 个字符。',
     minimum_length_error: '最小长度必须在 {{min}} 和 {{max}} 之间（包括 {{min}} 和 {{max}}）。',
     minimum_required_char_types: '最小要求字符类型',
     minimum_required_char_types_description:
@@ -82,7 +84,7 @@ const security = {
     custom_words_placeholder: '您的服务名称，公司名称等。',
     password_expiration: '密码过期',
     password_expiration_description:
-      '要求用户在设定的天数后重置密码。通过 SSO 或通行密钥登录的用户不受影响。',
+      '要求用户在设定的天数后重置密码。通过单点登录或通行密钥登录的用户不受影响。',
     enable_password_expiration: '启用密码过期',
     enable_password_expiration_description:
       '要求用户定期重置密码。对于没有记录密码更改日期的现有用户，将从此策略启用之日起进行评估。',
@@ -151,7 +153,7 @@ const security = {
     custom_email_allowlist: {
       title: '允许自定义电子邮件地址',
       description:
-        '添加规则，仅允许特定的电子邮件域名、电子邮件地址或通配符模式用于新注册和新绑定的电子邮件。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com 和 googlemail.com 域名会被视为等效，且本地部分中的点号会被忽略，因此 foo.bar@gmail.com 与 foobar@googlemail.com 匹配。',
+        '添加规则，仅允许特定的电子邮件域名、电子邮件地址或通配符模式用于新注册和新绑定的电子邮件。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com和googlemail.com域名会被视为等效，且本地部分中的点号会被忽略，因此foo.bar@gmail.com与foobar@googlemail.com匹配。',
       placeholder: '输入电子邮件地址、域名或通配符模式',
       duplicate_error: '电子邮件地址、域名或通配符电子邮件地址模式已添加',
       invalid_format_error:
@@ -176,7 +178,7 @@ const security = {
     custom_email_address: {
       title: '阻止自定义电子邮件地址',
       description:
-        '添加规则，阻止特定的电子邮件域名、电子邮件地址或通配符模式通过 UI 注册或链接。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com 和 googlemail.com 域名会被视为等效，且本地部分中的点号会被忽略，因此 foo.bar@gmail.com 与 foobar@googlemail.com 匹配。',
+        '添加规则，阻止特定的电子邮件域名、电子邮件地址或通配符模式通过界面注册或链接。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com和googlemail.com域名会被视为等效，且本地部分中的点号会被忽略，因此foo.bar@gmail.com与foobar@googlemail.com匹配。',
       placeholder: '输入电子邮件地址、域名或通配符模式',
       duplicate_error: '电子邮件地址、域名或通配符电子邮件地址模式已添加',
       invalid_format_error:

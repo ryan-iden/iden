@@ -6,6 +6,7 @@ import {
   logtoAccountContext,
   type LogtoAccountContextType,
 } from '../providers/logto-account-provider.js';
+import { LocalizationController } from '../utils/localization.js';
 
 const tagName = 'logto-account-center';
 
@@ -24,9 +25,11 @@ export class LogtoAccountCenter extends LitElement {
   @consume({ context: logtoAccountContext, subscribe: true })
   private readonly accountContext?: LogtoAccountContextType;
 
+  private readonly localization: LocalizationController = new LocalizationController(this);
+
   render() {
     if (!this.accountContext) {
-      return html`<span>Unable to retrieve account context.</span>`;
+      return html`<span>${this.localization.message('context_unavailable')}</span>`;
     }
 
     const {

@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: 'ส่งข้อความถึงผู้รับรายนี้มากเกินไป โปรดลองอีกครั้งในภายหลัง',
   invalid_input: 'ข้อมูลที่ป้อนไม่ถูกต้อง {{details}}',
   general: 'เกิดข้อผิดพลาดในการร้องขอ',
   range_not_satisfiable: 'ช่วงข้อมูลไม่ตรงตามข้อกำหนด',

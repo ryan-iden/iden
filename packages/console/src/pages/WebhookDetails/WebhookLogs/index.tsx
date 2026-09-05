@@ -12,6 +12,8 @@ import { availableHookEvents } from '@/consts/webhooks';
 import Table from '@/ds-components/Table';
 import Tag from '@/ds-components/Tag';
 import { type RequestError } from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 import useSearchParametersWatcher from '@/hooks/use-search-parameters-watcher';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import { buildUrl } from '@/utils/url';
@@ -21,12 +23,13 @@ import { buildHookEventLogKey, getHookEventKey } from '../utils';
 
 import styles from './index.module.scss';
 
-const hookLogEventOptions = availableHookEvents.map((event) => ({
-  title: event,
-  value: buildHookEventLogKey(event),
-}));
-
 function WebhookLogs() {
+  const getEventTitle = useLogEventTitle();
+  const { t: tUi } = useInterfaceTranslation();
+  const hookLogEventOptions = availableHookEvents.map((event) => ({
+    title: getEventTitle(event),
+    value: buildHookEventLogKey(event),
+  }));
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const { navigate } = useTenantPathname();
   const {
@@ -74,7 +77,7 @@ function WebhookLogs() {
       }
       columns={[
         {
-          title: 'Status',
+          title: tUi('status'),
           dataIndex: 'status',
           colSpan: 5,
           render: ({ payload }) => {
@@ -86,7 +89,7 @@ function WebhookLogs() {
             const isError = !statusCode || statusCode >= 400;
             return (
               <Tag type="result" status={isError ? 'error' : 'success'}>
-                {statusCode ?? 'Request error'}
+                {statusCode ?? tUi('generic_error')}
               </Tag>
             );
           },
@@ -95,7 +98,7 @@ function WebhookLogs() {
           title: t('logs.event'),
           dataIndex: 'event',
           colSpan: 6,
-          render: ({ key }) => getHookEventKey(key),
+          render: ({ key }) => getEventTitle(getHookEventKey(key)),
         },
         {
           title: t('logs.time'),

@@ -87,7 +87,7 @@ const organizations = {
   branding: {
     title: '組織品牌',
     primary_color: '主色',
-    custom_css: '自訂 CSS',
+    custom_css: '自訂階層式樣式表（CSS）',
     preview: '預覽',
     light: '淺色',
     dark: '深色',
@@ -100,14 +100,14 @@ const organizations = {
     title: '即時配置電郵網域',
     domain: '電郵網域',
     add: '新增網域',
-    verify: '檢查 DNS',
-    dns_instruction: '建立 TXT 記錄 {{record}}，值為 {{value}}。',
+    verify: '檢查網域名稱系統（DNS）',
+    dns_instruction: '建立 TXT 文字記錄 {{record}}，值為 {{value}}。',
     verified: '已驗證',
   },
   applications: {
     title: '共享資源',
     empty: '此組織尚無可用資源。',
-    sso: '企業 SSO 連線',
+    sso: '企業單一登入連線',
     m2m: '機器對機器應用程式',
   },
   activity: {

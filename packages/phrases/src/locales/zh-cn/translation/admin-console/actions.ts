@@ -1,7 +1,7 @@
 const actions = {
-  page_title: 'Actions',
-  title: 'Actions',
-  subtitle: '在身份验证流程的特定节点运行自定义代码，以扩展 Logto 的行为。',
+  page_title: '流程扩展',
+  title: '流程扩展',
+  subtitle: '在身份验证流程的特定节点运行自定义代码，以扩展Logto的行为。',
   status: {
     not_configured: '未配置',
     configured: '已配置',
@@ -27,7 +27,7 @@ const actions = {
   },
   result_data: {
     title: '操作结果',
-    subtitle: '返回 Logto 可理解的结果对象，以适配此操作类型。',
+    subtitle: '返回Logto可理解的结果对象，以适配此操作类型。',
   },
   environment_variables: {
     title: '设置环境变量',
@@ -37,8 +37,8 @@ const actions = {
   },
   fetch_external_data: {
     title: '获取外部数据',
-    subtitle: '在操作脚本中调用外部 API。',
-    description: '使用 `fetch` 函数调用外部 API，并将数据包含在操作结果中。示例：',
+    subtitle: '在操作脚本中调用外部接口。',
+    description: '使用 `fetch` 函数调用外部接口，并将数据包含在操作结果中。示例：',
   },
   settings: {
     title: '设置',
@@ -49,16 +49,16 @@ const actions = {
     },
     on_execution_error: {
       title: '脚本出错时',
-      description: '选择脚本运行失败时 Logto 的行为。',
+      description: '选择脚本运行失败时Logto的行为。',
       block: '阻止身份验证流程',
       allow: '允许身份验证流程继续',
       post_first_factor_description:
-        '当此脚本失败时，Logto 始终拒绝无效凭证，以确保无法绕过密码验证。',
+        '当此脚本失败时，Logto始终拒绝无效凭证，以确保无法绕过密码验证。',
     },
   },
   test_context: {
     subtitle: '调整运行测试时使用的模拟事件载荷。',
-    input_field_title: '事件示例 JSON',
+    input_field_title: '事件示例JavaScript对象表示法（JSON）',
   },
   script: {
     title: '脚本',
@@ -70,22 +70,22 @@ const actions = {
     result_title: '测试结果',
   },
   form_error: {
-    invalid_json: '无效的 JSON 格式',
+    invalid_json: '无效的JavaScript对象表示法（JSON）格式',
   },
   sandbox_and_security_warning: {
     title: '脚本以服务器权限运行',
     description:
-      '在自托管的 Logto 中，此脚本与 Logto 本身运行在相同环境中：它可以读取服务器环境变量并访问你的内网服务。它没有沙箱隔离。请仅向你信任可访问服务器的人开放此页面。此操作仅在本地密码验证失败后运行——只有在独立验证提交的密码后，才能返回 `passwordVerified: true`。通过此操作创建的用户会绕过仅适用于注册的限制，包括邮箱黑名单、仅 SSO 域名、禁用注册模式，以及注册必填资料检查。对已有用户的资料和密码写入也会在 MFA 完成前发生。',
+      '在自托管的Logto中，此脚本与Logto本身运行在相同环境中：它可以读取服务器环境变量并访问你的内网服务。它没有沙箱隔离。请仅向你信任可访问服务器的人开放此页面。此操作仅在本地密码验证失败后运行——只有在独立验证提交的密码后，才能返回 `passwordVerified: true`。通过此操作创建的用户会绕过仅适用于注册的限制，包括邮箱黑名单、仅单点登录域名、禁用注册模式，以及注册必填资料检查。对已有用户的资料和密码写入也会在多因素认证完成前发生。',
   },
   sandbox_warning: {
     title: '脚本以服务器权限运行',
     description:
-      '在自托管的 Logto 中，此脚本与 Logto 本身运行在相同环境中：它可以读取服务器环境变量并访问你的内网服务。它没有沙箱隔离。请仅向你信任可访问服务器的人开放此页面。',
+      '在自托管的Logto中，此脚本与Logto本身运行在相同环境中：它可以读取服务器环境变量并访问你的内网服务。它没有沙箱隔离。请仅向你信任可访问服务器的人开放此页面。',
   },
   security_warning: {
     title: '安全警告',
     description:
-      '此操作仅在本地密码验证失败后运行。只有在独立验证提交的密码后，才能返回 `passwordVerified: true`。通过此操作创建的用户会绕过仅适用于注册的限制，包括邮箱黑名单、仅 SSO 域名、禁用注册模式，以及注册必填资料检查。对已有用户的资料和密码写入也会在 MFA 完成前发生。',
+      '此操作仅在本地密码验证失败后运行。只有在独立验证提交的密码后，才能返回 `passwordVerified: true`。通过此操作创建的用户会绕过仅适用于注册的限制，包括邮箱黑名单、仅单点登录域名、禁用注册模式，以及注册必填资料检查。对已有用户的资料和密码写入也会在多因素认证完成前发生。',
   },
   delete_modal_title: '删除操作',
   delete_modal_content: '确定要删除此操作吗？身份验证流程将不再运行此脚本。',

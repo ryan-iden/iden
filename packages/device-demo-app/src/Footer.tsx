@@ -4,6 +4,7 @@ import styles from './App.module.scss';
 import logtoLogoDark from './assets/logto-logo-dark.svg';
 import logtoLogoLight from './assets/logto-logo-light.svg';
 import logtoLogoShadow from './assets/logto-logo-shadow.svg';
+import useInterfaceTranslation from './i18n/use-interface-translation';
 import { isCloudBuild, productBrand } from './product-brand';
 
 const logtoUrl = `https://logto.io/?${new URLSearchParams({
@@ -31,11 +32,12 @@ export const useIsDarkMode = () => {
 };
 
 const Footer = ({ isDarkMode }: { readonly isDarkMode: boolean }) => {
+  const { t: tUi, i18n } = useInterfaceTranslation();
   if (!isCloudBuild) {
     return (
       <div className={styles.footerContainer}>
-        <a className={styles.idenFooter} href="/help/en/about">
-          <span>Powered by</span>
+        <a className={styles.idenFooter} href={`/help/${i18n.resolvedLanguage}/about`}>
+          <span>{tUi('powered_by')}</span>
           <span aria-hidden className={styles.idenMark} />
           <strong>{productBrand.productName}</strong>
         </a>
@@ -50,9 +52,9 @@ const Footer = ({ isDarkMode }: { readonly isDarkMode: boolean }) => {
         href={logtoUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Powered By Logto"
+        aria-label={`${tUi('powered_by')} Logto`}
       >
-        <span>Powered by</span>
+        <span>{tUi('powered_by')}</span>
         <img className={styles.staticLogo} src={logtoLogoShadow} alt="Logto" />
         <img
           className={styles.highlightLogo}

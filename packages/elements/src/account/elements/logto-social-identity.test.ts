@@ -18,7 +18,7 @@ suite('logto-social-identity', () => {
     );
     await element.updateComplete;
 
-    assert.equal(element.shadowRoot?.textContent, 'Unable to retrieve account context.');
+    assert.equal(element.shadowRoot?.textContent, 'Unable to load account information.');
   });
 
   test('should render correctly when user has permission to view social identity information', async () => {

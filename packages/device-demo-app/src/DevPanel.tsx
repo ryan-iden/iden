@@ -2,6 +2,7 @@ import { decodeJwt } from 'jose';
 import { useCallback, useState, type FormEventHandler } from 'react';
 
 import styles from './App.module.scss';
+import useInterfaceTranslation from './i18n/use-interface-translation';
 import { parseJsonResponse } from './types';
 
 const localStorageKeyPrefix = 'logto:device-demo-app:dev:';
@@ -54,6 +55,7 @@ type DevPanelProps = {
 };
 
 const DevPanel = ({ clientId, refreshToken, idToken, accessToken }: DevPanelProps) => {
+  const { t: tUi } = useInterfaceTranslation();
   const config = getDevConfig();
   const [showSaved, setShowSaved] = useState(false);
 
@@ -120,9 +122,9 @@ const DevPanel = ({ clientId, refreshToken, idToken, accessToken }: DevPanelProp
   return (
     <div className={styles.devPanel}>
       <form onSubmit={submitConfig}>
-        <div className={styles.title}>Device auth config</div>
+        <div className={styles.title}>{tUi('configuration')}</div>
         <div className={styles.item}>
-          <div className={styles.text}>Scope</div>
+          <div className={styles.text}>{tUi('scope')}</div>
           <input
             name="scope"
             defaultValue={config.scope}
@@ -131,38 +133,38 @@ const DevPanel = ({ clientId, refreshToken, idToken, accessToken }: DevPanelProp
           />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Resource</div>
+          <div className={styles.text}>{tUi('resource')}</div>
           <input name="resource" defaultValue={config.resource} type="text" />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Organization ID</div>
+          <div className={styles.text}>{tUi('organization_id')}</div>
           <input name="organizationId" defaultValue={config.organizationId} type="text" />
         </div>
         <div className={styles.action}>
-          <div className={styles.text}>Sign out to apply changes.</div>
+          <div className={styles.text}>{tUi('sign_out_to_apply')}</div>
           <button type="submit" className={styles.button}>
-            {showSaved ? 'Saved' : 'Save'}
+            {showSaved ? tUi('saved') : tUi('save')}
           </button>
         </div>
       </form>
       <form onSubmit={requestToken}>
-        <div className={styles.title}>Refresh token grant</div>
+        <div className={styles.title}>{tUi('refresh_token_grant')}</div>
         <div className={styles.item}>
-          <div className={styles.text}>Resource</div>
+          <div className={styles.text}>{tUi('resource')}</div>
           <input name="resource" type="text" />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Organization ID</div>
+          <div className={styles.text}>{tUi('organization_id')}</div>
           <input name="organizationId" type="text" />
         </div>
-        <div className={styles.text}>See console for the result.</div>
+        <div className={styles.text}>{tUi('console_result')}</div>
         <button type="submit" className={styles.button}>
-          Request token
+          {tUi('request_token')}
         </button>
       </form>
       <div>
-        <div className={styles.title}>Token info</div>
-        <div className={styles.text}>See console for the result.</div>
+        <div className={styles.title}>{tUi('token_info')}</div>
+        <div className={styles.text}>{tUi('console_result')}</div>
         <p>
           <button
             type="button"
@@ -175,7 +177,7 @@ const DevPanel = ({ clientId, refreshToken, idToken, accessToken }: DevPanelProp
               }
             }}
           >
-            Get ID token claims
+            {tUi('get_id_token_claims')}
           </button>
         </p>
         <p>
@@ -190,7 +192,7 @@ const DevPanel = ({ clientId, refreshToken, idToken, accessToken }: DevPanelProp
               }
             }}
           >
-            Get access token
+            {tUi('get_access_token')}
           </button>
         </p>
       </div>

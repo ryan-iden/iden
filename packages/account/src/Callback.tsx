@@ -3,8 +3,10 @@ import { useEffect } from 'react';
 
 import { clearVerificationRecord } from './Providers/PageContextProvider/verification-storage';
 import GlobalLoading from './components/GlobalLoading';
+import useInterfaceTranslation from './hooks/use-interface-translation';
 
 const Callback = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const { clearAllTokens } = useLogto();
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const Callback = () => {
   if (error) {
     return (
       <>
-        <p>We couldn&apos;t complete the sign in callback.</p>
+        <p>{tUi('callback_failed')}</p>
         <pre>{error.message}</pre>
         <button
           type="button"
@@ -27,7 +29,7 @@ const Callback = () => {
             window.location.replace('/account');
           }}
         >
-          Back to sign in
+          {tUi('back_sign_in')}
         </button>
       </>
     );

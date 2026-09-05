@@ -1,6 +1,7 @@
 const organization_template = {
   title: '组织模板',
-  subtitle: '在多租户 SaaS 应用中，组织模板定义了多个组织的共享访问控制政策（权限和角色）。',
+  subtitle:
+    '在多租户软件即服务（SaaS）应用中，组织模板定义了多个组织的共享访问控制政策（权限和角色）。',
   roles: {
     tab_name: '组织角色',
     search_placeholder: '按角色名称搜索',

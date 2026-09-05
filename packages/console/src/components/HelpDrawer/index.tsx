@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import Close from '@/assets/icons/close.svg?react';
 import ExternalLink from '@/assets/icons/external-link.svg?react';
 import IconButton from '@/ds-components/IconButton';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 
 import styles from './index.module.scss';
 
@@ -13,6 +14,7 @@ type Props = {
 };
 
 function HelpDrawer({ isOpen, url, onClose }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   return (
     <ReactModal
       shouldCloseOnOverlayClick
@@ -27,15 +29,15 @@ function HelpDrawer({ isOpen, url, onClose }: Props) {
       <header className={styles.header}>
         <div>
           <div id="iden-help-drawer-title" className={styles.title}>
-            iden Help Center
+            {tUi('help_title')}
           </div>
-          <div className={styles.subtitle}>Guidance without leaving your workspace</div>
+          <div className={styles.subtitle}>{tUi('help_subtitle')}</div>
         </div>
         <div className={styles.actions}>
-          <a aria-label="Open full help page" className={styles.expand} href={url}>
+          <a aria-label={tUi('open_help')} className={styles.expand} href={url}>
             <ExternalLink />
           </a>
-          <IconButton aria-label="Close help" size="large" onClick={onClose}>
+          <IconButton aria-label={tUi('close_help')} size="large" onClick={onClose}>
             <Close />
           </IconButton>
         </div>
@@ -44,7 +46,7 @@ function HelpDrawer({ isOpen, url, onClose }: Props) {
         className={styles.frame}
         sandbox="allow-scripts"
         src={`${url}${url.includes('?') ? '&' : '?'}embedded=1`}
-        title="iden Help Center"
+        title={tUi('help_title')}
       />
     </ReactModal>
   );

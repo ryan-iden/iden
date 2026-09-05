@@ -4467,6 +4467,9 @@ importers:
       '@logto/phrases':
         specifier: workspace:^
         version: link:../phrases
+      '@logto/phrases-experience':
+        specifier: workspace:^
+        version: link:../phrases-experience
       '@logto/react':
         specifier: ^4.0.6
         version: 4.0.6(react@18.3.1)
@@ -4552,6 +4555,9 @@ importers:
       '@logto/core-kit':
         specifier: workspace:^
         version: link:../toolkit/core-kit
+      '@logto/phrases-experience':
+        specifier: workspace:^
+        version: link:../phrases-experience
       '@logto/schemas':
         specifier: workspace:^
         version: link:../schemas
@@ -4582,6 +4588,12 @@ importers:
       eslint:
         specifier: ^8.56.0
         version: 8.57.0
+      i18next:
+        specifier: ^22.4.15
+        version: 22.4.15
+      i18next-browser-languagedetector:
+        specifier: ^8.0.0
+        version: 8.0.0
       jose:
         specifier: ^6.2.3
         version: 6.2.3
@@ -4600,6 +4612,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-i18next:
+        specifier: ^12.3.1
+        version: 12.3.1(i18next@22.4.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       stylelint:
         specifier: ^15.0.0
         version: 15.11.0(typescript@5.9.3)
@@ -4624,6 +4639,9 @@ importers:
       '@lit/react':
         specifier: ^1.0.5
         version: 1.0.5(@types/react@18.3.3)
+      '@logto/phrases-experience':
+        specifier: workspace:^
+        version: link:../phrases-experience
       '@silverhand/essentials':
         specifier: ^2.9.1
         version: 2.9.2
@@ -4924,6 +4942,9 @@ importers:
         specifier: ^15.0.12
         version: 15.0.12
     devDependencies:
+      '@logto/phrases-experience':
+        specifier: workspace:^
+        version: link:../phrases-experience
       pagefind:
         specifier: ^1.4.0
         version: 1.5.2

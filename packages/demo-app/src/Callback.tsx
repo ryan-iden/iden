@@ -1,7 +1,10 @@
 import { useHandleSignInCallback, useLogto } from '@logto/react';
 import { useEffect } from 'react';
 
+import useInterfaceTranslation from './i18n/use-interface-translation';
+
 const Callback = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const { clearAllTokens } = useLogto();
 
   useEffect(() => {
@@ -15,14 +18,14 @@ const Callback = () => {
   if (error) {
     return (
       <div>
-        Error Occurred:
+        {tUi('error')}
         <br />
         {error.message}
       </div>
     );
   }
 
-  return <div>Loading...</div>;
+  return <div>{tUi('loading')}</div>;
 };
 
 export default Callback;

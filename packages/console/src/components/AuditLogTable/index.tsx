@@ -11,6 +11,7 @@ import { auditLogEventTitle, defaultPageSize } from '@/consts';
 import Table from '@/ds-components/Table';
 import type { Column } from '@/ds-components/Table/types';
 import type { RequestError } from '@/hooks/use-api';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 import useSearchParametersWatcher from '@/hooks/use-search-parameters-watcher';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import { buildUrl } from '@/utils/url';
@@ -25,11 +26,6 @@ import { defaultPresetRange } from './components/TimeRangePicker/preset';
 import useAuditLogTimeWindow from './components/TimeRangePicker/use-audit-log-time-window';
 import styles from './index.module.scss';
 
-const auditLogEventOptions = Object.entries(auditLogEventTitle).map(([value, title]) => ({
-  value,
-  title,
-}));
-
 type Props = {
   readonly applicationId?: string;
   readonly userId?: string;
@@ -38,6 +34,11 @@ type Props = {
 };
 
 function AuditLogTable({ applicationId, userId, organizationId, className }: Props) {
+  const getEventTitle = useLogEventTitle();
+  const auditLogEventOptions = Object.keys(auditLogEventTitle).map((value) => ({
+    value,
+    title: getEventTitle(value),
+  }));
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const pageSize = defaultPageSize;
 

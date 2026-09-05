@@ -6,11 +6,13 @@ import { githubOrgLink } from '@/consts';
 import { LinkButton } from '@/ds-components/Button';
 import DangerousRaw from '@/ds-components/DangerousRaw';
 import Spacer from '@/ds-components/Spacer';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 
 import styles from './index.module.scss';
 
 /** The inline banner for displaying the sample info. */
 export default function Sample() {
+  const { t } = useInterfaceTranslation();
   const {
     metadata: { sample },
     Logo,
@@ -24,15 +26,15 @@ export default function Sample() {
     <aside className={styles.sample}>
       {Logo && <Logo className={styles.logo} />}
       <hgroup>
-        <header>Want to see a sample?</header>
-        <p>Check out our repository for a sample application that uses this guide.</p>
+        <header>{t('sample_title')}</header>
+        <p>{t('sample_description')}</p>
       </hgroup>
       <Spacer />
       <LinkButton
         targetBlank
         type="outline"
         href={appendPath(new URL(githubOrgLink), sample.repo, 'tree/HEAD', sample.path).href}
-        title={<DangerousRaw>Check out sample</DangerousRaw>}
+        title={<DangerousRaw>{t('sample_action')}</DangerousRaw>}
       />
     </aside>
   );

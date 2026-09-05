@@ -3,6 +3,7 @@ import type { SsoConnectorWithProviderConfig } from '@logto/schemas';
 import classNames from 'classnames';
 
 import ImageWithErrorFallback from '@/ds-components/ImageWithErrorFallback';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTheme from '@/hooks/use-theme';
 
 import styles from './index.module.scss';
@@ -40,6 +41,7 @@ const pickLogoForCurrentTheme = (
 };
 
 function SsoConnectorLogo({ className, containerClassName, data }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const theme = useTheme();
   const isDarkMode = theme === Theme.Dark;
   const { providerLogo: logo, providerLogoDark: logoDark, branding } = data;
@@ -48,7 +50,7 @@ function SsoConnectorLogo({ className, containerClassName, data }: Props) {
     <ImageWithErrorFallback
       containerClassName={classNames(styles.container, containerClassName)}
       className={classNames(styles.logo, className)}
-      alt="logo"
+      alt={tUi('logo')}
       src={pickLogoForCurrentTheme(isDarkMode, { logo, logoDark }, branding)}
     />
   );

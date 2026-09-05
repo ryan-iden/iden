@@ -14,6 +14,7 @@ import Select from '@/ds-components/Select';
 import Switch from '@/ds-components/Switch';
 import TextInput from '@/ds-components/TextInput';
 import Textarea from '@/ds-components/Textarea';
+import { translateConnectorMetadata } from '@/i18n/connector-metadata';
 import type { ConnectorFormType } from '@/types/connector';
 import { formatMultiLineScopeInput } from '@/utils/connector-form';
 import { jsonValidator } from '@/utils/validator';
@@ -33,7 +34,8 @@ function ConfigFormFields({ formItems }: Props) {
       errors: { formConfig: formConfigErrors },
     },
   } = useFormContext<ConnectorFormType>();
-  const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
+  const { t, i18n } = useTranslation(undefined, { keyPrefix: 'admin_console' });
+  const localize = (text: string | undefined) => translateConnectorMetadata(text, i18n.language);
 
   const values = watch('formConfig');
 
@@ -75,7 +77,7 @@ function ConfigFormFields({ formItems }: Props) {
             }
         ),
       }),
-      placeholder: item.placeholder,
+      placeholder: localize(item.placeholder),
       error,
     });
 
@@ -115,7 +117,7 @@ function ConfigFormFields({ formItems }: Props) {
           if (item.type === ConnectorConfigFormItemType.Switch) {
             return (
               <Switch
-                label={item.description}
+                label={localize(item.description)}
                 checked={typeof value === 'boolean' ? value : false}
                 onChange={({ currentTarget: { checked } }) => {
                   onChange(checked);
@@ -127,7 +129,10 @@ function ConfigFormFields({ formItems }: Props) {
           if (item.type === ConnectorConfigFormItemType.Select) {
             return (
               <Select
-                options={item.selectItems}
+                options={item.selectItems.map((option) => ({
+                  ...option,
+                  title: localize(option.title),
+                }))}
                 value={typeof value === 'string' ? value : undefined}
                 error={error}
                 onChange={onChange}
@@ -138,7 +143,10 @@ function ConfigFormFields({ formItems }: Props) {
           if (item.type === ConnectorConfigFormItemType.MultiSelect) {
             return (
               <CheckboxGroup
-                options={item.selectItems}
+                options={item.selectItems.map((option) => ({
+                  ...option,
+                  title: <DangerousRaw>{localize(option.value)}</DangerousRaw>,
+                }))}
                 value={
                   Array.isArray(value) &&
                   value.every((item): item is string => typeof item === 'string')
@@ -183,15 +191,14 @@ function ConfigFormFields({ formItems }: Props) {
           <FormField
             key={item.key}
             isRequired={item.required}
-            // Tooltip is currently string and does not support i18n.
-            tip={item.tooltip}
-            title={<DangerousRaw>{item.label}</DangerousRaw>}
+            tip={localize(item.tooltip)}
+            title={<DangerousRaw>{localize(item.label)}</DangerousRaw>}
           >
             {renderFormItem(item)}
             {
               //  The Switch component displays the description inside the switch box.
               Boolean(item.description && item.type !== ConnectorConfigFormItemType.Switch) && (
-                <div className={styles.description}>{item.description}</div>
+                <div className={styles.description}>{localize(item.description)}</div>
               )
             }
           </FormField>

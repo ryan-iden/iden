@@ -1,10 +1,10 @@
 const content = {
   terms_of_use: {
-    title: 'TERMS',
+    title: '条款',
     description: '添加条款和隐私以满足合规要求。',
-    terms_of_use: '使用条款 URL',
+    terms_of_use: '使用条款网址',
     terms_of_use_placeholder: 'https://your.terms.of.use/',
-    privacy_policy: '隐私政策 URL',
+    privacy_policy: '隐私政策网址',
     privacy_policy_placeholder: 'https://your.privacy.policy/',
     agree_to_terms: '同意条款',
     agree_policies: {
@@ -36,9 +36,9 @@ const content = {
     title: '管理语言',
     subtitle: '通过添加语言和翻译来本地化产品体验。你的贡献可以设置为默认语言。',
     add_language: '添加语言',
-    logto_provided: 'Logto 提供',
+    logto_provided: 'Logto提供',
     key: '键',
-    logto_source_values: 'Logto 源值',
+    logto_source_values: 'Logto源值',
     custom_values: '自定义值',
     clear_all_tip: '清除全部值',
     unsaved_description: '如果离开此页面而不保存，更改将不会保存。',

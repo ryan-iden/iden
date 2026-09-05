@@ -117,7 +117,7 @@ const account_center = {
     phone_removed: '手机号已成功移除。',
     username_removed: '用户名已成功移除。',
     trusted_devices: {
-      title: 'MFA 受信任设备',
+      title: '多因素认证受信任设备',
       current_device: '当前设备',
       expires_on: '于 {{date}} 到期',
       unknown_location: '未知位置',
@@ -129,7 +129,7 @@ const account_center = {
       retry: '重试',
       remove_confirmation_title: '移除受信任设备？',
       remove_confirmation_description:
-        '下次在此设备上登录时，你需要再次完成 MFA。当前会话将保持有效。',
+        '下次在此设备上登录时，你需要再次完成多因素认证。当前会话将保持有效。',
     },
   },
   social: {
@@ -178,10 +178,10 @@ const account_center = {
   },
   mfa: {
     totp_already_added: '你已添加过身份验证器应用，请先移除现有的。',
-    totp_not_enabled: '身份验证器应用 OTP 未启用。请联系管理员寻求帮助。',
+    totp_not_enabled: '身份验证器应用一次性密码未启用。请联系管理员寻求帮助。',
     backup_code_already_added: '你已拥有有效的备份码，请先使用或移除它们再生成新的。',
     backup_code_not_enabled: '备份码未启用。请联系管理员寻求帮助。',
-    backup_code_requires_other_mfa: '备份码需要先设置其他 MFA 方式。',
+    backup_code_requires_other_mfa: '备份码需要先设置其他多因素认证方式。',
     passkey_not_enabled: '通行密钥未启用。请联系管理员寻求帮助。',
     passkey_already_registered: '此通行密钥已绑定到您的账户，请使用其他认证器。',
   },
@@ -245,7 +245,7 @@ const account_center = {
     deleted: '通行密钥已移除。',
     add_another_title: '添加另一个通行密钥',
     add_another_description:
-      '使用设备生物识别、安全密钥（例如 YubiKey）或其他可用方法注册您的通行密钥。',
+      '使用设备生物识别、安全密钥（例如YubiKey）或其他可用方法注册您的通行密钥。',
     add_passkey: '添加通行密钥',
     delete_confirmation_title: '移除您的通行密钥',
     delete_confirmation_description: '如果您移除此通行密钥，您将无法使用它进行验证。',
@@ -272,7 +272,7 @@ const account_center = {
     third_party_apps_load_failed: '第三方应用加载失败，请重试。',
     granted_at: '授权于 {{date}}',
     dynamic_app: '动态应用',
-    client_id: '客户端 ID: {{clientId}}',
+    client_id: '客户端标识: {{clientId}}',
     revoke_grant: '移除',
     revoke_grant_title: '移除第三方应用访问权限',
     revoke_grant_description:

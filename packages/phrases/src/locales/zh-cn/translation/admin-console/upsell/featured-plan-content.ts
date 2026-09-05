@@ -1,14 +1,14 @@
 const featured_plan_content = {
   mau: {
-    free_plan: '最多 {{count, number}} MAU',
-    pro_plan: '无限 MAU',
+    free_plan: '最多 {{count, number}} 月活跃用户',
+    pro_plan: '无限月活跃用户',
   },
   m2m: {
     free_plan: '{{count, number}} 机器对机器',
     pro_plan: '额外的机器对机器',
   },
-  saml_and_third_party_apps: 'SAML 应用程序和第三方应用程序',
-  third_party_apps: '第三方应用的 IdP',
+  saml_and_third_party_apps: '安全断言标记语言（SAML）应用程序和第三方应用程序',
+  third_party_apps: '第三方应用的身份提供商',
   mfa: '多因素认证',
   sso: '企业单点登录',
   role_and_permissions: {

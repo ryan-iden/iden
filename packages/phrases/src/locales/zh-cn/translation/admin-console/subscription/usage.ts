@@ -8,11 +8,11 @@ const usage = {
   usage_description_with_limited_quota: '{{usage}}<span>（前 {{basicQuota}} 个已包含）</span>',
   usage_description_without_quota: '{{usage}}<span>（未包含）</span>',
   mau: {
-    title: 'MAU',
+    title: '月活跃用户',
     tooltip:
-      'MAU 是指在一个计费周期内与 Logto 交换过至少一个令牌的唯一用户。Pro 计划无限制。<a>了解更多</a>',
+      '月活跃用户是指在一个计费周期内与Logto交换过至少一个令牌的唯一用户。Pro计划无限制。<a>了解更多</a>',
     tooltip_for_enterprise:
-      'MAU 是指在一个计费周期内与 Logto 交换过至少一个令牌的唯一用户。企业计划无限制。',
+      '月活跃用户是指在一个计费周期内与Logto交换过至少一个令牌的唯一用户。企业计划无限制。',
   },
   organizations: {
     title: '组织',
@@ -24,22 +24,22 @@ const usage = {
       '你的计划包括前 {{basicQuota}} 个组织免费。如果需要更多，可以按月以每月 ${{price, number}} 的固定价格添加组织，不管组织的数量或活动水平如何。',
   },
   mfa: {
-    title: 'MFA',
+    title: '多因素认证',
     tooltip: '附加功能，每月固定费用为 ${{price, number}} 。认证因素的数量不影响价格。',
     tooltip_for_enterprise:
-      '根据你的计划而定。如果 MFA 功能不在你的初始合同中，当你激活它时，将会添加到你的账单中。附加费用为 ${{price, number}}/月，不受使用的认证因素数量影响。',
+      '根据你的计划而定。如果多因素认证功能不在你的初始合同中，当你激活它时，将会添加到你的账单中。附加费用为 ${{price, number}}/月，不受使用的认证因素数量影响。',
   },
   enterprise_sso: {
-    title: '企业 SSO',
-    tooltip: '附加功能，每个 SSO 连接每月价格为 ${{price, number}} 。',
+    title: '企业单点登录',
+    tooltip: '附加功能，每个单点登录连接每月价格为 ${{price, number}} 。',
     tooltip_for_enterprise:
-      '附加功能，每个 SSO 连接每月价格为 ${{price, number}}。合同计划包括前 {{basicQuota}} 个 SSO，免费使用。',
+      '附加功能，每个单点登录连接每月价格为 ${{price, number}}。合同计划包括前 {{basicQuota}} 个单点登录，免费使用。',
   },
   api_resources: {
-    title: 'API 资源',
-    tooltip: '附加功能，每个资源每月价格为 ${{price, number}} 。前三个 API 资源免费。',
+    title: '接口资源',
+    tooltip: '附加功能，每个资源每月价格为 ${{price, number}} 。前三个接口资源免费。',
     tooltip_for_enterprise:
-      '合同计划包括前 {{basicQuota}} 个 API 资源，免费使用。如果需要更多，每个 API 资源每月 ${{price, number}}。',
+      '合同计划包括前 {{basicQuota}} 个接口资源，免费使用。如果需要更多，每个接口资源每月 ${{price, number}}。',
   },
   machine_to_machine: {
     title: '机器对机器',
@@ -67,7 +67,7 @@ const usage = {
       '合同计划包括首 {{basicQuota}} 个令牌，免费使用。如果需要更多，每 {{tokenLimit}} 个令牌每月 ${{price, number}}。',
   },
   m2mTokens: {
-    title: 'M2M 令牌',
+    title: '机器对机器令牌',
   },
   hooks: {
     title: '钩子',
@@ -78,11 +78,11 @@ const usage = {
   security_features: {
     title: '高级安全',
     tooltip:
-      '附加功能，完整的高级安全套件每月价格为 ${{price, number}}，包括 CAPTCHA、标识符锁定、电子邮件黑名单等。',
+      '附加功能，完整的高级安全套件每月价格为 ${{price, number}}，包括人机验证、标识符锁定、电子邮件黑名单等。',
   },
   saml_applications: {
-    title: 'SAML 应用',
-    tooltip: '附加功能，每个 SAML 应用每月价格为 ${{price, number}} 。',
+    title: '安全断言标记语言（SAML）应用',
+    tooltip: '附加功能，每个安全断言标记语言（SAML）应用每月价格为 ${{price, number}} 。',
   },
   third_party_applications: {
     title: '第三方应用',

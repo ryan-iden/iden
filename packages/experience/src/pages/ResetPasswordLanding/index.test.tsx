@@ -141,7 +141,7 @@ describe('ResetPasswordLanding', () => {
     await waitFor(() => {
       expect(mockedIdentifyForgotPasswordWithOneTimeToken).toBeCalledTimes(1);
       expect(window.location.pathname).toBe('/reset-password');
-      expect(queryByText('Verification failed')).not.toBeNull();
+      expect(queryByText('error.invalid_link_description')).not.toBeNull();
     });
 
     expect(container.querySelector<HTMLInputElement>('input[name="identifier"]')).toBeNull();

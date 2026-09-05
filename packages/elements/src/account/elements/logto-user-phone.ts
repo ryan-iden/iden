@@ -20,7 +20,7 @@ export class LogtoUserPhone extends LogtoProfileItemElement {
   protected getItemLabelInfo() {
     return {
       icon: phoneIcon,
-      label: 'Phone number',
+      label: this.localization.message('phone'),
     };
   }
 

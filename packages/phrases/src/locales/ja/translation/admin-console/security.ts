@@ -9,6 +9,8 @@ const security = {
     general: '一般設定',
   },
   bot_protection: {
+    custom_ui_captcha_notice:
+      'カスタム UI を使用しています。CAPTCHA を有効にするには追加の設定が必要です。<a>設定ガイドを見る</a>。',
     title: 'ボット保護',
     description:
       'サインアップ、サインイン、パスワード回復に CAPTCHA を有効にして、自動的な脅威をブロックします。',

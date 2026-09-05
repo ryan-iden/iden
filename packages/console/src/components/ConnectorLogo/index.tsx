@@ -3,6 +3,7 @@ import type { ConnectorResponse } from '@logto/schemas';
 import classNames from 'classnames';
 
 import ImageWithErrorFallback from '@/ds-components/ImageWithErrorFallback';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTheme from '@/hooks/use-theme';
 
 import styles from './index.module.scss';
@@ -14,13 +15,14 @@ type Props = {
 };
 
 function ConnectorLogo({ className, data, size = 'medium' }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const theme = useTheme();
 
   return (
     <ImageWithErrorFallback
       containerClassName={classNames(styles.container, styles[size])}
       className={classNames(styles.logo, styles[size], className)}
-      alt="logo"
+      alt={tUi('logo')}
       src={theme === Theme.Dark && data.logoDark ? data.logoDark : data.logo}
     />
   );

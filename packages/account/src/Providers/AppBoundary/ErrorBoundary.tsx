@@ -48,7 +48,7 @@ class ErrorBoundary extends Component<Props, State> {
       return <SessionExpired />;
     }
 
-    return <ErrorPage titleKey="error.something_went_wrong" rawMessage={error.message} />;
+    return <ErrorPage titleKey="error.something_went_wrong" messageKey="error.unknown" />;
   }
 }
 

@@ -10,6 +10,7 @@ import FormField from '@/ds-components/FormField';
 import ModalLayout from '@/ds-components/ModalLayout';
 import TextInput from '@/ds-components/TextInput';
 import useApi from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import modalStyles from '@/scss/modal.module.scss';
 import { trySubmitSafe } from '@/utils/form';
 
@@ -22,6 +23,7 @@ type Props = {
 };
 
 function EditTokenModal({ userId, token, onClose }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const {
     register,
@@ -72,7 +74,7 @@ function EditTokenModal({ userId, token, onClose }: Props) {
           <TextInput
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
-            placeholder="My token"
+            placeholder={tUi('my_token')}
             error={Boolean(errors.name)}
             {...register('name', { required: true })}
           />

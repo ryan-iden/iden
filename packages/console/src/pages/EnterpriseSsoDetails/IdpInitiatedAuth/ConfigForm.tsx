@@ -21,6 +21,7 @@ import Select from '@/ds-components/Select';
 import Switch from '@/ds-components/Switch';
 import TextInput from '@/ds-components/TextInput';
 import useApi from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import { trySubmitSafe } from '@/utils/form';
 import { uriValidator } from '@/utils/validator';
@@ -46,6 +47,7 @@ function ConfigForm({
   idpInitiatedAuthConfig,
   mutateIdpInitiatedConfig,
 }: FormProps) {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const { getTo } = useTenantPathname();
   const api = useApi();
@@ -183,7 +185,8 @@ function ConfigForm({
                         <span>
                           {application.name}
                           <span className={styles.applicationDetails}>
-                            ({t(`guide.categories.${application.type}`)}, ID: {application.id})
+                            ({t(`guide.categories.${application.type}`)}, {tUi('app_id')}:{' '}
+                            {application.id})
                           </span>
                         </span>
                       ),
@@ -263,7 +266,7 @@ function ConfigForm({
                       !value || uriValidator(value) || t('errors.invalid_uri_format'),
                   })}
                   required
-                  placeholder="Redirect URI"
+                  placeholder={tUi('redirect_uri')}
                   error={errors.config?.clientIdpInitiatedAuthCallbackUri?.message}
                 />
               </FormField>

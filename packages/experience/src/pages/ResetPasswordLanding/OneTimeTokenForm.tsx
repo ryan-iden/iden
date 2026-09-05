@@ -69,12 +69,12 @@ const OneTimeTokenForm = ({ className, token, loginHint = '', onError }: Props) 
       if (error) {
         if (error instanceof HTTPError) {
           try {
-            const { code, message } = await error.response.json<RequestErrorBody>();
+            const { code } = await error.response.json<RequestErrorBody>();
 
             onError(
               code === 'guard.invalid_input'
                 ? { message: 'error.invalid_email' }
-                : { rawMessage: message }
+                : { message: 'error.invalid_link_description' }
             );
           } catch {
             onError({ message: 'error.unknown' });

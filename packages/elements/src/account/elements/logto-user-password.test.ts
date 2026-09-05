@@ -17,7 +17,7 @@ suite('logto-user-password', () => {
     );
     await element.updateComplete;
 
-    assert.equal(element.shadowRoot?.textContent, 'Unable to retrieve account context.');
+    assert.equal(element.shadowRoot?.textContent, 'Unable to load account information.');
   });
 
   test('should render configured status when user has password', async () => {

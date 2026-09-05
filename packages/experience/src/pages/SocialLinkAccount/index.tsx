@@ -42,15 +42,15 @@ const SocialLinkAccount = () => {
   const verificationId = verificationIdsMap[VerificationType.Social];
 
   if (!is(state, socialAccountNotExistErrorDataGuard)) {
-    return <ErrorPage rawMessage="Missing relate account info" />;
+    return <ErrorPage title="error.invalid_session" />;
   }
 
   if (!connectorId) {
-    return <ErrorPage rawMessage="Connector not found" />;
+    return <ErrorPage title="error.unknown" />;
   }
 
   if (!verificationId) {
-    return <ErrorPage title="error.invalid_session" rawMessage="Verification ID not found" />;
+    return <ErrorPage title="error.invalid_session" />;
   }
 
   const { relatedUser } = state;

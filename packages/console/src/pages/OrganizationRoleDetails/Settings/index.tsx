@@ -12,11 +12,13 @@ import FormField from '@/ds-components/FormField';
 import TextInput from '@/ds-components/TextInput';
 import useApi from '@/hooks/use-api';
 import useDocumentationUrl from '@/hooks/use-documentation-url';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import { trySubmitSafe } from '@/utils/form';
 
 import { type OrganizationRoleDetailsOutletContext } from '../types';
 
 function Settings() {
+  const { t: tUi } = useInterfaceTranslation();
   const { organizationRole, isDeleting, onOrganizationRoleUpdated } =
     useOutletContext<OrganizationRoleDetailsOutletContext>();
 
@@ -59,7 +61,7 @@ function Settings() {
       >
         <FormField isRequired title="organization_role_details.general.name_field">
           <TextInput
-            placeholder="viewer"
+            placeholder={tUi('role_example')}
             error={Boolean(errors.name)}
             {...register('name', { required: true })}
           />

@@ -8,6 +8,7 @@ import InlineNotification from '@/ds-components/InlineNotification';
 import Switch from '@/ds-components/Switch';
 import TextInput from '@/ds-components/TextInput';
 import Textarea from '@/ds-components/Textarea';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import { formatMultiLineScopeInput } from '@/utils/connector-form';
 import { uriValidator } from '@/utils/validator';
 
@@ -24,6 +25,7 @@ type Props = {
 
 // Do not show inline notification and parsed config preview if it is on guide page.
 function OidcMetadataForm({ providerConfig, config, providerName }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const {
     register,
@@ -43,7 +45,7 @@ function OidcMetadataForm({ providerConfig, config, providerName }: Props) {
         <TextInput
           {...register('clientId', { required: true })}
           error={Boolean(errors.clientId)}
-          placeholder="Client ID"
+          placeholder={tUi('client_id')}
         />
       </FormField>
       <FormField isRequired title="enterprise_sso.metadata.oidc.client_secret_field_name">
@@ -51,7 +53,7 @@ function OidcMetadataForm({ providerConfig, config, providerName }: Props) {
           isConfidential
           {...register('clientSecret', { required: true })}
           error={Boolean(errors.clientSecret)}
-          placeholder="Client secret"
+          placeholder={tUi('client_secret')}
         />
       </FormField>
       <FormField

@@ -12,7 +12,6 @@ import ClientIdentifier from '@/components/ClientIdentifier';
 import DetailsPage from '@/components/DetailsPage';
 import PageMeta from '@/components/PageMeta';
 import UserName from '@/components/UserName';
-import { logEventTitle } from '@/consts/logs';
 import Card from '@/ds-components/Card';
 import CodeEditor from '@/ds-components/CodeEditor';
 import DangerousRaw from '@/ds-components/DangerousRaw';
@@ -20,6 +19,8 @@ import FormField from '@/ds-components/FormField';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import Tag from '@/ds-components/Tag';
 import type { RequestError } from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 import { isWebhookEventLogKey } from '@/pages/WebhookDetails/utils';
 import { getUserTitle } from '@/utils/user';
 
@@ -33,6 +34,8 @@ const getDetailsTabNavLink = (logId: string, userId?: string) =>
   userId ? `/users/${userId}/logs/${logId}` : `/audit-logs/${logId}`;
 
 function AuditLogDetails() {
+  const getEventTitle = useLogEventTitle();
+  const { t: tUi } = useInterfaceTranslation();
   const { appId, userId, hookId, logId } = useParams();
   const { pathname } = useLocation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
@@ -88,8 +91,8 @@ function AuditLogDetails() {
             <EventIcon isSuccess={data.payload.result === 'Success'} />
             <div className={styles.content}>
               <div className={styles.eventName}>
-                {logEventTitle[data.key]}
-                {isImpersonationLog(data) && <Tag status="alert">Impersonation</Tag>}
+                {getEventTitle(data.key)}
+                {isImpersonationLog(data) && <Tag status="alert">{tUi('impersonation')}</Tag>}
               </div>
               <div className={styles.basicInfo}>
                 <div className={styles.infoItem}>

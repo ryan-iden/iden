@@ -42,11 +42,7 @@ function GoogleOneTapCard() {
         <Switch
           description={
             <div className={styles.oneTapSwitch}>
-              <img
-                className={styles.figure}
-                src={themeToFigure[theme]}
-                alt="Google One Tap figure"
-              />
+              <img className={styles.figure} src={themeToFigure[theme]} alt="" />
               {t('enable_google_one_tap_description')}
             </div>
           }

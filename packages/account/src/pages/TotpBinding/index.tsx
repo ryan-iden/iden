@@ -22,6 +22,7 @@ import {
 } from '@ac/constants/routes';
 import useApi from '@ac/hooks/use-api';
 import useErrorHandler from '@ac/hooks/use-error-handler';
+import useInterfaceTranslation from '@ac/hooks/use-interface-translation';
 import SecondaryPageLayout from '@ac/layouts/SecondaryPageLayout';
 import { sessionStorage } from '@ac/utils/session-storage';
 
@@ -56,6 +57,7 @@ type Props = {
 };
 
 const TotpBinding = ({ isReplace }: Props) => {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { loading } = useContext(LoadingContext);
@@ -246,7 +248,7 @@ const TotpBinding = ({ isReplace }: Props) => {
             {isQrCodeFormat &&
               (secretQrCode ? (
                 <div className={styles.qrCode}>
-                  <img src={secretQrCode} alt="QR code" />
+                  <img src={secretQrCode} alt={tUi('qr_code')} />
                 </div>
               ) : secret ? (
                 <CopySecretButton secret={secret} onCopy={copySecret} />

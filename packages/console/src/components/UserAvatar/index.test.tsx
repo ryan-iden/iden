@@ -22,13 +22,15 @@ describe('UserAvatar', () => {
   it('uses a local generated avatar when the user has no custom avatar', () => {
     render(<UserAvatar user={{ id: 'user-123', primaryEmail: 'user@example.com' }} />);
 
-    expect(screen.getByAltText('avatar').getAttribute('src')).toMatch(/^data:image\/svg\+xml/);
+    expect(screen.getByAltText('interface.avatar').getAttribute('src')).toMatch(
+      /^data:image\/svg\+xml/
+    );
   });
 
   it('keeps a custom avatar as the first choice', () => {
     render(<UserAvatar user={{ id: 'user-123', avatar: 'https://example.com/avatar.png' }} />);
 
-    expect(screen.getByAltText('avatar').getAttribute('src')).toBe(
+    expect(screen.getByAltText('interface.avatar').getAttribute('src')).toBe(
       'https://example.com/avatar.png'
     );
   });

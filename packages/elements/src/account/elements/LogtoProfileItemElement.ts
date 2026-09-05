@@ -5,14 +5,17 @@ import {
   logtoAccountContext,
   type LogtoAccountContextType,
 } from '../providers/logto-account-provider.js';
+import { LocalizationController } from '../utils/localization.js';
 
 export abstract class LogtoProfileItemElement extends LitElement {
   @consume({ context: logtoAccountContext, subscribe: true })
   protected readonly accountContext?: LogtoAccountContextType;
 
+  protected readonly localization: LocalizationController = new LocalizationController(this);
+
   render() {
     if (!this.accountContext) {
-      return html`<span>Unable to retrieve account context.</span>`;
+      return html`<span>${this.localization.message('context_unavailable')}</span>`;
     }
 
     if (!this.isAccessible()) {

@@ -1,5 +1,5 @@
 const sign_in_experiences = {
-  empty_content_url_of_terms_of_use: '你啟用了「使用條款」，請加入使用條款 URL。',
+  empty_content_url_of_terms_of_use: '你啟用了「使用條款」，請加入使用條款網址。',
   empty_social_connectors: '你啟用了社交登錄的方式。請至少選擇一個社交連接器。',
   enabled_connector_not_found: '未找到已啟用的 {{type}} 連接器',
   not_one_and_only_one_primary_sign_in_method:
@@ -16,20 +16,19 @@ const sign_in_experiences = {
   email_verification_code_cannot_be_used_for_mfa:
     '啟用電郵驗證登錄時，不能將電郵驗證碼用於多因子驗證。',
   phone_verification_code_cannot_be_used_for_mfa:
-    '啟用 SMS 驗證登錄時，不能將 SMS 驗證碼用於多因子驗證。',
+    '啟用SMS驗證登錄時，不能將SMS驗證碼用於多因子驗證。',
   email_verification_code_cannot_be_used_for_sign_in:
     '當啟用多因子驗證時，電子郵件驗證碼不能用於登錄。',
-  phone_verification_code_cannot_be_used_for_sign_in:
-    '當啟用多因子驗證時，SMS 驗證碼不能用於登錄。',
-  adaptive_mfa_requires_mfa: '啟用自適應 MFA 前必須先啟用 MFA。',
+  phone_verification_code_cannot_be_used_for_sign_in: '當啟用多因子驗證時，SMS驗證碼不能用於登錄。',
+  adaptive_mfa_requires_mfa: '啟用自適應多因素驗證前必須先啟用多因素驗證。',
   adaptive_mfa_requires_non_skippable_policy:
-    '啟用自適應 MFA 需要一個無法跳過的 MFA 提示政策。請使用 PromptOnlyAtSignInMandatory 或 PromptAtSignInAndSignUpMandatory。',
+    '啟用自適應多因素驗證需要一個無法跳過的多因素驗證提示政策。請使用PromptOnlyAtSignInMandatory或PromptAtSignInAndSignUpMandatory。',
   non_adaptive_mfa_requires_skippable_policy:
-    '當自適應 MFA 被禁用時，MFA 提示政策必須可跳過。不要使用 PromptOnlyAtSignInMandatory 或 PromptAtSignInAndSignUpMandatory。',
+    '當自適應多因素驗證被禁用時，多因素驗證提示政策必須可跳過。不要使用PromptOnlyAtSignInMandatory或PromptAtSignInAndSignUpMandatory。',
   duplicated_sign_up_identifiers: '檢測到重複的註冊標識符。',
   missing_sign_up_identifiers: '主要的註冊標識符不能為空。',
   invalid_custom_email_blocklist_format:
-    '無效的自定義電子郵件黑名單條目：{{items, list(type:conjunction)}}。每個條目必須是有效的電子郵件地址或電子郵件域，例如，foo@example.com 或 @example.com。',
+    '無效的自定義電子郵件黑名單條目：{{items, list(type:conjunction)}}。每個條目必須是有效的電子郵件地址或電子郵件域，例如，foo@example.com或 @example.com。',
   forgot_password_method_requires_connector: '忘記密碼方法需要配置相應的 {{method}} 連接器。',
   password_expiration_requires_forgot_password:
     '密碼過期需要至少配置一種帶有有效連接器的忘記密碼方式。',

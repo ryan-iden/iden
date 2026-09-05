@@ -1,4 +1,5 @@
 import account_center from './account-center.js';
+import action from './action.js';
 import application from './application.js';
 import auth from './auth.js';
 import connector from './connector.js';
@@ -31,6 +32,7 @@ import verification_code from './verification-code.js';
 import verification_record from './verification-record.js';
 
 const errors = {
+  action,
   request,
   auth,
   guard,

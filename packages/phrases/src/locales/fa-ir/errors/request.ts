@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: 'پیام‌های زیادی به این گیرنده ارسال شده است. لطفاً بعداً تلاش کنید.',
   invalid_input: 'ورودی نامعتبر است. {{details}}',
   general: 'خطای درخواست رخ داد.',
   range_not_satisfiable: 'بازه قابل برآورده‌سازی نیست.',

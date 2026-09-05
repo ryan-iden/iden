@@ -21,6 +21,7 @@
     "marked": "^15.0.12"
   },
   "devDependencies": {
+    "@logto/phrases-experience": "workspace:^",
     "pagefind": "^1.4.0"
   },
   "engines": {

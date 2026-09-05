@@ -18,6 +18,8 @@ import Select from '@/ds-components/Select';
 import Table from '@/ds-components/Table';
 import Tag from '@/ds-components/Tag';
 import useApi, { type RequestError } from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
+import useSystemLabels from '@/hooks/use-system-labels';
 import { buildUrl } from '@/utils/url';
 
 import type { OrganizationDetailsOutletContext } from '../types';
@@ -25,6 +27,9 @@ import type { OrganizationDetailsOutletContext } from '../types';
 import styles from './index.module.scss';
 
 function ManagementAccess() {
+  const { t: tUi } = useInterfaceTranslation();
+  const { t: tOrg } = useTranslation('experience', { keyPrefix: 'account_center.organizations' });
+  const { getManagementRoleName, getManagementRoleDescription } = useSystemLabels();
   const { data: organization } = useOutletContext<OrganizationDetailsOutletContext>();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const api = useApi();
@@ -56,18 +61,14 @@ function ManagementAccess() {
     () =>
       members.map((member) => ({
         value: member.id,
-        title: member.name ?? member.primaryEmail ?? member.id,
+        title:
+          [member.username, member.name, member.primaryEmail].find((value) => value?.trim()) ??
+          member.id,
       })),
     [members]
   );
-  const roleOptions = useMemo(
-    () =>
-      roles?.map(({ id, name }) => ({
-        value: id,
-        title: name,
-      })) ?? [],
-    [roles]
-  );
+  const roleOptions =
+    roles?.map((role) => ({ value: role.id, title: getManagementRoleName(role) })) ?? [];
 
   const bootstrapOwner = async () => {
     if (!selectedOwnerId || isSubmitting) {
@@ -171,7 +172,7 @@ function ManagementAccess() {
                   );
                 }}
               />
-              <span>{permission.replaceAll('_', ' ')}</span>
+              <span>{tOrg(`roles.permission_labels.${permission}`)}</span>
             </label>
           ))}
         </div>
@@ -211,25 +212,35 @@ function ManagementAccess() {
             dataIndex: 'name',
             title: t('general.name'),
             colSpan: 5,
-            render: ({ name, description }) => (
+            render: (role) => (
               <div className={styles.roleName}>
-                <strong>{name}</strong>
-                <span>{description}</span>
+                <strong>{getManagementRoleName(role)}</strong>
+                <span>{getManagementRoleDescription(role)}</span>
               </div>
             ),
           },
           {
             dataIndex: 'type',
-            title: <DangerousRaw>Type</DangerousRaw>,
+            title: <DangerousRaw>{tUi('type')}</DangerousRaw>,
             colSpan: 3,
-            render: ({ type }) => <Tag variant="cell">{type}</Tag>,
+            render: ({ type }) => (
+              <Tag variant="cell">
+                {type === OrganizationManagementRoleType.Owner ? tOrg('owner') : tUi('custom')}
+              </Tag>
+            ),
           },
           {
             dataIndex: 'permissions',
-            title: <DangerousRaw>Permissions</DangerousRaw>,
+            title: <DangerousRaw>{tUi('permissions')}</DangerousRaw>,
             colSpan: 7,
             render: ({ permissions }) => (
-              <DangerousRaw>{permissions.length > 0 ? permissions.join(', ') : '-'}</DangerousRaw>
+              <DangerousRaw>
+                {permissions.length > 0
+                  ? permissions
+                      .map((permission) => tOrg(`roles.permission_labels.${permission}`))
+                      .join(', ')
+                  : '-'}
+              </DangerousRaw>
             ),
           },
         ]}

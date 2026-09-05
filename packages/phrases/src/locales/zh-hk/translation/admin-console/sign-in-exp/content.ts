@@ -1,10 +1,10 @@
 const content = {
   terms_of_use: {
-    title: 'TERMS',
+    title: '條款',
     description: '添加條款和隱私以滿足合規要求。',
-    terms_of_use: '使用條款 URL',
+    terms_of_use: '使用條款網址',
     terms_of_use_placeholder: 'https://your.terms.of.use/',
-    privacy_policy: '私隱政策 URL',
+    privacy_policy: '私隱政策網址',
     privacy_policy_placeholder: 'https://your.privacy.policy/',
     agree_to_terms: '同意條款',
     agree_policies: {
@@ -36,9 +36,9 @@ const content = {
     title: '管理語言',
     subtitle: '透過加入語言與翻譯來本地化產品體驗。你的貢獻可以設為預設語言。',
     add_language: '新增語言',
-    logto_provided: '由 Logto 提供',
+    logto_provided: '由Logto提供',
     key: '鍵值',
-    logto_source_values: 'Logto 原始值',
+    logto_source_values: 'Logto原始值',
     custom_values: '自訂值',
     clear_all_tip: '清除所有值',
     unsaved_description: '若你離開此頁而未儲存，更改將不會被儲存。',

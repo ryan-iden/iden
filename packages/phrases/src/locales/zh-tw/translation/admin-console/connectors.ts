@@ -13,7 +13,7 @@ const connectors = {
   connector_type: '類型',
   placeholder_title: '社交連接器',
   placeholder_description:
-    'Logto 提供了許多廣泛使用的社交登錄連接器，同時你還可以使用標準協議創建自己的連接器。',
+    'Logto提供了許多廣泛使用的社交登錄連接器，同時你還可以使用標準協議創建自己的連接器。',
   save_and_done: '保存並完成',
   type: {
     email: '郵件連接器',
@@ -41,27 +41,27 @@ const connectors = {
     target_tip_standard:
       '在“身份供應商名稱”字段中輸入唯一的標識符字符串，用於區分社交身份來源。注意，在連接器創建成功後，無法再次修改此設置。',
     target_tooltip:
-      'Logto 社交連接器的「target」指的是社交身份的「來源」。在 Logto 的設計裡，我們不允許某一平台的連接器中有相同的「target」以避免身份的衝突。在添加連接器時，你需要格外小心，我們「不允許」用戶在創建之後更改「target」的值。<a>了解更多</a>',
+      'Logto社交連接器的「target」指的是社交身份的「來源」。在Logto的設計裡，我們不允許某一平台的連接器中有相同的「target」以避免身份的衝突。在添加連接器時，你需要格外小心，我們「不允許」用戶在創建之後更改「target」的值。<a>了解更多</a>',
     target_conflict:
       '此「身份供應商名稱」值與現有的 <span>name</span> 連接器相同。使用相同的身份供應商名稱會導致不符合預期的登錄行為，用戶可能通過兩個不同的連接器訪問同一個帳戶。',
     target_conflict_line2:
-      '如果你想替換當前的連接器，並連接相同的身份提供商（IdP），以便先前的用戶可以直接登錄而無需重新註冊，請先刪除 <span>name</span> 連接器，再創建一個新的連接器並使用相同的「身份供應商名稱」值。',
+      '如果你想替換當前的連接器，並連接相同的身份提供商（身分提供者），以便先前的用戶可以直接登錄而無需重新註冊，請先刪除 <span>name</span> 連接器，再創建一個新的連接器並使用相同的「身份供應商名稱」值。',
     target_conflict_line3: '如果你想連接一個新的身份驗證提供程序，請修改「身份供應商名稱」並繼續。',
-    config: '粘貼你的 JSON 代碼',
+    config: '粘貼你的JavaScript物件表示法（JSON）代碼',
     sync_profile: '開啟用戶資料同步',
     sync_profile_only_at_sign_up: '首次註冊時同步',
     sync_profile_each_sign_in: '每次登錄時同步',
     sync_profile_tip: '同步用戶的用戶名、頭像等個人資料信息',
     enable_token_storage: {
-      title: '存儲令牌以持續訪問 API',
+      title: '存儲令牌以持續訪問介面',
       description:
-        '在 Secret Vault 中存儲訪問和刷新令牌。允許自動 API 調用而無需重複用戶授權。例如：讓你的 AI 代理通過持續授權添加事件到 Google 日曆。<a>了解如何調用第三方 API</a>',
+        '將存取權杖和重新整理權杖儲存在密鑰保險庫（Secret Vault）中，無需使用者重複授權即可自動呼叫介面。例如：讓人工智慧代理在持續授權下向 Google 日曆新增事件。<a>了解如何呼叫第三方介面</a>',
     },
-    callback_uri: '重新導向 URI（回呼 URI）',
+    callback_uri: '重新導向位址（回呼位址）',
     callback_uri_description:
-      '重新導向 URI 是在社交授權後使用者被重新導向的位置。請將顯示的所有 URI 加入 IdP 的設定中。',
+      '重新導向位址是在社交授權後使用者被重新導向的位置。請將顯示的所有位址加入身分提供者的設定中。',
     callback_uri_custom_domain_description:
-      '如果你在 Logto 使用多個<a>自訂網域</a>，務必把所有對應的回呼 URI 加到 IdP，確保社群登入在每個網域都能運作。\n\n預設的 Logto 網域 (*.logto.app) 一直有效；只有在你也希望支援該網域下的登入時才需要包含它。',
+      '如果你在Logto使用多個<a>自訂網域</a>，務必把所有對應的回呼位址加到身分提供者，確保社群登入在每個網域都能運作。\n\n預設的Logto網域(*.logto.app)一直有效；只有在你也希望支援該網域下的登入時才需要包含它。',
     acs_url: '斷言消費者服務網址',
   },
   platform: {
@@ -76,7 +76,7 @@ const connectors = {
   standard_connectors: '標準連接器',
   create_form: {
     third_party_connectors:
-      '集成第三方提供商以快速進行社交登入、社交帳號連接和 API 訪問。<a>了解更多</a>',
+      '集成第三方提供商以快速進行社交登入、社交帳號連接和介面訪問。<a>了解更多</a>',
     standard_connectors: '或者你可以通過標準協議來自定義你的社交連接器。',
   },
 };

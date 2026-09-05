@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
+
 /**
  * BetaTag static component
  *
@@ -13,7 +15,8 @@ type Props = {
 };
 
 function BetaTag({ className }: Props) {
-  return <div className={classNames(styles.tag, styles.beta, className)}>Beta</div>;
+  const { t: tUi } = useInterfaceTranslation();
+  return <div className={classNames(styles.tag, styles.beta, className)}>{tUi('beta')}</div>;
 }
 
 export default BetaTag;

@@ -10,8 +10,10 @@ import {
 import CategorizedCheckboxGroup, {
   type CheckboxOptionGroup,
 } from '@/ds-components/Checkbox/CategorizedCheckboxGroup';
+import DangerousRaw from '@/ds-components/DangerousRaw';
 import FormField from '@/ds-components/FormField';
 import TextInput from '@/ds-components/TextInput';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 import { uriValidator } from '@/utils/validator';
 
 import styles from './index.module.scss';
@@ -46,6 +48,7 @@ export type BasicWebhookFormType = {
 };
 
 function BasicWebhookForm() {
+  const getEventTitle = useLogEventTitle();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const {
     register,
@@ -89,7 +92,17 @@ function BasicWebhookForm() {
               value.length === 0 ? t('webhooks.create_form.missing_event_error') : true,
           }}
           render={({ field: { onChange, value } }) => (
-            <CategorizedCheckboxGroup value={value} groups={hookEventGroups} onChange={onChange} />
+            <CategorizedCheckboxGroup
+              value={value}
+              groups={hookEventGroups.map((group) => ({
+                ...group,
+                options: group.options.map((option) => ({
+                  ...option,
+                  title: <DangerousRaw>{getEventTitle(option.value)}</DangerousRaw>,
+                })),
+              }))}
+              onChange={onChange}
+            />
           )}
         />
         {errors.events && <div className={styles.errorMessage}>{errors.events.message}</div>}

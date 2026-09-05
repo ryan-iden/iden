@@ -32,7 +32,7 @@ function ApplicationSelector({ value, onChange }: Props) {
         ...(conditional(
           isCloud &&
             currentTenantId === adminTenantId && [
-              { value: adminConsoleApplicationId, title: 'Admin Console' },
+              { value: adminConsoleApplicationId, title: t('title') },
             ]
         ) ?? []),
         ...options,

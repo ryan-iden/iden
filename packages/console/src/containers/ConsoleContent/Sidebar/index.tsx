@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { isDevFeaturesEnabled, brandProfile, isIdenBrand } from '@/consts/env';
 import OverlayScrollbar from '@/ds-components/OverlayScrollbar';
 import useDocumentationUrl from '@/hooks/use-documentation-url';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useMatchTenantPath from '@/hooks/use-tenant-pathname';
 
 import Item from './components/Item';
@@ -12,6 +13,7 @@ import styles from './index.module.scss';
 import { getPath } from './utils';
 
 function Sidebar() {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation(undefined, {
     keyPrefix: 'admin_console.tab_sections',
   });
@@ -46,7 +48,7 @@ function Sidebar() {
             <footer className={styles.footer}>
               <div className={styles.slogan}>{brandProfile.slogan}</div>
               <a className={styles.about} href={`${documentationSiteUrl}/about`}>
-                About &amp; open source
+                {tUi('about')}
               </a>
             </footer>
           )}

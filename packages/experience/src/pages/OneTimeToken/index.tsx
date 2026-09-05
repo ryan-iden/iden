@@ -1,10 +1,4 @@
-import {
-  AgreeToTermsPolicy,
-  experience,
-  InteractionEvent,
-  SignInIdentifier,
-  type RequestErrorBody,
-} from '@logto/schemas';
+import { AgreeToTermsPolicy, experience, InteractionEvent, SignInIdentifier } from '@logto/schemas';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -58,7 +52,10 @@ const OneTimeToken = () => {
       ) {
         navigate(
           { pathname: `/${experience.routes.oneTimeToken}/error` },
-          { replace: true, state: { errorMessage: 'terms_acceptance_required_description' } }
+          {
+            replace: true,
+            state: { message: 'error.terms_acceptance_required_description' },
+          }
         );
         return;
       }
@@ -172,10 +169,10 @@ const OneTimeToken = () => {
       if (error) {
         setIsLoading(false);
         await handleError(error, {
-          global: (error: RequestErrorBody) => {
+          global: () => {
             navigate(
               { pathname: `/${experience.routes.oneTimeToken}/error` },
-              { replace: true, state: { errorMessage: error.message } }
+              { replace: true, state: { message: 'error.invalid_link_description' } }
             );
           },
         });

@@ -16,6 +16,7 @@ import Button from '@/shared/components/Button';
 import DynamicT from '@/shared/components/DynamicT';
 import LoadingLayer from '@/shared/components/LoadingLayer';
 import PageMeta from '@/shared/components/PageMeta';
+import useInterfaceTranslation from '@/shared/hooks/use-interface-translation';
 import { getBrandingLogoUrl } from '@/shared/utils/logo';
 
 import styles from './index.module.scss';
@@ -25,6 +26,7 @@ import styles from './index.module.scss';
  * is trying to sign-in with another account (e.g., using a magic link).
  */
 const SwitchAccount = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const { experienceSettings, theme } = useContext(PageContext);
   const navigate = useNavigateWithPreservedSearchParams();
   const handleError = useErrorHandler();
@@ -68,7 +70,7 @@ const SwitchAccount = () => {
     <StaticPageLayout>
       <PageMeta titleKey="description.switch_account" />
       <div className={styles.container}>
-        {logoUrl && <img className={styles.logo} src={logoUrl} alt="app logo" />}
+        {logoUrl && <img className={styles.logo} src={logoUrl} alt={tUi('logo')} />}
         <div className={styles.title}>
           <DynamicT
             forKey="description.switch_account_title"

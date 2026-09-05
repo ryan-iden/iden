@@ -13,12 +13,14 @@ import DevPanel from './DevPanel';
 import congratsDark from './assets/congrats-dark.svg';
 import congrats from './assets/congrats.svg';
 import initI18n from './i18n/init';
+import useInterfaceTranslation from './i18n/use-interface-translation';
 import { isCloudBuild, productBrand } from './product-brand';
 import { getLocalData, setLocalData } from './utils';
 
 void initI18n();
 
 const Main = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const config = getLocalData('config');
   const params = new URL(window.location.href).searchParams;
   const { isAuthenticated, isLoading, getIdTokenClaims, signIn, signOut } = useLogto();
@@ -116,7 +118,7 @@ const Main = () => {
       <div className={styles.app}>
         <div className={styles.error}>
           <p>
-            Error occurred: {error}
+            {tUi('error')} {error}
             <br />
             {errorDescription}
           </p>
@@ -127,7 +129,7 @@ const Main = () => {
               window.location.assign('/demo-app');
             }}
           >
-            Reset config and retry
+            {tUi('reset_retry')}
           </button>
         </div>
       </div>
@@ -141,7 +143,7 @@ const Main = () => {
   return (
     <div className={styles.app}>
       <Helmet
-        title={`${productBrand.productName} Live Preview`}
+        title={`${productBrand.productName} · ${i18next.t('admin_console.general.live_preview')}`}
         htmlAttributes={{
           // We intentionally use the imported i18next instance instead of the hook, since the hook
           // will cause a re-render following some bugs here. This still works for the initial
@@ -158,7 +160,7 @@ const Main = () => {
             <span>{productBrand.productName}</span>
           </div>
         )}
-        {congratsIcon && <img src={congratsIcon} alt="Congrats" />}
+        {congratsIcon && <img src={congratsIcon} alt="" />}
         <div className={styles.title}>{t('title')}</div>
         <div className={styles.text}>{t('subtitle')}</div>
         <div className={styles.infoCard}>
@@ -197,7 +199,7 @@ const Main = () => {
             }
           }}
         >
-          {showDevPanel ? 'Close' : 'Open'} dev panel
+          {tUi(showDevPanel ? 'close_dev_panel' : 'open_dev_panel')}
         </div>
       </div>
     </div>

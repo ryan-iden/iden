@@ -6,11 +6,13 @@ import TextLink from '@/components/TextLink';
 import usePlatform from '@/hooks/use-platform';
 import useTextHandler from '@/hooks/use-text-handler';
 import Button from '@/shared/components/Button';
+import useInterfaceTranslation from '@/shared/hooks/use-interface-translation';
 import { type TotpBindingState } from '@/types/guard';
 
 import styles from './index.module.scss';
 
 const SecretSection = ({ secret, secretQrCode }: TotpBindingState) => {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation();
   const { isMobile } = usePlatform();
   const [isQrCodeFormat, setIsQrCodeFormat] = useState(!isMobile);
@@ -30,7 +32,7 @@ const SecretSection = ({ secret, secretQrCode }: TotpBindingState) => {
       <div className={styles.secretContent}>
         {isQrCodeFormat && secretQrCode && (
           <div className={styles.qrCode}>
-            <img src={secretQrCode} alt="QR code" />
+            <img src={secretQrCode} alt={tUi('qr_code')} />
           </div>
         )}
         {!isQrCodeFormat && (

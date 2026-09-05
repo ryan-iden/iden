@@ -39,6 +39,6 @@ describe('<Callback />', () => {
 
     const { getByText } = renderWithPageContext(<Callback />);
 
-    expect(getByText(/couldn't complete the sign in callback/i)).toBeTruthy();
+    expect(getByText('interface.callback_failed')).toBeTruthy();
   });
 });

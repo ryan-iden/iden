@@ -10,7 +10,6 @@ export const productBrand = resolveBrandProfile(isCloudBuild);
 
 export const applyProductBrandToDocument = () => {
   Reflect.set(document.documentElement.dataset, 'productBrand', productBrand.id);
-  Reflect.set(document, 'title', `${productBrand.productName} Device Flow Demo`);
   if (!isCloudBuild) {
     installSelfHostedHelpNavigation();
     const favicon = document.querySelector<HTMLLinkElement>('link[rel~="icon"]');

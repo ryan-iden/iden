@@ -6,7 +6,7 @@ const sign_in_exp = {
   page_title: '登錄體驗',
   page_title_with_account: '登錄與帳戶',
   title: '登錄與帳戶',
-  description: '自定義身份驗證流程和 UI，並實時預覽開箱即用的體驗。',
+  description: '自定義身份驗證流程和介面，並實時預覽開箱即用的體驗。',
   tabs: {
     branding: '品牌',
     sign_up_and_sign_in: '註冊與登錄',
@@ -24,10 +24,10 @@ const sign_in_exp = {
   color: {
     title: '顏色',
     primary_color: '品牌顏色',
-    dark_primary_color: '品牌顏色 (深色)',
+    dark_primary_color: '品牌顏色(深色)',
     dark_mode: '開啟深色模式',
     dark_mode_description:
-      '基於品牌顏色和 Logto 的算法，應用將會有一個自動生成的深色模式。當然，你可以自定義和修改。',
+      '基於品牌顏色和Logto的算法，應用將會有一個自動生成的深色模式。當然，你可以自定義和修改。',
     dark_mode_reset_tip: '基於品牌顏色，重新生成深色模式顏色。',
     reset: '重新生成',
   },
@@ -39,74 +39,73 @@ const sign_in_exp = {
     app_logo_and_favicon: '應用程式標誌和圖標',
     company_logo_and_favicon: '公司標誌和圖標',
     organization_logo_and_favicon: '組織標誌和圖標',
-    hide_logto_branding: '隱藏 Logto 品牌',
+    hide_logto_branding: '隱藏Logto品牌',
     hide_logto_branding_description:
       '移除「Powered by Logto」。以乾淨、專業的登入體驗突顯你的品牌。',
   },
   branding_uploads: {
     app_logo: {
       title: '應用程式標誌',
-      url: '應用程式標誌 URL',
+      url: '應用程式標誌網址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
       error: '應用程式標誌：{{error}}',
     },
     company_logo: {
       title: '公司標誌',
-      url: '公司標誌 URL',
+      url: '公司標誌網址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
       error: '公司標誌：{{error}}',
     },
     organization_logo: {
       title: '上傳圖片',
-      url: '組織標誌 URL',
+      url: '組織標誌網址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
       error: '組織標誌：{{error}}',
     },
     connector_logo: {
       title: '上傳圖片',
-      url: '連接器標誌 URL',
+      url: '連接器標誌網址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
       error: '連接器標誌：{{error}}',
     },
     favicon: {
       title: '圖標',
-      url: '圖標 URL',
+      url: '圖標網址',
       url_placeholder: 'https://your.cdn.domain/favicon.ico',
       error: '圖標：{{error}}',
     },
   },
   custom_ui: {
-    title: '自定義 UI',
-    css_code_editor_title: '自定義 CSS',
-    css_code_editor_field_title: 'CSS 覆寫',
-    css_code_editor_description1: '查看自定義 CSS 示例。',
+    title: '自定義介面',
+    css_code_editor_title: '自定義階層式樣式表（CSS）',
+    css_code_editor_field_title: '階層式樣式表（CSS）覆寫',
+    css_code_editor_description1: '查看自定義階層式樣式表（CSS）示例。',
     css_code_editor_description2: '<a>{{link}}</a>',
     css_code_editor_description_link_content: '了解更多',
     css_code_editor_content_placeholder:
-      '在此輸入你的 CSS 覆寫規則，以按你的具體要求調整任何內容的樣式。發揮你的創意，讓你的 UI 脫穎而出。',
-    bring_your_ui_title: '帶上你的 UI',
-    bring_your_ui_upload_title: '上傳自訂 UI 資源',
-    bring_your_ui_description:
-      '上傳壓縮包 (.zip) 以用自己的代碼替換 Logto 預建的 UI。<a>了解更多</a>',
+      '在此輸入你的階層式樣式表（CSS）覆寫規則，以按你的具體要求調整任何內容的樣式。發揮你的創意，讓你的介面脫穎而出。',
+    bring_your_ui_title: '帶上你的介面',
+    bring_your_ui_upload_title: '上傳自訂介面資源',
+    bring_your_ui_description: '上傳壓縮包(.zip)以用自己的代碼替換Logto預建的介面。<a>了解更多</a>',
     preview_with_bring_your_ui_description:
-      '你的自定義 UI 資源已成功上傳，現在正在提供服務。因此，內建預覽窗口已被禁用。\n要測試你的個性化登錄 UI，請點擊“實時預覽”按鈕在新瀏覽器標籤頁中打開。',
-    csp_description: '為你的自訂登入 UI 允許額外的來源表達式。這些值只會在提供自訂 UI 資源時套用。',
+      '你的自定義介面資源已成功上傳，現在正在提供服務。因此，內建預覽窗口已被禁用。\n要測試你的個性化登錄介面，請點擊“實時預覽”按鈕在新瀏覽器標籤頁中打開。',
+    csp_description: '為你的自訂登入介面允許額外的來源表達式。這些值只會在提供自訂介面資源時套用。',
     csp_script_src: '允許的 script-src',
     csp_script_src_tip:
-      '允許你的自訂 UI 載入腳本時使用的 HTTPS 來源表達式，例如 https://scripts.example.com 或 https://*.example.com。',
+      '允許你的自訂介面載入腳本時使用的 HTTPS 來源表達式，例如 https://scripts.example.com 或 https://*.example.com。',
     csp_connect_src: '允許的 connect-src',
     csp_connect_src_tip:
-      '允許你的自訂 UI 發送網絡請求時使用的 HTTPS 或 WSS 來源表達式，例如 https://api.example.com 或 wss://events.example.com。',
+      '允許你的自訂介面發送網絡請求時使用的 HTTPS 或 WSS 來源表達式，例如 https://api.example.com 或 wss://events.example.com。',
     csp_source_invalid_error:
-      '請輸入有效的來源表達式。請使用 https:// URL；connect-src 亦支援 wss://。不支援 CSP 關鍵字和分號。',
+      '請輸入有效的來源表達式。請使用 https:// 網址；connect-src 亦支援 wss://。不支援內容安全政策關鍵字和分號。',
     csp_source_duplicate_error: '此來源表達式已在列表中。',
   },
   account_center: {
     title: '帳戶中心',
-    description: '使用 Logto API 自訂你的帳戶中心流程。',
-    enable_account_api: '啟用帳戶中心和 Account API',
+    description: '使用Logto介面自訂你的帳戶中心流程。',
+    enable_account_api: '啟用帳戶中心和帳戶介面',
     enable_account_api_description:
-      '同時啟用面向使用者的 Account API 和 Logto 的開箱即用帳戶中心。關閉後，這兩項功能都將不可用。',
+      '同時啟用面向使用者的帳戶介面和 Logto 的開箱即用帳戶中心。關閉後，這兩項功能都將不可用。',
     field_options: {
       off: '關閉',
       edit: '可編輯',
@@ -118,11 +117,11 @@ const sign_in_exp = {
       account_security: {
         title: '帳戶安全',
         description:
-          '管理對 Account API 的存取權限，讓使用者在登入應用程式後，可以檢視或編輯身份資訊與驗證因素。',
+          '管理對帳戶介面的存取權限，讓使用者在登入應用程式後，可以檢視或編輯身份資訊與驗證因素。',
         security_verification: {
           title: '安全驗證',
           description:
-            '在變更安全設定之前，使用者必須驗證身份以取得有效期 10 分鐘的驗證紀錄 ID。要啟用驗證方式（電郵、手機、密碼），請將下方的 Account API 權限設定為<strong>唯讀</strong>（最低要求）或<strong>可編輯</strong>，以便系統偵測使用者是否已配置。<a>了解更多</a>',
+            '在變更安全設定之前，使用者必須驗證身份以取得有效期 10 分鐘的驗證紀錄識別碼。要啟用驗證方式（電郵、手機、密碼），請將下方的帳戶介面權限設定為<strong>唯讀</strong>（最低要求）或<strong>可編輯</strong>，以便系統偵測使用者是否已配置。<a>了解更多</a>',
         },
         groups: {
           identifiers: {
@@ -138,8 +137,7 @@ const sign_in_exp = {
       },
       user_profile: {
         title: '使用者檔案',
-        description:
-          '管理對 Account API 的存取，讓使用者在登入後可以檢視或編輯基礎或自訂的檔案資料。',
+        description: '管理對帳戶介面的存取，讓使用者在登入後可以檢視或編輯基礎或自訂的檔案資料。',
         groups: {
           profile_data: {
             title: '檔案資料',
@@ -149,12 +147,12 @@ const sign_in_exp = {
       secret_vault: {
         title: '密鑰保險庫',
         description:
-          '適用於社交及企業連接器，安全儲存第三方存取權杖以呼叫其 API（例如新增事件至 Google 日曆）。',
+          '適用於社交及企業連接器，安全儲存第三方存取權杖以呼叫其介面（例如新增事件至Google日曆）。',
         third_party_token_storage: {
           title: '第三方權杖',
           third_party_access_token_retrieval: '第三方存取權杖擷取',
           third_party_token_tooltip: '如需儲存權杖，可在相應的社交或企業連接器設定中啟用此選項。',
-          third_party_token_description: '啟用 Account API 後，第三方權杖擷取會自動啟用。',
+          third_party_token_description: '啟用帳戶介面後，第三方權杖擷取會自動啟用。',
         },
       },
     },
@@ -165,14 +163,15 @@ const sign_in_exp = {
       password: '密碼',
       mfa: '多重驗證',
       mfa_description: '允許使用者於帳戶中心管理其多重驗證方式。',
-      passkey: 'Passkey',
+      passkey: '通行金鑰',
       username: '使用者名稱',
       name: '姓名',
       avatar: '頭像',
       profile: '檔案',
       profile_description: '控制對結構化檔案屬性的存取權。',
       custom_data: '自訂資料',
-      custom_data_description: '控制對儲存在使用者上的自訂 JSON 資料的存取權。',
+      custom_data_description:
+        '控制對儲存在使用者上的自訂JavaScript物件表示法（JSON）資料的存取權。',
       sessions: '會話',
       trusted_devices: '受信任裝置',
     },
@@ -192,17 +191,16 @@ const sign_in_exp = {
           '要新增此欄位，請先在下方用戶資料部分中將「自訂資料」權限設定為「可編輯/唯讀」。',
       },
     },
-    webauthn_related_origins: 'WebAuthn 關聯來源',
-    webauthn_related_origins_description:
-      '新增允許透過 Account API 註冊通行密鑰的前端應用程式網域。',
+    webauthn_related_origins: '網路身分驗證（WebAuthn）關聯來源',
+    webauthn_related_origins_description: '新增允許透過帳戶介面註冊通行密鑰的前端應用程式網域。',
     webauthn_related_origins_error: '來源必須以 https:// 或 http:// 開頭',
     delete_account_url: '刪除帳號',
-    delete_account_url_description: '提供你自己的端點 URL，以使用自訂邏輯處理帳號刪除。',
+    delete_account_url_description: '提供你自己的端點網址，以使用自訂邏輯處理帳號刪除。',
     organization_center: {
       title: '組織中心',
       description: '設定預建組織體驗，讓最終用戶建立組織並進行自主管理。',
       enabled: '啟用組織中心',
-      enabled_description: '在預建帳戶中心中開放組織管理，並啟用面向用戶的組織 API。',
+      enabled_description: '在預建帳戶中心中開放組織管理，並啟用面向用戶的組織介面。',
       preview: '開啟組織中心預覽',
       modules: '可用模組',
       creation_policy: '建立組織',
@@ -210,17 +208,17 @@ const sign_in_exp = {
       creation_disabled: '任何人都不可以',
       creation_all: '所有已登入用戶',
       creation_roles: '擁有指定全域角色的用戶',
-      allowed_roles: '允許的全域角色 ID',
-      allowed_roles_description: '使用逗號分隔角色 ID，僅在指定角色策略下生效。',
+      allowed_roles: '允許的全域角色識別碼',
+      allowed_roles_description: '使用逗號分隔角色識別碼，僅在指定角色策略下生效。',
       creation_limit: '每位用戶最多建立的組織數',
       invitation_policy: '邀請',
       invitation_registration: '允許受邀用戶註冊',
       invitation_expiry: '邀請有效期（天）',
       resource_allowlist: '共用資源允許清單',
-      sso_connectors: '企業 SSO 連接器 ID',
-      applications: '機器對機器應用程式 ID',
-      business_roles: '組織業務角色 ID',
-      allowlist_description: '使用逗號分隔 ID，留空表示不共用任何資源。',
+      sso_connectors: '企業單一登入連接器識別碼',
+      applications: '機器對機器應用程式識別碼',
+      business_roles: '組織業務角色識別碼',
+      allowlist_description: '使用逗號分隔識別碼，留空表示不共用任何資源。',
       module_labels: {
         profile: '組織資料',
         branding: '品牌',
@@ -228,27 +226,27 @@ const sign_in_exp = {
         invitations: '邀請',
         managementRoles: '管理角色',
         businessRoles: '業務角色',
-        security: '安全與 MFA',
-        jit: 'JIT 佈建',
-        applications: 'M2M 應用程式',
+        security: '安全與多因素驗證',
+        jit: '即時佈建佈建',
+        applications: '機器對機器應用程式',
         activity: '活動',
         deletion: '刪除組織',
       },
     },
     prebuilt_ui: {
-      title: '整合預建 UI',
+      title: '整合預建介面',
       description: '快速整合帳戶中心、安全驗證或單一資料更新流程等開箱即用的流程。',
       permission_notice:
-        '要整合這些預建流程，請在下方設定中將相關的帳戶 API 權限設為<strong>編輯</strong>。',
+        '要整合這些預建流程，請在下方設定中將相關的帳戶介面權限設為<strong>編輯</strong>。',
       account_center_title: '整合開箱即用的帳戶中心',
       account_center_description:
-        '將用戶路由到帳戶中心，以管理電郵地址、電話號碼、使用者名稱、密碼、MFA 和關聯帳號等安全設定。',
+        '將用戶路由到帳戶中心，以管理電郵地址、電話號碼、使用者名稱、密碼、多因素驗證和關聯帳號等安全設定。',
       flows_title: '整合開箱即用的安全設置流程',
       single_task_flows_title: '整合開箱即用的單一資料更新流程',
       flows_description:
-        '結合你的域名與路徑形成你的帳戶設置 URL（例如，https://auth.foo.com/account/email）。可以選擇性地添加 `redirect=` 在成功更新後返回用戶至你的應用程式，添加 `show_success=true` 以保持成功頁面可見，添加 `ui_locales=` 以覆蓋預設語言，或添加 `identifier=` 以預填識別碼輸入欄位。',
+        '結合你的域名與路徑形成你的帳戶設置網址（例如，https://auth.foo.com/account/email）。可以選擇性地添加 `redirect=` 在成功更新後返回用戶至你的應用程式，添加 `show_success=true` 以保持成功頁面可見，添加 `ui_locales=` 以覆蓋預設語言，或添加 `identifier=` 以預填識別碼輸入欄位。',
       single_task_flows_description:
-        '結合你的域名與路徑形成你的個人資料更新 URL（例如，https://auth.foo.com/account/profile）。可以選擇性地添加 `redirect=` 在成功更新後返回用戶至你的應用程式，或添加 `ui_locales=` 以覆蓋預設語言。',
+        '結合你的域名與路徑形成你的個人資料更新網址（例如，https://auth.foo.com/account/profile）。可以選擇性地添加 `redirect=` 在成功更新後返回用戶至你的應用程式，或添加 `ui_locales=` 以覆蓋預設語言。',
       tooltips: {
         email: '更新你的主電郵地址',
         phone: '更新你的主電話號碼',
@@ -264,23 +262,23 @@ const sign_in_exp = {
         backup_codes_generate: '生成一組新的 10 個備份代碼',
         backup_codes_manage: '查看可用的備份代碼或生成新的',
         account_center:
-          '訪問帳戶中心以管理電郵地址、電話號碼、使用者名稱、密碼、MFA 和關聯帳號等安全設定',
+          '訪問帳戶中心以管理電郵地址、電話號碼、使用者名稱、密碼、多因素驗證和關聯帳號等安全設定',
         profile: '管理個人資料（如姓名、頭像）的中心樞紐',
         sessions: '查看和管理你在各裝置上的活躍會話',
       },
       customize_note: '不想要開箱即用的體驗？你可以完全',
-      customize_link: '使用 Account API 自定義你的流程。',
+      customize_link: '使用帳戶介面自定義你的流程。',
     },
     custom_css: {
-      title: '自定義 CSS',
-      description: '使用自定義 CSS 自定義帳戶中心的外觀。',
+      title: '自定義階層式樣式表（CSS）',
+      description: '使用自定義階層式樣式表（CSS）自定義帳戶中心的外觀。',
     },
   },
   sign_up_and_sign_in,
   content,
   setup_warning: {
     no_connector_sms:
-      '尚未設置 SMS 短信連接器。在完成該配置前，用戶將無法通過此登錄方式登錄。<a>{{link}}</a>連接器。',
+      '尚未設定短訊（SMS）連接器。在完成設定前，用戶將無法透過此登入方式登入。<a>{{link}}</a>連接器。',
     no_connector_email:
       '尚未設置電子郵件連接器。在完成該配置前，用戶將無法通過此登錄方式登錄。<a>{{link}}</a>連接器。',
     no_connector_social:
@@ -288,9 +286,9 @@ const sign_in_exp = {
     no_connector_email_account_center:
       '尚未設置電子郵件連接器。請在<a>「郵件與短信連接器」</a>中設置。',
     no_connector_sms_account_center:
-      '尚未設置 SMS 短信連接器。請在<a>「郵件與短信連接器」</a>中設置。',
+      '尚未設定短訊（SMS）連接器。請在<a>「電郵與短訊連接器」</a>中設定。',
     no_connector_social_account_center: '尚未設置社交連接器。請在<a>「社交連接器」</a>中設置。',
-    no_mfa_factor: '尚未設置 MFA 因子。請在<a>{{link}}</a>中完成設定。',
+    no_mfa_factor: '尚未設置多因素驗證因子。請在<a>{{link}}</a>中完成設定。',
     setup_link: '立即設置',
   },
   save_alert: {

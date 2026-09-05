@@ -1,26 +1,36 @@
+import { Trans } from 'react-i18next';
+
 import { isCloud } from '@/consts/env';
 import InlineNotification from '@/ds-components/InlineNotification';
 import TextLink from '@/ds-components/TextLink';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 
 type Props = {
   readonly variant?: 'access' | 'replace';
 };
 
-function CustomDomainEndpointNotice({ variant = 'access' }: Props) {
+function CustomDomainEndpointNotice(_props: Props) {
+  const { t } = useInterfaceTranslation();
   if (!isCloud) {
     return null;
   }
 
   return (
     <InlineNotification>
-      After adding{' '}
-      <TextLink href="https://docs.logto.io/logto-cloud/custom-domain" targetBlank="noopener">
-        custom domains
-      </TextLink>
-      {variant === 'replace'
-        ? ', you can replace the Logto endpoint with '
-        : ', you can access endpoints at '}
-      <code>{'https://{{custom_domain}}/'}</code>.
+      <Trans
+        t={t}
+        i18nKey="custom_domains_notice"
+        values={{ endpoint: 'https://{{custom_domain}}/' }}
+        components={{
+          a: (
+            <TextLink
+              href="https://docs.logto.io/logto-cloud/custom-domain"
+              targetBlank="noopener"
+            />
+          ),
+          code: <code />,
+        }}
+      />
     </InlineNotification>
   );
 }

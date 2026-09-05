@@ -4,9 +4,9 @@ import usage from './usage.js';
 
 const subscription = {
   free_plan: '免費方案',
-  free_plan_description: '適用於旁邊項目和開始使用 Logto 的試用。無需信用卡。',
+  free_plan_description: '適用於旁邊項目和開始使用Logto的試用。無需信用卡。',
   pro_plan: '專業方案',
-  pro_plan_description: '企業無憂享受 Logto 服務。',
+  pro_plan_description: '企業無憂享受Logto服務。',
   enterprise: '企業方案',
   enterprise_description: '適用於具有企業級要求的大型團隊和企業。',
   admin_plan: '管理員方案',
@@ -25,7 +25,7 @@ const subscription = {
   upgrade_pro: '升級專業',
   update_payment: '更新付款信息',
   payment_error:
-    '偵測到付款問題。無法處理以前週期的 {{price, number}}$ 。更新付款以避免 Logto 服務中止。',
+    '偵測到付款問題。無法處理以前週期的 {{price, number}}$ 。更新付款以避免Logto服務中止。',
   downgrade: '降級',
   current: '當前',
   upgrade: '升級',
@@ -45,8 +45,7 @@ const subscription = {
   quota_item,
   cancel_feedback_modal: {
     title: '很遺憾你要離開',
-    description:
-      '你的訂閱已取消。你的回饋將幫助我們把 Logto 做得更好。每一則回覆我們都會認真閱讀。',
+    description: '你的訂閱已取消。你的回饋將幫助我們把Logto做得更好。每一則回覆我們都會認真閱讀。',
     what_made_you_cancel: '是什麼讓你決定取消？',
     how_to_reconsider: '我們做些什麼能讓你重新考慮？',
   },
@@ -64,7 +63,7 @@ const subscription = {
     downgrade_help_tip: '需要降級幫助？<a>聯絡我們</a>。',
     upgrade_title: '致尊敬的早期採用者的友善提醒',
     upgrade_description:
-      '你目前的使用量超過了 <name /> 允許的範圍。Logto 現已正式發布，包括針對每個計劃量身定制的功能。在考慮升級到 <name /> 之前，請確保你符合以下升級條件。',
+      '你目前的使用量超過了 <name /> 允許的範圍。Logto現已正式發布，包括針對每個計劃量身定制的功能。在考慮升級到 <name /> 之前，請確保你符合以下升級條件。',
     upgrade_pro_tip: ' 或者考慮升級到專業版計劃。',
     upgrade_help_tip: '需要升級幫助？<a>聯絡我們</a>。',
     a_maximum_of: '最多<item/>',
@@ -77,8 +76,8 @@ const subscription = {
   token_usage_notification: {
     exceeded: '你已超過 100% 的配額限制。使用者將無法正常登入。請立即升級以避免任何不便。',
     close_to_limit:
-      '你幾乎達到令牌使用限制。如果使用量超過 100%，Logto 將停止提供令牌。請升級免費方案以避免任何不便。',
-    dev_plan_exceeded: "此租戶已達到 Logto's 實體限制政策的令牌限制。",
+      '你幾乎達到令牌使用限制。如果使用量超過 100%，Logto將停止提供令牌。請升級免費方案以避免任何不便。',
+    dev_plan_exceeded: "此租戶已達到Logto's實體限制政策的令牌限制。",
   },
 };
 

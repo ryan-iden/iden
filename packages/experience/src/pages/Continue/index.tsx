@@ -21,7 +21,7 @@ const Continue = () => {
   const [, continueFlowState] = validate(state, continueFlowStateGuard);
 
   if (!continueFlowState) {
-    return <ErrorPage title="error.invalid_session" rawMessage="flow state not found" />;
+    return <ErrorPage title="error.invalid_session" />;
   }
 
   const { interactionEvent } = continueFlowState;

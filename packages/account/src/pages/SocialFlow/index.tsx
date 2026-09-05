@@ -62,7 +62,6 @@ const SocialFlow = ({ mode }: Props) => {
     [connectorId, experienceSettings?.socialConnectors]
   );
   const hasLinkedConnector = Boolean(connector && userInfo?.identities?.[connector.target]);
-  const duplicateBindingMessage = 'You have already associated this social account.';
   const connectorName = connector ? getLocalizedConnectorName(connector, language) : undefined;
   const storedSocialFlow = connectorId ? accountStorage.socialFlow.get(connectorId) : undefined;
   const canSkipVerification = canManageSocialIdentitiesWithoutVerification(userInfo);
@@ -317,7 +316,7 @@ const SocialFlow = ({ mode }: Props) => {
     return (
       <ErrorPage
         titleKey="error.something_went_wrong"
-        rawMessage={duplicateBindingMessage}
+        messageKey="interface.social_account_already_linked"
         action={{
           titleKey: 'action.back',
           onClick: () => {

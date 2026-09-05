@@ -53,7 +53,7 @@ const sign_up_and_sign_in = {
     settings_title: '社交登錄體驗',
     automatic_account_linking: '自動鏈接具有相同標識的帳戶',
     automatic_account_linking_tip:
-      '啟用後，如果用戶使用新的社交身份登錄，並且恰好有一個具有相同標識（例如，郵件地址）的現有帳戶，Logto 將自動將該社交身份鏈接到該帳戶。用戶將不會被要求選擇是否鏈接帳戶。',
+      '啟用後，如果用戶使用新的社交身份登錄，並且恰好有一個具有相同標識（例如，郵件地址）的現有帳戶，Logto將自動將該社交身份鏈接到該帳戶。用戶將不會被要求選擇是否鏈接帳戶。',
     required_sign_up_identifiers: '要求用戶提供遺漏的註冊標識',
     required_sign_up_identifiers_tip:
       '啟用後，通過社交提供商登錄的用戶在完成登錄之前必須填寫任何遺漏的註冊標識（例如，郵件）。\n\n若禁用，則用戶即使社交帳戶未同步，也可以在不提供遺漏標識的情況下繼續。',
@@ -76,8 +76,8 @@ const sign_up_and_sign_in = {
     password_auth: '因註冊設置裏你啟用了用戶名密碼標識。這個資訊在用戶登錄時，屬於必選項。',
     verification_code_auth:
       '因註冊設置裏你啟用了驗證碼標識，驗證碼屬於用戶必選項。開啟密碼註冊後，你可以選擇關閉驗證碼登錄。',
-    email_mfa_enabled: '郵件驗證碼已經啟用為 MFA，因安全起見，無法重複用作主要登錄方式。',
-    phone_mfa_enabled: '電話驗證碼已經啟用為 MFA，因安全起見，無法重複用作主要登錄方式。',
+    email_mfa_enabled: '郵件驗證碼已經啟用為多因素驗證，因安全起見，無法重複用作主要登錄方式。',
+    phone_mfa_enabled: '電話驗證碼已經啟用為多因素驗證，因安全起見，無法重複用作主要登錄方式。',
     delete_sign_in_method:
       '因註冊設置裏你啟用了{{identifier}}標識。這些資訊在用戶登錄時，屬於必選項。',
     password_disabled_notification:
@@ -85,19 +85,19 @@ const sign_up_and_sign_in = {
   },
   advanced_options: {
     title: '進階選項',
-    enable_single_sign_on: '啟用企業單一登錄 (SSO)',
+    enable_single_sign_on: '啟用企業單一登錄(單一登入)',
     enable_single_sign_on_description: '啟用用戶使用企業身份進行應用程式的單一登錄。',
     single_sign_on_hint: {
       prefix: '前往',
-      link: '“企業 SSO”',
+      link: '“企業單一登入”',
       suffix: '部分設置更多企業連接器。',
     },
     enable_user_registration: '啟用用戶註冊',
     enable_user_registration_description:
       '啟用或禁止用戶註冊。禁用後，管理控制臺仍然可以添加用戶，但用戶無法通過登錄界面建立帳戶。',
-    unknown_session_redirect_url: '未知 Session 重新導向 URL',
+    unknown_session_redirect_url: '未知Session重新導向網址',
     unknown_session_redirect_url_tip:
-      '有時，Logto 可能無法識別用戶在登錄頁面的 Session，比如 Session 過期或用戶書籤或分享錄入連結時。預設顯示"未知 Session" 404 錯誤。為增強用戶體驗，設定一個回退 URL，將用戶重定向回應用程式並重啟身份認證。',
+      '有時，Logto可能無法識別用戶在登錄頁面的Session，比如Session過期或用戶書籤或分享錄入連結時。預設顯示"未知Session" 404 錯誤。為增強用戶體驗，設定一個回退網址，將用戶重定向回應用程式並重啟身份認證。',
   },
   username_policy: {
     title: '使用者名稱政策',

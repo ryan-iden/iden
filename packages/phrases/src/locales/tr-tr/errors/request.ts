@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: 'Bu alıcıya çok fazla mesaj gönderildi. Lütfen daha sonra yeniden deneyin.',
   invalid_input: 'Girdi geçersiz. {{details}}',
   general: 'İstek hatası oluştu.',
   range_not_satisfiable: 'Aralık karşılanamıyor.',

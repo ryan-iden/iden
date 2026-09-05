@@ -10,6 +10,7 @@ import FormField from '@/ds-components/FormField';
 import ModalLayout from '@/ds-components/ModalLayout';
 import TextInput from '@/ds-components/TextInput';
 import useApi from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import modalStyles from '@/scss/modal.module.scss';
 import { trySubmitSafe } from '@/utils/form';
 
@@ -25,6 +26,7 @@ type Props = {
 };
 
 function EditSecretModal({ appId, secret, isOpen, onClose }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const {
     register,
@@ -73,7 +75,7 @@ function EditSecretModal({ appId, secret, isOpen, onClose }: Props) {
           <TextInput
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
-            placeholder="My secret"
+            placeholder={tUi('my_secret')}
             error={Boolean(errors.name)}
             {...register('name', { required: true })}
           />

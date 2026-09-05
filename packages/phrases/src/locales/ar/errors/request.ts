@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: 'تم إرسال رسائل كثيرة إلى هذا المستلم. يرجى المحاولة لاحقًا.',
   invalid_input: 'الإدخال غير صالح. {{details}}',
   general: 'حدث خطأ في الطلب.',
   range_not_satisfiable: 'النطاق غير قابل للتحقق.',

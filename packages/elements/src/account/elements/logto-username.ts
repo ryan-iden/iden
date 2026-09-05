@@ -17,7 +17,7 @@ export class LogtoUsername extends LogtoProfileItemElement {
   }
 
   protected getItemLabelInfo() {
-    return { icon: usernameIcon, label: 'Username' };
+    return { icon: usernameIcon, label: this.localization.message('username') };
   }
 
   protected renderContent(): TemplateResult {
