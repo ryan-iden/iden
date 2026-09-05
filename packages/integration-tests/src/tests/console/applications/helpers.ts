@@ -78,7 +78,7 @@ export const expectToProceedSdkGuide = async (
   expect(page.url()).toContain(`/guide/${guideFilename}`);
 
   await expect(page).toClick('.ReactModalPortal aside[class$=sample] a span', {
-    text: 'Check out sample',
+    text: 'View sample',
   });
 
   await expectToOpenNewPage(

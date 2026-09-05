@@ -160,7 +160,7 @@ const Main = () => {
             <span>{productBrand.productName}</span>
           </div>
         )}
-        {congratsIcon && <img src={congratsIcon} alt="" />}
+        {congratsIcon && <img src={congratsIcon} alt={t('title')} />}
         <div className={styles.title}>{t('title')}</div>
         <div className={styles.text}>{t('subtitle')}</div>
         <div className={styles.infoCard}>
