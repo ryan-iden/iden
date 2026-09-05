@@ -63,8 +63,8 @@ describe('webhooks', () => {
     await expectNavigation(page.goto(appendPathname('/console/webhooks', logtoConsoleUrl).href));
 
     await expect(page).toClick('div[class$=main] div[class$=headline] > button');
-    await expect(page).toClick('span[class$=label]', { text: 'PostRegister' });
-    await expect(page).toClick('span[class$=label]', { text: 'User.Create' });
+    await expect(page).toClick('span[class$=label]', { text: 'SIGN UP' });
+    await expect(page).toClick('span[class$=label]', { text: 'User · Create' });
     await expect(page).toFill('input[name=name]', 'hook_name');
     await expect(page).toFill('input[name=url]', 'http://localhost/webhook');
     await expect(page).toClick('button[type=submit]');

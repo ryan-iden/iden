@@ -36,7 +36,7 @@ export default class ExpectTotpExperience extends ExpectMfaExperience {
     // Wait for the form to commit automatically
     await waitFor(500);
     if (signingInAfterBinding) {
-      await this.page.waitForSelector('img[alt="Congrats"]');
+      await this.page.waitForSelector('img[src*="congrats"]');
     }
 
     return secret;
@@ -59,7 +59,7 @@ export default class ExpectTotpExperience extends ExpectMfaExperience {
     // Wait for the form to commit automatically
     await waitFor(500);
     if (signingInAfterVerification) {
-      await this.page.waitForSelector('img[alt="Congrats"]');
+      await this.page.waitForSelector('img[src*="congrats"]');
     }
   }
 

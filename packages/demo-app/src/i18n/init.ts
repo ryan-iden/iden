@@ -24,6 +24,8 @@ const initI18n = async (language?: LanguageTag) =>
         ])
       ),
       fallbackLng: 'en',
+      ns: ['translation', 'interface'],
+      defaultNS: 'translation',
       interpolation: {
         escapeValue: false,
       },

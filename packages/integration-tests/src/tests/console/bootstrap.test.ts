@@ -218,7 +218,7 @@ describe('smoke testing for console admin account creation and sign-in', () => {
 
   it(`should ${isDevFeaturesEnabled ? '' : 'not '}show the dev features label`, async () => {
     await (isDevFeaturesEnabled
-      ? expect(page).toMatchElement('div', { text: 'Dev features enabled' })
-      : expect(page).not.toMatchElement('div', { text: 'Dev features enabled' }));
+      ? expect(page).toMatchElement('div', { text: 'Development features enabled' })
+      : expect(page).not.toMatchElement('div', { text: 'Development features enabled' }));
   });
 });
