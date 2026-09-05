@@ -15,7 +15,7 @@ export type ModelSettings = {
   /** The icon of the model, will be displayed on the tab */
   icon?: React.ReactNode;
   /** The title of the model */
-  title: string;
+  title: React.ReactNode;
   /** The default value of the file */
   defaultValue?: string;
   value?: string;

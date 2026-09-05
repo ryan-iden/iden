@@ -3,13 +3,14 @@ const single_sign_on = {
   duplicated_domains: '存在重复的域名。',
   invalid_domain_format: '无效的域名格式。',
   duplicate_connector_name: '连接器名称已存在。请选择不同的名称。',
-  idp_initiated_authentication_not_supported: 'IdP 发起的身份验证仅支持 SAML 连接器。',
+  idp_initiated_authentication_not_supported:
+    '身份提供商发起的身份验证仅支持安全断言标记语言（SAML）连接器。',
   idp_initiated_authentication_invalid_application_type:
     '无效的应用程序类型。仅允许 {{type}} 应用程序。',
   idp_initiated_authentication_redirect_uri_not_registered:
-    'redirect_uri 未注册。请检查应用程序设置。',
+    'redirect_uri未注册。请检查应用程序设置。',
   idp_initiated_authentication_client_callback_uri_not_found:
-    '未找到客户端 IdP 发起的身份验证回调 URI。请检查连接器设置。',
+    '未找到客户端身份提供商发起的身份验证回调地址。请检查连接器设置。',
   sso_signing_unavailable: '无法通过你的身份提供商完成登录。请联系管理员。',
   can_not_delete_active_signing_key: '无法删除当前启用的签名密钥。请先启用其他密钥或停用此密钥。',
   can_not_deactivate_signing_key_in_use:

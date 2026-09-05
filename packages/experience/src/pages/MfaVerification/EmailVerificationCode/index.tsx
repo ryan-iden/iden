@@ -24,7 +24,7 @@ const EmailVerificationCode = () => {
   // VerificationId not found
   const verificationId = verificationIdsMap[codeVerificationTypeMap.email];
   if (!verificationId) {
-    return <ErrorPage title="error.invalid_session" rawMessage="Verification ID not found" />;
+    return <ErrorPage title="error.invalid_session" />;
   }
 
   const maskedEmail = flowState.maskedIdentifiers?.[MfaFactor.EmailVerificationCode];

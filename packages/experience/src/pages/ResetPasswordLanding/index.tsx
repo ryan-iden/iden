@@ -51,7 +51,6 @@ const ResetPasswordLanding = () => {
         isNavbarHidden
         title="error.invalid_link"
         message={magicLinkError.message ?? 'error.invalid_link_description'}
-        rawMessage={magicLinkError.rawMessage}
       />
     );
   }

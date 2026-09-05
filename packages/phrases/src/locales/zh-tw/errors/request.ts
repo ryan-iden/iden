@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: '傳送給此收件者的訊息過多，請稍後重試。',
   invalid_input: '輸入無效。{{details}}',
   general: '發生請求錯誤。',
   range_not_satisfiable: '範圍不滿足。',

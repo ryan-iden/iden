@@ -6,10 +6,12 @@ import { useTranslation } from 'react-i18next';
 import PageContext from '@ac/Providers/PageContextProvider/PageContext';
 import UserMenu from '@ac/components/UserMenu';
 import { layoutClassNames } from '@ac/constants/layout';
+import useInterfaceTranslation from '@ac/hooks/use-interface-translation';
 
 import styles from './index.module.scss';
 
 const PageHeader = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation();
   const { theme, experienceSettings } = useContext(PageContext);
 
@@ -26,7 +28,7 @@ const PageHeader = () => {
       <div className={styles.left}>
         {logoUrl && (
           <>
-            <img className={styles.logo} src={logoUrl} alt="logo" />
+            <img className={styles.logo} src={logoUrl} alt={tUi('logo')} />
             <div className={styles.divider} />
           </>
         )}

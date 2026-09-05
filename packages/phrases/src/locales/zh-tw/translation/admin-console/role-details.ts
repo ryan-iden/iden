@@ -10,16 +10,16 @@ const role_details = {
   permissions_tab: '權限',
   settings: '設置',
   settings_description:
-    '角色是一組權限，可以分配給用戶。它們還提供了一種聚合不同 API 定義的權限的方法，使得添加、刪除或調整權限比將其單獨分配給用戶更有效率。',
+    '角色是一組權限，可以分配給用戶。它們還提供了一種聚合不同介面定義的權限的方法，使得添加、刪除或調整權限比將其單獨分配給用戶更有效率。',
   field_name: '名稱',
   field_description: '描述',
   field_is_default: '默認角色',
   field_is_default_description:
-    '將此角色設置為新用戶的默認角色。可以設置多個默認角色。這也將影響通過管理 API 創建的用戶的默認角色。',
+    '將此角色設置為新用戶的默認角色。可以設置多個默認角色。這也將影響通過管理介面創建的用戶的默認角色。',
   type_m2m_role_tag: '機器對機器角色',
   type_user_role_tag: '用戶角色',
   m2m_role_notification:
-    '將此機器對機器角色分配給機器對機器應用程式，以授予相關API資源的存取權限。如果尚未建立，請<a>先建立機器對機器應用程式</a>。',
+    '將此機器對機器角色分配給機器對機器應用程式，以授予相關介面資源的存取權限。如果尚未建立，請<a>先建立機器對機器應用程式</a>。',
   permission: {
     assign_button: '分配權限',
     assign_title: '分配權限',
@@ -43,7 +43,7 @@ const role_details = {
     delete_description: '它將保留在您的用戶池中，但失去此角色的授權。',
     deleted: '{{name}} 已成功從此角色中刪除',
     assign_title: '分配用戶到 {{name}}',
-    assign_subtitle: '透過搜尋姓名、電子郵件、電話或用戶ID找到合適的用戶。',
+    assign_subtitle: '透過搜尋姓名、電子郵件、電話或用戶識別碼找到合適的用戶。',
     assign_field: '分配用戶',
     confirm_assign: '分配用戶',
     assigned_toast_text: '所選用戶已成功分配給此角色',
@@ -57,7 +57,7 @@ const role_details = {
     delete_description: '它將保留在您的應用程式集區中，但喪失此角色的授權。',
     deleted: '{{name}} 已從此角色中成功刪除',
     assign_title: '將機器對機器應用程式分配給 {{name}}',
-    assign_subtitle: '透過搜索名稱、描述或應用程式 ID 來查找合適的機器對機器應用程式。',
+    assign_subtitle: '透過搜索名稱、描述或應用程式識別碼來查找合適的機器對機器應用程式。',
     assign_field: '分配機器對機器應用程式',
     confirm_assign: '分配機器對機器應用程式',
     assigned_toast_text: '所選應用程式已成功分配給此角色',

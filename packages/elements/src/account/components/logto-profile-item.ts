@@ -1,6 +1,8 @@
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+import { LocalizationController } from '../utils/localization.js';
+
 const tagName = 'logto-profile-item';
 
 /**
@@ -75,13 +77,17 @@ export class LogtoProfileItem extends LitElement {
     }
   `;
 
+  private readonly localization: LocalizationController = new LocalizationController(this);
+
   render() {
     return html`
       <div class="label">
         <slot name="label-icon"></slot>
         <slot name="label-text"></slot>
       </div>
-      <slot name="content"><span class="no-value">Not set</span></slot>
+      <slot name="content"
+        ><span class="no-value">${this.localization.message('not_set')}</span></slot
+      >
       <slot name="actions"></slot>
     `;
   }

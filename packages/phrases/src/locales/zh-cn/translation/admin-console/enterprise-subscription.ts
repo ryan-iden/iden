@@ -14,7 +14,7 @@ const enterprise_subscription = {
       '这是你的企业计划订阅，此配额在各租户之间共享。使用情况的更新可能会有轻微的延迟。',
     add_on_title: '按需付费附加项',
     add_on_description:
-      '这些是基于你的合同或 Logto 的标准按需付费费率的额外附加项。你将根据实际使用量收费。',
+      '这些是基于你的合同或Logto的标准按需付费费率的额外附加项。你将根据实际使用量收费。',
     included: '已包含',
     over_quota: '超出配额',
     basic_plan_column_title: {
@@ -29,7 +29,7 @@ const enterprise_subscription = {
       total_price: '总计',
     },
     add_on_sku_price: '¥{{price}}/月',
-    private_region_title: '私有云实例 ({{regionName}})',
+    private_region_title: '私有云实例({{regionName}})',
     shared_cross_tenants: '跨租户',
   },
 };

@@ -1,18 +1,18 @@
 const get_started = {
   page_title: '開始上手',
   title: '成功開發身份方案，我們先來探索一番',
-  subtitle: '一些你可以做的事情，以快速獲取 Logto 的價值',
+  subtitle: '一些你可以做的事情，以快速獲取Logto的價值',
   develop: {
     title: '開發：花 5 分鐘將你的應用集成進來',
     title_cloud: '開發：花 5 分鐘將你的應用安全集成進來',
-    subtitle_cloud: '或花 5 分鐘將你的應用與我們預先構建的 SDK 和教程集成。',
-    try_mcp: '試試用 MCP 一句話完成整合',
+    subtitle_cloud: '或花 5 分鐘將你的應用與我們預先構建的開發工具套件和教程集成。',
+    try_mcp: '試試用模型上下文協定（MCP）一句話完成整合',
   },
   customize: {
     title: '定制：提供出色的登錄體驗',
     preview: {
       title: '查看剛剛定制的登錄體驗的實時預覽',
-      subtitle: '現在嘗試 Logto 登錄體驗，看看它如何運作',
+      subtitle: '現在嘗試Logto登錄體驗，看看它如何運作',
     },
     connector: {
       title: '添加更多連接器以支持更多社交登錄方式',

@@ -14,6 +14,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 
 import { marked } from "marked";
+import { getInterfacePhrases } from "@logto/phrases-experience/lib/interface.js";
 
 import {
   applyTranslationCache,
@@ -24,7 +25,6 @@ import {
   readLocales,
   readSource,
   readVisibilityPolicy,
-  rebrandDocumentationText,
   routeFromRelativePath,
   sha256,
   transformMdx,
@@ -131,41 +131,39 @@ try {
 }
 
 const availableUpstreamLocales = new Map(
-  (
-    await Promise.all(
-      locales.map(async (locale) => {
-        if (locale === "en") {
-          return [locale, englishRoot];
-        }
-        const root = path.join(
-          upstreamRoot,
-          "i18n",
-          locale,
-          "docusaurus-plugin-content-docs/current",
-        );
-        try {
-          await access(root);
-          return [locale, root];
-        } catch {
-          return [locale, englishRoot];
-        }
-      }),
-    )
+  await Promise.all(
+    locales.map(async (locale) => {
+      if (locale === "en") {
+        return [locale, englishRoot];
+      }
+      const root = path.join(
+        upstreamRoot,
+        "i18n",
+        locale,
+        "docusaurus-plugin-content-docs/current",
+      );
+      try {
+        await access(root);
+        return [locale, root];
+      } catch {
+        return [locale, englishRoot];
+      }
+    }),
   ),
 );
 
 const primaryNavigation = [
-  ["introduction", "Introduction"],
-  ["quick-starts", "Quick starts"],
-  ["integrate-iden", "Integration"],
-  ["end-user-flows", "End-user flows"],
-  ["authorization", "Authorization"],
-  ["user-management", "User management"],
-  ["security", "Security"],
-  ["customization", "Customization"],
-  ["connectors", "Connectors"],
-  ["organizations", "Organizations"],
-  ["iden-oss", "Self-hosting"],
+  ["introduction", "introduction"],
+  ["quick-starts", "quick_starts"],
+  ["integrate-iden", "integration"],
+  ["end-user-flows", "end_user_flows"],
+  ["authorization", "authorization"],
+  ["user-management", "user_management"],
+  ["security", "security"],
+  ["customization", "customization"],
+  ["connectors", "connectors"],
+  ["organizations", "organizations"],
+  ["iden-oss", "self_hosting"],
 ];
 
 const idenMark = await readFile(
@@ -190,7 +188,7 @@ const renderNavigation = (locale, currentRoute) =>
     .map(([route, label]) => {
       const isCurrent =
         currentRoute === route || currentRoute.startsWith(`${route}/`);
-      return `<a href="/help/${locale}/${route}/"${isCurrent ? ' aria-current="page"' : ""}>${escapeHtml(rebrandDocumentationText(label))}</a>`;
+      return `<a href="/help/${locale}/${route}/"${isCurrent ? ' aria-current="page"' : ""}>${escapeHtml(getInterfacePhrases(locale)[label])}</a>`;
     })
     .join("");
 
@@ -212,9 +210,11 @@ const renderPage = ({
   sourceHash,
 }) => {
   const safeTitle = escapeHtml(title);
+  const ui = getInterfacePhrases(locale);
+  const t = (key) => escapeHtml(ui[key]);
   const page = `<!doctype html>
-<html lang="${escapeHtml(locale)}" data-product-brand="iden"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#5B5CF6"><meta name="description" content="${escapeHtml(description)}"><title>${safeTitle} · iden Help</title><style>${globalStyles}</style></head>
-<body><button class="menu-button" type="button" aria-label="Open navigation">Menu</button><div class="shell"><aside class="sidebar"><a class="brand" href="/help/${locale}/">${inlineIdenMark}<span>iden</span></a><input class="search" type="search" placeholder="Search help" aria-label="Search help"><div class="search-results"></div><select class="search" aria-label="Language" onchange="location.href=this.value">${renderLocaleOptions(locale, route)}</select><nav>${renderNavigation(locale, route)}<a class="about-link" href="/help/${locale}/about/">About & open source</a></nav></aside><main class="content"><div class="compatibility">Compatibility note: inherited Logto SDK, package, protocol, component, and request-header names remain unchanged.</div><article data-pagefind-body><h1 data-pagefind-meta="title">${safeTitle}</h1>${content}</article><footer class="source-note">Source: logto-io/docs@${source.commit.slice(0, 12)} · ${escapeHtml(sourcePath)} · ${sourceHash.slice(0, 12)}</footer></main></div>
+<html lang="${escapeHtml(locale)}" dir="${["ar", "fa-IR"].includes(locale) ? "rtl" : "ltr"}" data-product-brand="iden"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#5B5CF6"><meta name="description" content="${escapeHtml(description)}"><title>${safeTitle} · ${t("help_title")}</title><style>${globalStyles}</style></head>
+<body><button class="menu-button" type="button" aria-label="${t("open_navigation")}">${t("menu")}</button><div class="shell"><aside class="sidebar"><a class="brand" href="/help/${locale}/">${inlineIdenMark}<span>iden</span></a><input class="search" type="search" placeholder="${t("search_help")}" aria-label="${t("search_help")}"><div class="search-results"></div><select class="search" aria-label="${t("language")}" onchange="location.href=this.value">${renderLocaleOptions(locale, route)}</select><nav>${renderNavigation(locale, route)}<a class="about-link" href="/help/${locale}/about/">${t("about")}</a></nav></aside><main class="content"><div class="compatibility">${t("compatibility_notice")}</div><article data-pagefind-body><h1 data-pagefind-meta="title">${safeTitle}</h1>${content}</article><footer class="source-note">${t("source")}: logto-io/docs@${source.commit.slice(0, 12)} · ${escapeHtml(sourcePath)} · ${sourceHash.slice(0, 12)}</footer></main></div>
 <script type="module">const params=new URLSearchParams(location.search);if(params.get('embedded')==='1')document.body.classList.add('embedded');document.querySelector('.menu-button')?.addEventListener('click',()=>document.body.classList.toggle('menu-open'));const input=document.querySelector('.search[type=search]');const results=document.querySelector('.search-results');let pagefind;input?.addEventListener('input',async()=>{const query=input.value.trim();if(query.length<2){results.classList.remove('active');results.innerHTML='';return}pagefind??=await import('/help/pagefind/pagefind.js');const response=await pagefind.search(query);const items=await Promise.all(response.results.slice(0,8).map(item=>item.data()));results.innerHTML=items.map(item=>'<a href="'+item.url+'">'+item.meta.title+'</a>').join('');results.classList.toggle('active',items.length>0)});</script></body></html>`;
   assertPublishedContentIsSafe(page, policy, `${locale}/${route}`);
   return page;
@@ -227,6 +227,8 @@ const writePage = async (locale, route, html) => {
 };
 
 const buildLocale = async (locale, localeRoot) => {
+  const ui = getInterfacePhrases(locale);
+  const t = (key) => escapeHtml(ui[key]);
   let translationCache;
   try {
     translationCache = JSON.parse(
@@ -276,15 +278,15 @@ const buildLocale = async (locale, localeRoot) => {
     count += 1;
   }
 
-  const aboutContent = `<p><strong>iden</strong> — Identity, Unified.</p><p>iden is based on Logto, open-source software licensed under the Mozilla Public License 2.0.</p><ul><li><a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License 2.0</a></li><li><a href="https://github.com/logto-io/logto">Upstream repository</a></li><li><a href="https://github.com/ryan-wong-coder/logto">Current fork</a></li></ul><p>The names of inherited SDK packages, APIs, protocol fields, web components, and HTTP headers remain unchanged for compatibility.</p>`;
+  const aboutContent = `<p><strong>iden</strong> — Identity, Unified.</p><p>${t("license_notice")}</p><ul><li><a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License 2.0</a></li><li><a href="https://github.com/logto-io/logto">${t("upstream_repository")}</a></li><li><a href="https://github.com/ryan-iden/iden">${t("current_fork")}</a></li></ul><p>${t("compatibility_notice")}</p>`;
   await writePage(
     locale,
     "about",
     renderPage({
       locale,
       route: "about",
-      title: "About & open source",
-      description: "iden product and open-source attribution.",
+      title: ui.about,
+      description: ui.about_description,
       content: aboutContent,
       sourcePath: "local/about",
       sourceHash: sha256(aboutContent),
@@ -293,10 +295,30 @@ const buildLocale = async (locale, localeRoot) => {
 
   await writeFile(
     path.join(paths.dist, locale, "index.html"),
-    `<!doctype html><html lang="${escapeHtml(locale)}"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/help/${locale}/introduction/"><title>iden Help</title><a href="/help/${locale}/introduction/">Open iden Help</a></html>`,
+    `<!doctype html><html lang="${escapeHtml(locale)}"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/help/${locale}/introduction/"><title>${t("help_title")}</title><a href="/help/${locale}/introduction/">${t("open_help")}</a></html>`,
   );
 
-  return count + 1;
+  await writePage(
+    locale,
+    "404",
+    renderPage({
+      locale,
+      route: "404",
+      title: ui.page_not_found,
+      description: ui.page_not_found_description,
+      content:
+        "<p>" +
+        t("page_not_found_description") +
+        '</p><a href="/help/' +
+        locale +
+        '/">' +
+        t("help_title") +
+        "</a>",
+      sourcePath: "local/404",
+      sourceHash: sha256(ui.page_not_found),
+    }),
+  );
+  return count + 2;
 };
 
 const localeCounts = {};
@@ -341,7 +363,7 @@ for (const locale of availableUpstreamLocales.keys()) {
     }
     await writeFile(
       path.join(directory, "index.html"),
-      `<!doctype html><html lang="${escapeHtml(locale)}"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${escapeHtml(target)}"><title>iden Help</title><a href="${escapeHtml(target)}">Continue</a></html>`,
+      `<!doctype html><html lang="${escapeHtml(locale)}"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${escapeHtml(target)}"><title>${escapeHtml(getInterfacePhrases(locale).help_title)}</title><a href="${escapeHtml(target)}">${escapeHtml(getInterfacePhrases(locale).continue)}</a></html>`,
     );
   }
 }

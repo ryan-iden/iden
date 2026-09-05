@@ -11,12 +11,14 @@ import Footer, { useIsDarkMode } from './Footer';
 import ProductIcon from './ProductIcon';
 import congratsDark from './assets/congrats-dark.svg';
 import congrats from './assets/congrats.svg';
+import useInterfaceTranslation from './i18n/use-interface-translation';
 import type { AppState, DeviceAuthResponse, TokenResponse, UserInfo } from './types';
 import { getStringClaim, parseJsonResponse } from './types';
 
 const defaultScope = 'openid offline_access profile email';
 
 const App = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const [state, setState] = useState<AppState>('loading');
   const [deviceAuth, setDeviceAuth] = useState<DeviceAuthResponse>();
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
@@ -188,7 +190,7 @@ const App = () => {
   if (state === 'loading') {
     return (
       <div className={styles.app}>
-        <div className={styles.loading}>Initializing device flow...</div>
+        <div className={styles.loading}>{tUi('device_initializing')}</div>
         <Footer isDarkMode={isDarkMode} />
       </div>
     );
@@ -206,28 +208,22 @@ const App = () => {
           />
         )}
         <div className={styles.successCard}>
-          <img
-            className={styles.congratsIcon}
-            src={isDarkMode ? congratsDark : congrats}
-            alt="Congrats"
-          />
-          <div className={styles.successTitle}>
-            You&apos;ve successfully signed in the demo app.
-          </div>
-          <div className={styles.successSubtitle}>Here is your log in information:</div>
+          <img className={styles.congratsIcon} src={isDarkMode ? congratsDark : congrats} alt="" />
+          <div className={styles.successTitle}>{tUi('device_success')}</div>
+          <div className={styles.successSubtitle}>{tUi('sign_in_information')}</div>
           <div className={styles.infoCard}>
             {user.email && (
               <div>
-                Email: <span>{user.email}</span>
+                {tUi('email')} <span>{user.email}</span>
               </div>
             )}
             {user.username && !user.email && (
               <div>
-                Username: <span>{user.username}</span>
+                {tUi('username')} <span>{user.username}</span>
               </div>
             )}
             <div>
-              User ID: <span>{user.sub}</span>
+              {tUi('user_id')} <span>{user.sub}</span>
             </div>
           </div>
           <button
@@ -237,7 +233,7 @@ const App = () => {
               void signOut();
             }}
           >
-            Sign out the demo app
+            {tUi('sign_out_demo')}
           </button>
           <button
             type="button"
@@ -246,7 +242,7 @@ const App = () => {
               setShowDevPanel((previous) => !previous);
             }}
           >
-            {showDevPanel ? 'Close dev panel' : 'Open dev panel'}
+            {showDevPanel ? tUi('close_dev_panel') : tUi('open_dev_panel')}
           </button>
         </div>
         <Footer isDarkMode={isDarkMode} />
@@ -259,12 +255,10 @@ const App = () => {
       <div className={styles.app}>
         <div className={styles.errorContainer}>
           <div className={styles.errorTitle}>
-            {state === 'expired' ? 'Device code expired' : 'Something went wrong'}
+            {state === 'expired' ? tUi('device_expired') : tUi('generic_error')}
           </div>
           <div className={styles.errorMessage}>
-            {state === 'expired'
-              ? 'The device code has expired. Please try again to get a new code.'
-              : error}
+            {state === 'expired' ? tUi('device_expired_description') : error}
           </div>
           <button
             type="button"
@@ -273,7 +267,7 @@ const App = () => {
               void initiateDeviceFlow();
             }}
           >
-            Try again
+            {tUi('try_again')}
           </button>
         </div>
         <Footer isDarkMode={isDarkMode} />
@@ -286,14 +280,14 @@ const App = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <ProductIcon className={styles.icon} />
-          <h1 className={styles.title}>Sign in to your account</h1>
+          <h1 className={styles.title}>{tUi('sign_in_title')}</h1>
         </div>
         {deviceAuth && (
           <>
             <div className={styles.stepSection}>
               <ol className={styles.stepList} start={1}>
                 <li>
-                  Scan the QR code, or use a browser on another device to visit:
+                  {tUi('scan_instruction')}
                   <br />
                   <a
                     className={styles.verificationLink}
@@ -306,12 +300,12 @@ const App = () => {
                 </li>
               </ol>
               <div className={styles.qrCodeBox}>
-                {qrCodeDataUrl && <img src={qrCodeDataUrl} alt="Scan to verify" />}
+                {qrCodeDataUrl && <img src={qrCodeDataUrl} alt={tUi('qr_code')} />}
               </div>
             </div>
             <div className={styles.stepSection}>
               <ol className={styles.stepList} start={2}>
-                <li>Enter the one-time code</li>
+                <li>{tUi('one_time_code')}</li>
               </ol>
               <div className={styles.userCode}>{deviceAuth.user_code}</div>
             </div>

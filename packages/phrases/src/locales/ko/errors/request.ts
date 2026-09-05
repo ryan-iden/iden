@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: '이 수신자에게 너무 많은 메시지를 보냈습니다. 나중에 다시 시도하세요.',
   invalid_input: '입력된 값이 유효하지 않아요. {{details}}',
   general: '요청 중에 오류가 발생했어요.',
   range_not_satisfiable: '범위가 충족되지 않습니다.',

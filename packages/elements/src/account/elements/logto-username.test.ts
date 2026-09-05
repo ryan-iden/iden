@@ -17,7 +17,7 @@ suite('logto-username', () => {
     const element = await fixture<LogtoUsername>(html`<logto-username></logto-username>`);
     await element.updateComplete;
 
-    assert.equal(element.shadowRoot?.textContent, 'Unable to retrieve account context.');
+    assert.equal(element.shadowRoot?.textContent, 'Unable to load account information.');
   });
 
   test('should render username if the user has permission to view username information', async () => {

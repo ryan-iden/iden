@@ -19,7 +19,7 @@ export class LogtoUserEmail extends LogtoProfileItemElement {
   protected getItemLabelInfo() {
     return {
       icon: emailIcon,
-      label: 'Email address',
+      label: this.localization.message('email'),
     };
   }
 

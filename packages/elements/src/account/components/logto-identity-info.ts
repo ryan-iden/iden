@@ -65,7 +65,7 @@ export class LogtoIdentityInfo extends LitElement {
     return html`
       <div class="avatar">
         ${this.avatar && !this.failedToLoadAvatar
-          ? html`<img src="${this.avatar}" alt="user avatar" @error=${this.handleAvatarError} />`
+          ? html`<img src="${this.avatar}" alt="" @error=${this.handleAvatarError} />`
           : html`<logto-icon>${fallbackAvatar}</logto-icon>`}
       </div>
       <div class="info">

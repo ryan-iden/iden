@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { logEventTitle } from '@/consts/logs';
 import Select, { type Option } from '@/ds-components/Select';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 
 type Props = {
   readonly value?: string;
@@ -9,12 +10,12 @@ type Props = {
   readonly options?: Array<Option<string>>;
 };
 
-const defaultEventOptions = Object.entries(logEventTitle).map(([value, title]) => ({
-  value,
-  title: title ?? value,
-}));
-
 function EventSelector({ value, onChange, options }: Props) {
+  const getEventTitle = useLogEventTitle();
+  const defaultEventOptions = Object.keys(logEventTitle).map((value) => ({
+    value,
+    title: getEventTitle(value),
+  }));
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
 
   return (

@@ -1,8 +1,10 @@
 import { appendPath } from '@silverhand/essentials';
 import { type Ref, forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { type GuideMetadata } from '@/assets/docs/guides/types';
 import TextLink from '@/ds-components/TextLink';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 
 import Step, { type Props as StepProps } from '../Step';
 
@@ -14,6 +16,8 @@ type Props = Omit<StepProps, 'children'> & {
 const quickStartsUrl = new URL('https://docs.logto.io/quick-starts/');
 
 function FurtherReadings(props: Props, ref?: Ref<HTMLDivElement>) {
+  const { t: tUi } = useInterfaceTranslation();
+  const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const { fullGuide, furtherReadings, ...stepProps } = props;
   return (
     <Step ref={ref} {...stepProps}>
@@ -21,7 +25,7 @@ function FurtherReadings(props: Props, ref?: Ref<HTMLDivElement>) {
         {fullGuide && (
           <li>
             <TextLink href={appendPath(quickStartsUrl, fullGuide).href} targetBlank="noopener">
-              Complete guide
+              {tUi('complete_guide')}
             </TextLink>
           </li>
         )}
@@ -34,7 +38,7 @@ function FurtherReadings(props: Props, ref?: Ref<HTMLDivElement>) {
         ))}
         <li>
           <TextLink href="https://docs.logto.io/docs/recipes/customize-sie/" targetBlank="noopener">
-            Customize sign-in experience
+            {t('sign_in_exp.title')}
           </TextLink>
         </li>
         <li>
@@ -42,7 +46,7 @@ function FurtherReadings(props: Props, ref?: Ref<HTMLDivElement>) {
             href="https://docs.logto.io/docs/recipes/configure-connectors/"
             targetBlank="noopener"
           >
-            Configure connectors
+            {tUi('connectors')}
           </TextLink>
         </li>
         <li>
@@ -50,7 +54,7 @@ function FurtherReadings(props: Props, ref?: Ref<HTMLDivElement>) {
             href="https://docs.logto.io/docs/recipes/rbac/protect-resource/#client"
             targetBlank="noopener"
           >
-            Configure client to use RBAC
+            {t('upsell.featured_plan_content.rbac')}
           </TextLink>
         </li>
       </ul>

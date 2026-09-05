@@ -1,6 +1,6 @@
 const swagger = {
-  invalid_zod_type: '無效的 Zod 類型，請檢查路由 guard 配置。',
-  not_supported_zod_type_for_params: '請求參數不支持的 Zod 類型，請檢查路由 guard 配置。',
+  invalid_zod_type: '無效的 Zod 類型，請檢查路由驗證設定。',
+  not_supported_zod_type_for_params: '請求參數不支援此 Zod 類型，請檢查路由驗證設定。',
 };
 
 export default Object.freeze(swagger);

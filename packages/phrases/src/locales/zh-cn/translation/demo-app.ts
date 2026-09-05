@@ -2,7 +2,7 @@ const demo_app = {
   title: '你已成功登录实时预览！',
   subtitle: '这里是你的用户信息：',
   username: '用户名：',
-  user_id: '用户 ID：',
+  user_id: '用户标识：',
   sign_out: '退出实时预览',
   continue_explore: '或继续探索',
   customize_sign_in_experience: '自定义登录体验',

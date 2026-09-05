@@ -8,11 +8,11 @@ const usage = {
   usage_description_with_limited_quota: '{{usage}}<span>（前 {{basicQuota}} 個包含在內）</span>',
   usage_description_without_quota: '{{usage}}<span>（不包含在內）</span>',
   mau: {
-    title: 'MAU',
+    title: '每月活躍使用者',
     tooltip:
-      'MAU 是指在計費週期內至少與 Logto 交換過一次令牌的獨立用戶。專業版計劃不受限制。<a>了解更多</a>',
+      '每月活躍使用者是指在計費週期內至少與Logto交換過一次令牌的獨立用戶。專業版計劃不受限制。<a>了解更多</a>',
     tooltip_for_enterprise:
-      'MAU 是在計費週期內至少與 Logto 交換過一次令牌的唯一用戶。企業計劃無限制。',
+      '每月活躍使用者是在計費週期內至少與Logto交換過一次令牌的唯一用戶。企業計劃無限制。',
   },
   organizations: {
     title: '組織',
@@ -31,15 +31,15 @@ const usage = {
   },
   enterprise_sso: {
     title: '企業單一登入',
-    tooltip: '附加功能，每個 SSO 連接每月 ${{price, number}}。',
+    tooltip: '附加功能，每個單一登入連接每月 ${{price, number}}。',
     tooltip_for_enterprise:
-      '附加功能，每個 SSO 連接每月 ${{price, number}}。合同方案中包含前 {{basicQuota}} 個 SSO 免費使用。',
+      '附加功能，每個單一登入連接每月 ${{price, number}}。合同方案中包含前 {{basicQuota}} 個單一登入免費使用。',
   },
   api_resources: {
-    title: 'API 資源',
-    tooltip: '附加功能，每個資源每月 ${{price, number}}。前三個 API 資源免費。',
+    title: '介面資源',
+    tooltip: '附加功能，每個資源每月 ${{price, number}}。前三個介面資源免費。',
     tooltip_for_enterprise:
-      '合同方案中包含前 {{basicQuota}} 個 API 資源免費使用。如果你需要更多，每個 API 資源每月 ${{price, number}}。',
+      '合同方案中包含前 {{basicQuota}} 個介面資源免費使用。如果你需要更多，每個介面資源每月 ${{price, number}}。',
   },
   machine_to_machine: {
     title: '機器對機器',
@@ -67,7 +67,7 @@ const usage = {
       '合同方案中包含前 {{basicQuota}} 個令牌免費使用。如果你需要更多，每 {{tokenLimit}} 令牌每月 ${{price, number}}。',
   },
   m2mTokens: {
-    title: 'M2M 令牌',
+    title: '機器對機器令牌',
   },
   hooks: {
     title: '鉤子',
@@ -81,8 +81,8 @@ const usage = {
       '附加功能，完整的進階安全包每月 ${{price, number}}，包括人機驗證、標識符鎖定、郵件黑名單等。',
   },
   saml_applications: {
-    title: 'SAML 應用',
-    tooltip: '附加功能，每個 SAML 應用每月 ${{price, number}}。',
+    title: '安全斷言標記語言（SAML）應用',
+    tooltip: '附加功能，每個安全斷言標記語言（SAML）應用每月 ${{price, number}}。',
   },
   third_party_applications: {
     title: '第三方應用',

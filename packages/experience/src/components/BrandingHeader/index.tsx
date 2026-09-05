@@ -9,6 +9,7 @@ import ConnectIcon from '@/assets/icons/connect-icon.svg?react';
 import ThirdPartyAppIconDark from '@/assets/icons/third-party-app-dark.svg?react';
 import ThirdPartyAppIcon from '@/assets/icons/third-party-app.svg?react';
 import DynamicT from '@/shared/components/DynamicT';
+import useInterfaceTranslation from '@/shared/hooks/use-interface-translation';
 
 import styles from './index.module.scss';
 
@@ -27,6 +28,7 @@ const BrandingHeader = ({
   headlineInterpolation,
   className,
 }: Props) => {
+  const { t: tUi } = useInterfaceTranslation();
   const { theme } = useContext(PageContext);
   /**
    * The third-party logo is a remote asset the client declares (e.g. a CIMD client's `logo_uri`),
@@ -49,7 +51,7 @@ const BrandingHeader = ({
             ) : (
               <img
                 className={classNames(styles.logo, styles.thirdPartyLogo)}
-                alt="third party logo"
+                alt={tUi('logo')}
                 src={thirdPartyLogo}
                 referrerPolicy="no-referrer"
                 onError={() => {
@@ -58,7 +60,7 @@ const BrandingHeader = ({
               />
             ))}
           {shouldConnectSvg && <ConnectIcon className={styles.connectIcon} />}
-          {logo && <img className={styles.logo} alt="app logo" src={logo} />}
+          {logo && <img className={styles.logo} alt={tUi('logo')} src={logo} />}
         </div>
       )}
 

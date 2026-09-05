@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import PageContext from '@ac/Providers/PageContextProvider/PageContext';
 import SignOutIcon from '@ac/assets/icons/sign-out.svg?react';
 import { layoutClassNames } from '@ac/constants/layout';
+import useInterfaceTranslation from '@ac/hooks/use-interface-translation';
 import { accountCenterBasePath } from '@ac/utils/account-center-route';
 
 import styles from './index.module.scss';
@@ -24,8 +25,11 @@ type AvatarProps = {
 };
 
 const Avatar = ({ className, avatar, seed }: AvatarProps) => {
+  const { t: tUi } = useInterfaceTranslation();
   if (avatar) {
-    return <img className={className} src={avatar} alt="avatar" referrerPolicy="no-referrer" />;
+    return (
+      <img className={className} src={avatar} alt={tUi('avatar')} referrerPolicy="no-referrer" />
+    );
   }
 
   return <DefaultUserAvatar className={className} seed={seed} />;

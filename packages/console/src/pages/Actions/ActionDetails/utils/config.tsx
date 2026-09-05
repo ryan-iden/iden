@@ -9,6 +9,7 @@ import {
   type PostSignInEvent,
 } from '@logto/schemas';
 import { type EditorProps } from '@monaco-editor/react';
+import { Trans } from 'react-i18next';
 
 import type { ModelSettings } from '@/components/MonacoCodeEditor';
 import { jwtCustomizerUserContextTypeDefinition } from '@/consts/jwt-customizer-type-definition';
@@ -156,7 +157,7 @@ declare ${actionUserPatchTypeDefinition}`;
 const postFirstFactorVerificationModel: ModelSettings = {
   name: 'post-first-factor-verification.js',
   // Display name for this action; runtime entry remains `runAction`.
-  title: 'Post first-factor verification',
+  title: <Trans i18nKey="admin_console.actions.types.post_first_factor_verification.name" />,
   language: 'typescript',
   defaultValue: defaultPostFirstFactorVerificationScript,
   extraLibs: [
@@ -178,7 +179,7 @@ declare ${postFirstFactorVerificationResultTypeDefinition}`,
 const postSignInModel: ModelSettings = {
   name: 'post-sign-in.js',
   // Display name for this action; runtime entry remains `runAction`.
-  title: 'Post sign-in',
+  title: <Trans i18nKey="admin_console.actions.types.post_sign_in.name" />,
   language: 'typescript',
   defaultValue: defaultPostSignInScript,
   extraLibs: [

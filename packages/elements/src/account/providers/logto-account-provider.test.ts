@@ -40,10 +40,7 @@ suite('logto-account-provider', () => {
 
     await provider.updateComplete;
 
-    assert.equal(
-      provider.shadowRoot?.textContent,
-      `${LogtoAccountProvider.tagName} not initialized.`
-    );
+    assert.equal(provider.shadowRoot?.textContent, 'Account information is not initialized.');
   });
 
   test('should correctly consume logto account provider context', async () => {
@@ -99,8 +96,8 @@ suite('logto-account-provider', () => {
 
     await provider.updateComplete;
 
-    await waitUntil(
-      () => provider.shadowRoot?.textContent === `${LogtoAccountProvider.tagName}: ${errorMessage}`
+    await waitUntil(() =>
+      provider.shadowRoot?.querySelector('details')?.textContent.includes(errorMessage)
     );
 
     assert.equal(dispatchedErrorEvent?.error.message, errorMessage);

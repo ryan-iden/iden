@@ -10,6 +10,7 @@ import { TenantsContext } from '@/contexts/TenantsProvider';
 import OverlayScrollbar from '@/ds-components/OverlayScrollbar';
 import Tag from '@/ds-components/Tag';
 import { useConsoleRoutes } from '@/hooks/use-console-routes';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import { usePlausiblePageview } from '@/hooks/use-plausible-pageview';
 
 import type { AppContentOutletContext } from '../AppContent/types';
@@ -19,6 +20,7 @@ import useTenantScopeListener from './hooks';
 import styles from './index.module.scss';
 
 function ConsoleContent() {
+  const { t: tUi } = useInterfaceTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { pathname } = useLocation();
   const { scrollableContent } = useOutletContext<AppContentOutletContext>();
@@ -39,7 +41,7 @@ function ConsoleContent() {
       <button
         aria-controls="iden-console-navigation"
         aria-expanded={isSidebarOpen}
-        aria-label="Open navigation"
+        aria-label={tUi('open_navigation')}
         className={styles.navToggle}
         type="button"
         onClick={() => {
@@ -49,7 +51,7 @@ function ConsoleContent() {
         <Menu />
       </button>
       <button
-        aria-label="Close navigation"
+        aria-label={tUi('close_navigation')}
         className={classNames(styles.navOverlay, isSidebarOpen && styles.open)}
         type="button"
         onClick={() => {
@@ -71,7 +73,7 @@ function ConsoleContent() {
       </OverlayScrollbar>
       {isDevFeaturesEnabled && (
         <Tag type="state" status="success" variant="plain" className={styles.devStatus}>
-          Dev features enabled
+          {tUi('development_enabled')}
         </Tag>
       )}
     </div>

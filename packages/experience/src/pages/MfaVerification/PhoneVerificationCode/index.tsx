@@ -24,7 +24,7 @@ const PhoneVerificationCode = () => {
   // VerificationId not found
   const verificationId = verificationIdsMap[codeVerificationTypeMap.phone];
   if (!verificationId) {
-    return <ErrorPage title="error.invalid_session" rawMessage="Verification ID not found" />;
+    return <ErrorPage title="error.invalid_session" />;
   }
 
   const maskedPhone = flowState.maskedIdentifiers?.[MfaFactor.PhoneVerificationCode];

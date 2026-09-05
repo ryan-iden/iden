@@ -1,3 +1,4 @@
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import { type TestResultData } from '@/pages/CustomizeJwtDetails/MainContent/ScriptSection/use-test-handler';
 
 import styles from './index.module.scss';
@@ -7,17 +8,18 @@ type Props = {
 };
 
 function ErrorContent({ testResult }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   return (
     <div>
       {testResult.error && (
         <pre className={styles.error}>
-          {'Error: \n'}
+          {tUi('error') + ': \n'}
           {testResult.error}
         </pre>
       )}
       {testResult.payload && (
         <pre>
-          {'Extra JWT claims: \n'}
+          {tUi('jwt_extra_claims') + ': \n'}
           {testResult.payload}
         </pre>
       )}

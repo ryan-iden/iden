@@ -6,18 +6,18 @@ const tenants = {
     settings: '设置',
     members: '成员',
     domains: '域名管理',
-    oidc_configs: 'OIDC 配置',
+    oidc_configs: '开放身份连接（OIDC）配置',
     subscription: '套餐与计费',
     billing_history: '历史账单',
   },
   settings: {
     title: '设置',
     description: '设置租户名称并查看您的数据托管地区和租户类型。',
-    tenant_id: '租户 ID',
+    tenant_id: '租户标识',
     tenant_name: '租户名称',
     tenant_instance: '选择您的实例',
     tenant_instance_description:
-      '选择您的租户将在哪里托管。选择 Logto Cloud 作为公共共享基础设施，或选择私人实例以获得专用资源。',
+      '选择您的租户将在哪里托管。选择Logto Cloud作为公共共享基础设施，或选择私人实例以获得专用资源。',
     tenant_region: '数据托管地区',
     tenant_region_description: '托管您的租户资源（用户、应用程序等）的物理位置。创建后无法更改。',
     tenant_region_tip: '您的租户资源托管在 {{region}}。 <a>了解更多</a>',
@@ -30,9 +30,9 @@ const tenants = {
     tenant_info_saved: '租户信息成功保存。',
     tenant_mfa: '多因素认证',
     tenant_mfa_description: '要求成员设置多因素认证才能访问此租户。',
-    enterprise_sso: '企业 SSO',
+    enterprise_sso: '企业单点登录',
     enterprise_sso_description:
-      '仅限付费计划。联系我们启用企业 SSO，让所有成员可以使用您组织的身份提供商登录 Logto Cloud 控制台。',
+      '仅限付费计划。联系我们启用企业单点登录，让所有成员可以使用您组织的身份提供商登录Logto Cloud控制台。',
   },
   full_env_tag: {
     development: '开发',
@@ -53,7 +53,7 @@ const tenants = {
   create_modal: {
     title: '创建租户',
     subtitle: '创建一个拥有独立资源和用户的新租户。',
-    tenant_id: '租户 ID',
+    tenant_id: '租户标识',
     tenant_usage_purpose: '您想要使用此租户做什么?',
     development_description: '仅用于测试，不应在生产环境中使用。不需要订阅。',
     development_description_for_private_regions: '仅用于测试，不应在生产环境中使用。',
@@ -65,9 +65,9 @@ const tenants = {
     tenant_created: '租户创建成功。',
     invitation_failed: '某些邀请未能发送。请稍后在设置 -> 成员中重试。',
     tenant_type_description: '创建后将无法更改。',
-    tenant_id_invalid: '租户 ID 只能包含小写字母、数字和连字符，且不能超过 {{max}} 个字符。',
-    tenant_id_placeholder: '你的租户 ID',
-    tenant_id_tip: '自定义租户 ID。如果留空，Logto 将生成默认 ID。租户 ID 在创建后无法更改。',
+    tenant_id_invalid: '租户标识只能包含小写字母、数字和连字符，且不能超过 {{max}} 个字符。',
+    tenant_id_placeholder: '你的租户标识',
+    tenant_id_tip: '自定义租户标识。如果留空，Logto将生成默认标识。租户标识在创建后无法更改。',
   },
   dev_tenant_migration: {
     title: '您现在可以通过创建新的“开发租户”免费尝试我们的专业功能！',
@@ -98,19 +98,19 @@ const tenants = {
   tenant_landing_page: {
     title: '您还没有创建租户',
     description:
-      '要开始使用 Logto 配置项目，请创建一个新的租户。如果您需要注销或删除您的帐户，只需单击右上角的头像按钮。',
+      '要开始使用Logto配置项目，请创建一个新的租户。如果您需要注销或删除您的帐户，只需单击右上角的头像按钮。',
     create_tenant_button: '创建租户',
   },
   status: {
-    mau_exceeded: '超出 MAU 限制',
-    token_exceeded: '超出 Token 限制',
+    mau_exceeded: '超出月活跃用户限制',
+    token_exceeded: '超出令牌限制',
     suspended: '已暂停',
     overdue: '逾期',
   },
   tenant_suspended_page: {
     title: '租户已暂停，请联系我们以恢复访问。',
     description_1:
-      '我们非常遗憾地通知您，由于不当使用，包括超出 MAU 限制、逾期付款或其他未经授权的操作，您的租户帐户已被临时停用。',
+      '我们非常遗憾地通知您，由于不当使用，包括超出月活跃用户限制、逾期付款或其他未经授权的操作，您的租户帐户已被临时停用。',
     description_2:
       '如果您需要进一步澄清、有任何疑虑或希望恢复全部功能并解锁您的租户，请立即联系我们。',
   },

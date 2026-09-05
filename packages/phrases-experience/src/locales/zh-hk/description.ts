@@ -87,7 +87,7 @@ const description = {
   use: '使用',
   single_sign_on_email_form: '輸入你的企業電子郵件地址',
   single_sign_on_connectors_list:
-    '您的企業已為電郵賬戶{{email}}啟用單一登入。您可以繼續使用以下的SSO供應商登入。',
+    '您的企業已為電郵賬戶{{email}}啟用單一登入。您可以繼續使用以下的單一登入供應商登入。',
   single_sign_on_enabled: '該帳戶已啟用單一登入',
   authorize_title: '授權 {{name}}',
   unregistered_client_notice:
@@ -101,7 +101,7 @@ const description = {
   authorize_agreement: `通過授權訪問，您同意 {{name}} 的 <link></link>。`,
   authorize_agreement_with_redirect: `通過授權訪問，您同意 {{name}} 的 <link></link>，並將被重定向到 {{uri}}。`,
   not_you: '不是你？',
-  user_id: '用戶 ID：{{id}}',
+  user_id: '用戶識別碼：{{id}}',
   redirect_to: '您將被重定向到 {{name}}。',
   auto_agreement: '繼續即表示您同意<link></link>。',
   identifier_sign_in_description: '輸入您的{{types, list(type: disjunction;)}}以登入。',
@@ -119,8 +119,8 @@ const description = {
   verify_identity: '驗證你的身份',
   choose_verification_method: '選擇你要登入的方式',
   verification_method: {
-    passkey: 'Passkey',
-    passkey_description: '透過你的裝置或 USB 硬體驗證',
+    passkey: '通行金鑰',
+    passkey_description: '透過你的裝置或通用序列匯流排（USB）硬體驗證',
     password: '密碼',
     password_description: '輸入密碼',
     email_verification_code: '電郵驗證碼',

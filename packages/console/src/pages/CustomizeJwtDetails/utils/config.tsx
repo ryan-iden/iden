@@ -12,6 +12,7 @@ import {
   InteractionEvent,
 } from '@logto/schemas';
 import { type EditorProps } from '@monaco-editor/react';
+import { Trans } from 'react-i18next';
 
 import TokenFileIcon from '@/assets/icons/token-file-icon.svg?react';
 import UserFileIcon from '@/assets/icons/user-file-icon.svg?react';
@@ -162,7 +163,7 @@ const getCustomJwtClaims = async ({ token, context, environmentVariables, api })
 
 export const accessTokenJwtCustomizerModel: ModelSettings = {
   name: 'user-jwt.js',
-  title: 'User access token',
+  title: <Trans i18nKey="admin_console.jwt_claims.user_jwt.card_field" />,
   language: 'typescript',
   defaultValue: defaultAccessTokenJwtCustomizerCode,
   extraLibs: [
@@ -179,7 +180,7 @@ export const accessTokenJwtCustomizerModel: ModelSettings = {
 
 export const clientCredentialsModel: ModelSettings = {
   name: 'machine-to-machine-jwt.js',
-  title: 'Machine-to-machine token',
+  title: <Trans i18nKey="admin_console.jwt_claims.machine_to_machine_jwt.card_field" />,
   language: 'typescript',
   defaultValue: defaultClientCredentialsJwtCustomizerCode,
   extraLibs: [
@@ -357,7 +358,7 @@ export const accessTokenPayloadTestModel: ModelSettings = {
   language: 'json',
   icon: <TokenFileIcon />,
   name: 'user-token-payload.json',
-  title: 'Token data',
+  title: <Trans ns="experience" i18nKey="interface.token_data" />,
   defaultValue: JSON.stringify(defaultAccessTokenPayload, null, 2),
 };
 
@@ -365,7 +366,7 @@ export const clientCredentialsPayloadTestModel: ModelSettings = {
   language: 'json',
   icon: <TokenFileIcon />,
   name: 'machine-to-machine-token-payload.json',
-  title: 'Token data',
+  title: <Trans ns="experience" i18nKey="interface.token_data" />,
   defaultValue: JSON.stringify(defaultClientCredentialsPayload, null, 2),
 };
 
@@ -373,7 +374,7 @@ export const userContextTestModel: ModelSettings = {
   language: 'json',
   icon: <UserFileIcon />,
   name: 'user-token-context.json',
-  title: 'Context data',
+  title: <Trans ns="experience" i18nKey="interface.context_data" />,
   defaultValue: JSON.stringify(defaultUserTokenContextData, null, 2),
 };
 
@@ -381,7 +382,7 @@ export const m2mContextTestModel: ModelSettings = {
   language: 'json',
   icon: <UserFileIcon />,
   name: 'machine-to-machine-token-context.json',
-  title: 'Context data',
+  title: <Trans ns="experience" i18nKey="interface.context_data" />,
   defaultValue: JSON.stringify(defaultM2mTokenContextData, null, 2),
 };
 /* eslint-enable max-lines */

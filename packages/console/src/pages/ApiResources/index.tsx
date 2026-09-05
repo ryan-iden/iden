@@ -23,6 +23,7 @@ import Table from '@/ds-components/Table';
 import Tag from '@/ds-components/Tag';
 import type { RequestError } from '@/hooks/use-api';
 import useSearchParametersWatcher from '@/hooks/use-search-parameters-watcher';
+import useSystemLabels from '@/hooks/use-system-labels';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useTheme from '@/hooks/use-theme';
 import pageLayout from '@/scss/page-layout.module.scss';
@@ -44,6 +45,7 @@ const icons = {
 };
 
 function ApiResources() {
+  const { managementApiName } = useSystemLabels();
   const { search } = useLocation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const [{ page }, updateSearchParameters] = useSearchParametersWatcher({
@@ -103,7 +105,7 @@ function ApiResources() {
               const Icon = isBuiltInManagementApi ? ManagementApiIcon : ApiIcon;
               return (
                 <ItemPreview
-                  title={getApiResourceDisplayName(name, indicator)}
+                  title={getApiResourceDisplayName(name, indicator, managementApiName)}
                   icon={
                     isCloud ? (
                       <Icon className={styles.icon} />

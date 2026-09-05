@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React, { useRef, type ReactElement, useEffect, useState, useMemo, useContext } from 'react';
 
 import { GuideContext } from '@/components/Guide';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useScroll from '@/hooks/use-scroll';
 import { onKeyDownHandler } from '@/utils/a11y';
 
@@ -35,6 +36,7 @@ const findScrollableElement = (element: Nullable<HTMLElement>): Nullable<HTMLEle
 };
 
 export default function Steps({ children: reactChildren }: Props) {
+  const { t } = useInterfaceTranslation();
   const contentRef = useRef<HTMLDivElement>(null);
   const stepReferences = useRef<Array<Nullable<HTMLElement>>>([]);
   const { scrollTop } = useScroll(findScrollableElement(contentRef.current));
@@ -45,12 +47,12 @@ export default function Steps({ children: reactChildren }: Props) {
   const furtherReadings = useMemo(
     () => (
       <FurtherReadings
-        title="Further readings"
+        title={t('further_readings')}
         fullGuide={metadata.fullGuide}
         furtherReadings={metadata.furtherReadings}
       />
     ),
-    [metadata.fullGuide, metadata.furtherReadings]
+    [metadata.fullGuide, metadata.furtherReadings, t]
   );
   const children: Array<ReactElement<StepProps, typeof Step>> = useMemo(() => {
     const steps = (Array.isArray(reactChildren) ? reactChildren : [reactChildren]).filter(

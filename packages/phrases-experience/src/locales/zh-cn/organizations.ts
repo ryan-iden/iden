@@ -87,7 +87,7 @@ const organizations: OrganizationCenterPhrases = {
   branding: {
     title: '组织品牌',
     primary_color: '主色',
-    custom_css: '自定义 CSS',
+    custom_css: '自定义层叠样式表（CSS）',
     preview: '预览',
     light: '亮色',
     dark: '暗色',
@@ -100,14 +100,14 @@ const organizations: OrganizationCenterPhrases = {
     title: '即时预配邮箱域名',
     domain: '邮箱域名',
     add: '添加域名',
-    verify: '检查 DNS',
-    dns_instruction: '创建 TXT 记录 {{record}}，值为 {{value}}。',
+    verify: '检查域名系统（DNS）',
+    dns_instruction: '创建 TXT 文本记录 {{record}}，值为 {{value}}。',
     verified: '已验证',
   },
   applications: {
     title: '共享资源',
     empty: '该组织暂无可用资源。',
-    sso: '企业 SSO 连接',
+    sso: '企业单点登录连接',
     m2m: '机器对机器应用',
   },
   activity: {

@@ -5,6 +5,7 @@ import Minus from '@/assets/icons/minus.svg?react';
 import Button from '@/ds-components/Button';
 import IconButton from '@/ds-components/IconButton';
 import TextInput, { type Props as TextInputProps } from '@/ds-components/TextInput';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 
 import styles from './index.module.scss';
 
@@ -68,6 +69,7 @@ function KeyValueInputField({
   onRemove,
   onAppend,
 }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   return (
     <div className={className}>
       {fields.map((field, index) => {
@@ -77,13 +79,13 @@ function KeyValueInputField({
             <div className={styles.input}>
               <TextInput
                 className={styles.keyInput}
-                placeholder="Key"
+                placeholder={tUi('key')}
                 error={Boolean(errors?.[index]?.key)}
                 {...getInputFieldProps.key(index)}
               />
               <TextInput
                 className={styles.valueInput}
-                placeholder="Value"
+                placeholder={tUi('value')}
                 error={Boolean(errors?.[index]?.value)}
                 {...getInputFieldProps.value(index)}
               />

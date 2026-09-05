@@ -24,10 +24,10 @@ const sign_in_exp = {
   color: {
     title: '颜色',
     primary_color: '品牌颜色',
-    dark_primary_color: '品牌颜色 (深色)',
+    dark_primary_color: '品牌颜色(深色)',
     dark_mode: '开启深色模式',
     dark_mode_description:
-      '基于品牌颜色和 Logto 的算法，应用将会有一个自动生成的深色模式。当然，你可以自定义和修改。',
+      '基于品牌颜色和Logto的算法，应用将会有一个自动生成的深色模式。当然，你可以自定义和修改。',
     dark_mode_reset_tip: '基于品牌颜色，重新生成深色模式颜色。',
     reset: '重新生成',
   },
@@ -36,77 +36,77 @@ const sign_in_exp = {
     ui_style: '样式',
     with_light: '{{value}}',
     with_dark: '{{value}} (深色)',
-    app_logo_and_favicon: '应用 logo 和 favicon',
-    company_logo_and_favicon: '公司 logo 和 favicon',
-    organization_logo_and_favicon: '组织 logo 和 favicon',
-    hide_logto_branding: '隐藏 Logto 品牌',
+    app_logo_and_favicon: '应用标志和网站图标',
+    company_logo_and_favicon: '公司标志和网站图标',
+    organization_logo_and_favicon: '组织标志和网站图标',
+    hide_logto_branding: '隐藏Logto品牌',
     hide_logto_branding_description:
       '移除“Powered by Logto”。以干净、专业的登录体验专属呈现你的品牌。',
   },
   branding_uploads: {
     app_logo: {
-      title: '应用 logo',
-      url: '应用 logo URL',
+      title: '应用标志',
+      url: '应用标志网址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
-      error: '应用 logo: {{error}}',
+      error: '应用标志: {{error}}',
     },
     company_logo: {
-      title: '公司 logo',
-      url: '公司 logo URL',
+      title: '公司标志',
+      url: '公司标志网址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
-      error: '公司 logo: {{error}}',
+      error: '公司标志: {{error}}',
     },
     organization_logo: {
-      title: '上传 图片',
-      url: '组织 logo URL',
+      title: '上传图片',
+      url: '组织标志网址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
-      error: '组织 logo: {{error}}',
+      error: '组织标志: {{error}}',
     },
     connector_logo: {
-      title: '上传 图片',
-      url: '连接器 logo URL',
+      title: '上传图片',
+      url: '连接器标志网址',
       url_placeholder: 'https://your.cdn.domain/logo.png',
-      error: '连接器 logo: {{error}}',
+      error: '连接器标志: {{error}}',
     },
     favicon: {
-      title: 'Favicon',
-      url: 'Favicon URL',
+      title: '网站图标',
+      url: '网站图标网址',
       url_placeholder: 'https://your.cdn.domain/favicon.ico',
-      error: 'Favicon: {{error}}',
+      error: '网站图标: {{error}}',
     },
   },
   custom_ui: {
-    title: '自定义 UI',
-    css_code_editor_title: '自定义 CSS',
-    css_code_editor_field_title: 'CSS 覆盖',
-    css_code_editor_description1: '请查看自定义 CSS 的示例。',
+    title: '自定义界面',
+    css_code_editor_title: '自定义层叠样式表（CSS）',
+    css_code_editor_field_title: '层叠样式表（CSS）覆盖',
+    css_code_editor_description1: '请查看自定义层叠样式表（CSS）的示例。',
     css_code_editor_description2: '<a>{{link}}</a>',
     css_code_editor_description_link_content: '了解更多',
     css_code_editor_content_placeholder:
-      '在此输入你的 CSS 覆盖规则，以按你的具体要求调整任何内容的样式。发挥你的创造力，让你的 UI 脱颖而出。',
-    bring_your_ui_title: '带上你的 UI',
-    bring_your_ui_upload_title: '上传自定义 UI 资源',
+      '在此输入你的层叠样式表（CSS）覆盖规则，以按你的具体要求调整任何内容的样式。发挥你的创造力，让你的界面脱颖而出。',
+    bring_your_ui_title: '带上你的界面',
+    bring_your_ui_upload_title: '上传自定义界面资源',
     bring_your_ui_description:
-      '上传一个压缩包 (.zip) 以使用你自己的代码替换 Logto 预构建的 UI。<a>了解更多</a>',
+      '上传一个压缩包(.zip)以使用你自己的代码替换Logto预构建的界面。<a>了解更多</a>',
     preview_with_bring_your_ui_description:
-      '你自定义的 UI 资源已经成功上传，现在正在提供服务。因此，内置预览窗口已被禁用。\n要测试你个性化的登录 UI，请单击“实时预览”按钮在新的浏览器标签中打开它。',
-    csp_description: '为你的自定义登录 UI 允许额外的源表达式。这些值仅在提供自定义 UI 资源时生效。',
+      '你自定义的界面资源已经成功上传，现在正在提供服务。因此，内置预览窗口已被禁用。\n要测试你个性化的登录界面，请单击“实时预览”按钮在新的浏览器标签中打开它。',
+    csp_description: '为你的自定义登录界面允许额外的源表达式。这些值仅在提供自定义界面资源时生效。',
     csp_script_src: '允许的 script-src',
     csp_script_src_tip:
-      '允许你的自定义 UI 加载脚本时使用的 HTTPS 源表达式，例如 https://scripts.example.com 或 https://*.example.com。',
+      '允许你的自定义界面加载脚本时使用的 HTTPS 源表达式，例如 https://scripts.example.com 或 https://*.example.com。',
     csp_connect_src: '允许的 connect-src',
     csp_connect_src_tip:
-      '允许你的自定义 UI 发起网络请求时使用的 HTTPS 或 WSS 源表达式，例如 https://api.example.com 或 wss://events.example.com。',
+      '允许你的自定义界面发起网络请求时使用的 HTTPS 或 WSS 源表达式，例如 https://api.example.com 或 wss://events.example.com。',
     csp_source_invalid_error:
-      '请输入有效的源表达式。请使用 https:// URL；connect-src 也支持 wss://。不支持 CSP 关键字和分号。',
+      '请输入有效的源表达式。请使用 https:// 网址；connect-src 也支持 wss://。不支持内容安全策略关键字和分号。',
     csp_source_duplicate_error: '此源表达式已在列表中。',
   },
   account_center: {
     title: '账户中心',
     description: '为终端用户实现账户中心，以管理账户安全和个人资料信息。',
-    enable_account_api: '启用账户中心和 Account API',
+    enable_account_api: '启用账户中心和账户接口',
     enable_account_api_description:
-      '同时启用面向用户的 Account API 和 Logto 的开箱即用账户中心。关闭后，这两个功能都将不可用。',
+      '同时启用面向用户的账户接口和Logto的开箱即用账户中心。关闭后，这两个功能都将不可用。',
     field_options: {
       off: '关闭',
       edit: '可编辑',
@@ -117,12 +117,11 @@ const sign_in_exp = {
     sections: {
       account_security: {
         title: '账户安全',
-        description:
-          '管理对 Account API 的访问，允许用户在登录应用后查看或编辑其身份信息和认证要素。',
+        description: '管理对账户接口的访问，允许用户在登录应用后查看或编辑其身份信息和认证要素。',
         security_verification: {
           title: '安全验证',
           description:
-            '在更改安全设置之前，用户必须验证身份以获取有效期 10 分钟的验证记录 ID。要启用验证方式（邮箱、手机、密码），请将下方的 Account API 权限设置为<strong>只读</strong>（最低要求）或<strong>编辑</strong>，以便系统检测用户是否已配置。<a>了解更多</a>',
+            '在更改安全设置之前，用户必须验证身份以获取有效期 10 分钟的验证记录标识。要启用验证方式（邮箱、手机、密码），请将下方的账户接口权限设置为<strong>只读</strong>（最低要求）或<strong>编辑</strong>，以便系统检测用户是否已配置。<a>了解更多</a>',
         },
         groups: {
           identifiers: {
@@ -138,8 +137,7 @@ const sign_in_exp = {
       },
       user_profile: {
         title: '用户资料',
-        description:
-          '管理对 Account API 的访问，允许用户在登录应用后查看或编辑基础或自定义的资料数据。',
+        description: '管理对账户接口的访问，允许用户在登录应用后查看或编辑基础或自定义的资料数据。',
         groups: {
           profile_data: {
             title: '资料数据',
@@ -149,12 +147,12 @@ const sign_in_exp = {
       secret_vault: {
         title: '密钥保险库',
         description:
-          '用于社交与企业连接器，安全地存储第三方访问令牌，以调用其 API（例如向 Google 日历添加事件）。',
+          '用于社交与企业连接器，安全地存储第三方访问令牌，以调用其接口（例如向Google日历添加事件）。',
         third_party_token_storage: {
           title: '第三方令牌',
           third_party_access_token_retrieval: '第三方访问令牌获取',
           third_party_token_tooltip: '若要存储令牌，可在相应社交或企业连接器的设置中启用该选项。',
-          third_party_token_description: '启用 Account API 后，将会自动开启第三方令牌获取。',
+          third_party_token_description: '启用账户接口后，将会自动开启第三方令牌获取。',
         },
       },
     },
@@ -165,14 +163,14 @@ const sign_in_exp = {
       password: '密码',
       mfa: '多因素认证',
       mfa_description: '允许用户在账户中心管理其多因素认证方式。',
-      passkey: 'Passkey',
+      passkey: '通行密钥',
       username: '用户名',
       name: '姓名',
       avatar: '头像',
       profile: '资料',
       profile_description: '控制对结构化资料属性的访问。',
       custom_data: '自定义数据',
-      custom_data_description: '控制对存储在用户上的自定义 JSON 数据的访问。',
+      custom_data_description: '控制对存储在用户上的自定义JavaScript对象表示法（JSON）数据的访问。',
       sessions: '会话',
       trusted_devices: '可信设备',
     },
@@ -192,16 +190,16 @@ const sign_in_exp = {
           '要添加此字段，请先在下方用户资料部分中将“自定义数据”权限设置为“可编辑/只读”。',
       },
     },
-    webauthn_related_origins: 'WebAuthn 关联来源',
-    webauthn_related_origins_description: '添加允许通过 Account API 注册通行密钥的前端应用域名。',
+    webauthn_related_origins: '网络身份验证（WebAuthn）关联来源',
+    webauthn_related_origins_description: '添加允许通过账户接口注册通行密钥的前端应用域名。',
     webauthn_related_origins_error: '来源必须以 https:// 或 http:// 开头',
     delete_account_url: '删除账号',
-    delete_account_url_description: '提供你自己的端点 URL，用自定义逻辑处理账号删除。',
+    delete_account_url_description: '提供你自己的端点网址，用自定义逻辑处理账号删除。',
     organization_center: {
       title: '组织中心',
       description: '配置预置组织体验，让最终用户创建组织并进行自治管理。',
       enabled: '启用组织中心',
-      enabled_description: '在预置账户中心中开放组织管理，并启用面向用户的组织 API。',
+      enabled_description: '在预置账户中心中开放组织管理，并启用面向用户的组织接口。',
       preview: '打开组织中心预览',
       modules: '可用模块',
       creation_policy: '组织创建',
@@ -209,17 +207,17 @@ const sign_in_exp = {
       creation_disabled: '任何人都不可以',
       creation_all: '所有已登录用户',
       creation_roles: '拥有指定全局角色的用户',
-      allowed_roles: '允许的全局角色 ID',
-      allowed_roles_description: '使用逗号分隔角色 ID，仅在指定角色策略下生效。',
+      allowed_roles: '允许的全局角色标识',
+      allowed_roles_description: '使用逗号分隔角色标识，仅在指定角色策略下生效。',
       creation_limit: '每位用户最多创建组织数',
       invitation_policy: '邀请',
       invitation_registration: '允许受邀用户注册',
       invitation_expiry: '邀请有效期（天）',
       resource_allowlist: '共享资源白名单',
-      sso_connectors: '企业 SSO 连接器 ID',
-      applications: '机器到机器应用 ID',
-      business_roles: '组织业务角色 ID',
-      allowlist_description: '使用逗号分隔 ID，留空表示不共享任何资源。',
+      sso_connectors: '企业单点登录连接器标识',
+      applications: '机器到机器应用标识',
+      business_roles: '组织业务角色标识',
+      allowlist_description: '使用逗号分隔标识，留空表示不共享任何资源。',
       module_labels: {
         profile: '组织资料',
         branding: '品牌',
@@ -227,25 +225,25 @@ const sign_in_exp = {
         invitations: '邀请',
         managementRoles: '管理角色',
         businessRoles: '业务角色',
-        security: '安全与 MFA',
-        jit: 'JIT 预配',
-        applications: 'M2M 应用',
+        security: '安全与多因素认证',
+        jit: '即时预配预配',
+        applications: '机器对机器应用',
         activity: '活动',
         deletion: '删除组织',
       },
     },
     prebuilt_ui: {
-      title: '集成预构建 UI',
+      title: '集成预构建界面',
       description:
-        '使用预构建 UI 快速集成开箱即用的账户中心、安全验证或单一资料更新流程。只需将你的域名与路由组合，即可形成账户中心 URL（例如 https://auth.foo.com/account/email）。',
+        '使用预构建界面快速集成开箱即用的账户中心、安全验证或单一资料更新流程。只需将你的域名与路由组合，即可形成账户中心网址（例如https://auth.foo.com/account/email）。',
       permission_notice:
-        '要集成这些预构建流程，请在下方设置中将相关的帐户 API 权限设置为<strong>编辑</strong>。',
+        '要集成这些预构建流程，请在下方设置中将相关的帐户接口权限设置为<strong>编辑</strong>。',
       account_center_title: '集成开箱即用的账户中心',
       account_center_description:
-        '将用户路由到账户中心，以管理电子邮件、手机号、用户名、密码、MFA 和关联账号等安全设置。',
+        '将用户路由到账户中心，以管理电子邮件、手机号、用户名、密码、多因素认证和关联账号等安全设置。',
       flows_title: '集成开箱即用的安全设置流程',
       flows_description:
-        '将你的域名与路由组合以形成账户设置 URL（例如 https://auth.foo.com/account/email）。可选择添加 `redirect=` 以在成功更新后将用户返回到你的应用，添加 `show_success=true` 以保持成功页面可见，添加 `ui_locales=` 以覆盖默认语言，或添加 `identifier=` 以预填标识符输入字段。',
+        '将你的域名与路由组合以形成账户设置网址（例如https://auth.foo.com/account/email）。可选择添加 `redirect=` 以在成功更新后将用户返回到你的应用，添加 `show_success=true` 以保持成功页面可见，添加 `ui_locales=` 以覆盖默认语言，或添加 `identifier=` 以预填标识符输入字段。',
       single_task_flows_title: '集成开箱即用的单一任务流程',
       single_task_flows_description:
         '直接将用户路由到特定流程（例如，邮箱绑定）。可选择添加 `redirect=` 以在成功更新后将用户返回到你的应用，添加 `show_success=true` 以保持成功页面可见，添加 `ui_locales=` 以覆盖默认语言，或添加 `identifier=` 以预填标识符输入字段。',
@@ -264,23 +262,23 @@ const sign_in_exp = {
         backup_codes_generate: '生成一组新的 10 个备用码',
         backup_codes_manage: '查看你可用的备用码或生成新的',
         account_center:
-          '访问账户中心以管理电子邮件、手机号、用户名、密码、MFA 和关联账号等安全设置',
+          '访问账户中心以管理电子邮件、手机号、用户名、密码、多因素认证和关联账号等安全设置',
         profile: '管理个人信息（如姓名、头像）的中心枢纽',
         sessions: '查看和管理你在各设备上的活跃会话',
       },
       customize_note: '不想要开箱即用的体验？你可以完全',
-      customize_link: '使用 Account API 自定义你的流程。',
+      customize_link: '使用账户接口自定义你的流程。',
     },
     custom_css: {
-      title: '自定义 CSS',
-      description: '使用自定义 CSS 自定义账户中心的外观。',
+      title: '自定义层叠样式表（CSS）',
+      description: '使用自定义层叠样式表（CSS）自定义账户中心的外观。',
     },
   },
   sign_up_and_sign_in,
   content,
   setup_warning: {
     no_connector_sms:
-      '尚未设置 SMS 短信连接器。在完成该配置前，用户将无法通过此登录方式登录。<a>{{link}}</a>连接器。',
+      '尚未设置短信（SMS）连接器。在完成该配置前，用户将无法通过此登录方式登录。<a>{{link}}</a>连接器。',
     no_connector_email:
       '尚未设置电子邮件连接器。在完成该配置前，用户将无法通过此登录方式登录。<a>{{link}}</a>连接器。',
     no_connector_social:
@@ -288,9 +286,9 @@ const sign_in_exp = {
     no_connector_email_account_center:
       '尚未设置电子邮件连接器。请在<a>"邮件与短信连接器"</a>中设置。',
     no_connector_sms_account_center:
-      '尚未设置 SMS 短信连接器。请在<a>"邮件与短信连接器"</a>中设置。',
+      '尚未设置短信（SMS）连接器。请在<a>"邮件与短信连接器"</a>中设置。',
     no_connector_social_account_center: '尚未设置社交连接器。请在<a>"社交连接器"</a>中设置。',
-    no_mfa_factor: '尚未设置 MFA 因子。请在<a>{{link}}</a>中完成设置。',
+    no_mfa_factor: '尚未设置多因素认证因子。请在<a>{{link}}</a>中完成设置。',
     setup_link: '立即设置',
   },
   save_alert: {

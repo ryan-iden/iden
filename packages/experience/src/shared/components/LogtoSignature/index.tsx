@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import LogtoLogtoDark from '@/shared/assets/icons/logto-logo-dark.svg?react';
 import LogtoLogoLight from '@/shared/assets/icons/logto-logo-light.svg?react';
 import LogtoLogoShadow from '@/shared/assets/icons/logto-logo-shadow.svg?react';
+import useInterfaceTranslation from '@/shared/hooks/use-interface-translation';
 import { isCloudBuild, productBrand } from '@/shared/utils/product-brand';
 
 import styles from './index.module.scss';
@@ -81,6 +82,7 @@ type Props = {
 };
 
 const CloudSignature = ({ className, theme }: Props) => {
+  const { t: tUi } = useInterfaceTranslation();
   const LogtoLogo = theme === Theme.Light ? LogtoLogoLight : LogtoLogtoDark;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -171,7 +173,7 @@ const CloudSignature = ({ className, theme }: Props) => {
     <div ref={containerRef} className={className} data-logto-signature-container="secured">
       <a
         ref={anchorRef}
-        aria-label="Powered By Logto"
+        aria-label={`${tUi('powered_by')} Logto`}
         className={styles.signature}
         data-logto-signature="secured"
         href={logtoUrl.toString()}
@@ -179,7 +181,7 @@ const CloudSignature = ({ className, theme }: Props) => {
         target="_blank"
       >
         <span data-logto-signature-text className={styles.text}>
-          Powered by
+          {tUi('powered_by')}
         </span>
         <LogtoLogoShadow data-logto-signature-icon="static" className={styles.staticIcon} />
         <LogtoLogo data-logto-signature-icon="highlight" className={styles.highlightIcon} />
@@ -188,15 +190,18 @@ const CloudSignature = ({ className, theme }: Props) => {
   );
 };
 
-const IdenSignature = ({ className }: Pick<Props, 'className'>) => (
-  <div className={className}>
-    <a className={styles.idenSignature} href="/help/en/about">
-      <span>Powered by</span>
-      <span aria-hidden className={styles.idenMark} />
-      <strong>{productBrand.productName}</strong>
-    </a>
-  </div>
-);
+const IdenSignature = ({ className }: Pick<Props, 'className'>) => {
+  const { t: tUi, i18n } = useInterfaceTranslation();
+  return (
+    <div className={className}>
+      <a className={styles.idenSignature} href={`/help/${i18n.resolvedLanguage}/about`}>
+        <span>{tUi('powered_by')}</span>
+        <span aria-hidden className={styles.idenMark} />
+        <strong>{productBrand.productName}</strong>
+      </a>
+    </div>
+  );
+};
 
 const LogtoSignature = (props: Props) =>
   isCloudBuild ? <CloudSignature {...props} /> : <IdenSignature className={props.className} />;

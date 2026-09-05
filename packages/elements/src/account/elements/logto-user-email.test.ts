@@ -15,7 +15,7 @@ suite('logto-user-email', () => {
     const element = await fixture<LogtoUserEmail>(html`<logto-user-email></logto-user-email>`);
     await element.updateComplete;
 
-    assert.equal(element.shadowRoot?.textContent, 'Unable to retrieve account context.');
+    assert.equal(element.shadowRoot?.textContent, 'Unable to load account information.');
   });
 
   test('should render email if the user has permission to view email information', async () => {

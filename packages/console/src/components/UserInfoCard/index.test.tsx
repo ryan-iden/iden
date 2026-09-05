@@ -35,7 +35,7 @@ describe('UserInfoCard', () => {
       </>
     );
     const avatarSources = [
-      ...container.querySelectorAll<HTMLImageElement>('img[alt="avatar"]'),
+      ...container.querySelectorAll<HTMLImageElement>('img[alt="interface.avatar"]'),
     ].map(({ src }) => src);
 
     expect(avatarSources).toHaveLength(2);

@@ -10,6 +10,7 @@ import DefaultAvatar from '@/assets/images/default-avatar.svg?react';
 import { isCloud } from '@/consts/env';
 import ImageWithErrorFallback from '@/ds-components/ImageWithErrorFallback';
 import { Tooltip } from '@/ds-components/Tip';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 
 import styles from './index.module.scss';
 
@@ -49,6 +50,7 @@ function UserInfoTipContent({ user }: { readonly user: Partial<UserInfo> }) {
 }
 
 function UserAvatar({ className, size = 'medium', user, hasTooltip = false }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const { i18n } = useTranslation();
   const avatarClassName = classNames(styles.avatar, styles[size], styles[i18n.dir()]);
   const wrapperClassName = classNames(styles.wrapper, styles[size], className);
@@ -71,7 +73,7 @@ function UserAvatar({ className, size = 'medium', user, hasTooltip = false }: Pr
   const avatarSeed = resolveDefaultAvatarSeed(id, primaryEmail, username, primaryPhone, name);
   const idenDefaultAvatar = (
     <Blobatar
-      alt="avatar"
+      alt={tUi('avatar')}
       background="squircle"
       className={avatarClassName}
       draggable={false}
@@ -86,7 +88,7 @@ function UserAvatar({ className, size = 'medium', user, hasTooltip = false }: Pr
         <ImageWithErrorFallback
           className={avatarClassName}
           src={avatar}
-          alt="avatar"
+          alt={tUi('avatar')}
           /**
            * Some social connectors like Google will block the references to its image resource,
            * without specifying the referrerPolicy attribute. Reference:

@@ -27,7 +27,7 @@
     "ci:lint": "pnpm -r --parallel --workspace-concurrency=0 lint",
     "ci:stylelint": "pnpm -r --parallel --workspace-concurrency=0 stylelint",
     "ci:test": "pnpm -r --parallel --workspace-concurrency=0 test:ci && pnpm test:scripts",
-    "test:scripts": "node .scripts/compare-database.test.js && node --test .scripts/ci.test.mjs",
+    "test:scripts": "node .scripts/compare-database.test.js && node --test .scripts/ci.test.mjs .scripts/localization.test.mjs",
     "test:integration": "./.scripts/integration/run.sh"
   },
   "devDependencies": {

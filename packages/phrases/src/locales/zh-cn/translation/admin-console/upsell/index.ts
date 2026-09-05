@@ -10,7 +10,7 @@ const upsell = {
   create_tenant: {
     title: '选择您的租户计划',
     description:
-      'Logto 提供创新且经济实惠的定价计划，旨在为不断发展的公司提供竞争优势。 <a>了解更多</a>',
+      'Logto提供创新且经济实惠的定价计划，旨在为不断发展的公司提供竞争优势。 <a>了解更多</a>',
     base_price: '基础价格',
     monthly_price: '每月 {{value, number}}',
     view_all_features: '查看所有功能',
@@ -21,15 +21,15 @@ const upsell = {
     upgrade_success: '成功升级至<name/>',
   },
   mau_exceeded_modal: {
-    title: 'MAU 超过限制，请升级您的计划。',
+    title: '月活跃用户超过限制，请升级您的计划。',
     notification:
-      '您当前的 MAU 已超过<planName/>的限制。请立即升级到高级计划，以避免 Logto 服务的暂停。',
+      '您当前的月活跃用户已超过<planName/>的限制。请立即升级到高级计划，以避免Logto服务的暂停。',
     update_plan: '更新计划',
   },
   token_exceeded_modal: {
     title: '令牌使用超过限制。升级你的计划。',
     notification:
-      '你已超出<planName/>令牌使用限制。用户将无法正常访问 Logto 服务。请及时升级你的计划到高级版，以避免任何不便。',
+      '你已超出<planName/>令牌使用限制。用户将无法正常访问Logto服务。请及时升级你的计划到高级版，以避免任何不便。',
   },
   payment_overdue_modal: {
     title: '账单逾期未付',
@@ -39,9 +39,9 @@ const upsell = {
     update_payment: '更新支付',
   },
   add_on_quota_item: {
-    api_resource: 'API 资源',
+    api_resource: '接口资源',
     machine_to_machine: '机器对机器应用',
-    tokens: '{{limit}}M 令牌',
+    tokens: '{{limit}}M令牌',
     tenant_member: '租户成员',
   },
   charge_notification_for_quota_limit:
@@ -54,7 +54,7 @@ const upsell = {
     description: '准备上线了吗？将此开发租户转换为生产租户可以解锁全部功能',
     benefits: {
       stable_environment: '针对终端用户：一个稳定的实际使用环境。',
-      keep_pro_features: '保留 Pro 功能：你将订阅 Pro 计划。<a>查看 Pro 功能。</a>',
+      keep_pro_features: '保留Pro功能：你将订阅Pro计划。<a>查看Pro功能。</a>',
       no_dev_restrictions: '无开发限制：移除实体和资源系统限制以及登录横幅。',
     },
     cards: {

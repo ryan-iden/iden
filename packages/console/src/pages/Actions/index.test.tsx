@@ -149,7 +149,7 @@ describe('Actions', () => {
 
     render(<Actions />);
 
-    expect(screen.getByRole('status', { name: 'Loading...' })).toBeTruthy();
+    expect(screen.getByRole('status', { name: 'interface.loading' })).toBeTruthy();
     expect(screen.queryByText('admin_console.actions.types.post_sign_in.name')).toBeNull();
   });
 

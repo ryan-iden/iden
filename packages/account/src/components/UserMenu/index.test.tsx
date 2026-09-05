@@ -115,7 +115,7 @@ describe('<UserMenu />', () => {
       }
     );
 
-    expect(container.querySelector('img[alt="avatar"]')?.getAttribute('src')).toBe(
+    expect(container.querySelector('img[alt="interface.avatar"]')?.getAttribute('src')).toBe(
       'https://example.com/avatar.png'
     );
   });

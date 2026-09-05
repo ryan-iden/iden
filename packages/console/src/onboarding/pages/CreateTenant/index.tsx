@@ -26,6 +26,7 @@ import RadioGroup, { Radio } from '@/ds-components/RadioGroup';
 import { Ring } from '@/ds-components/Spinner';
 import TextInput from '@/ds-components/TextInput';
 import useAvailableRegions from '@/hooks/use-available-regions';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTheme from '@/hooks/use-theme';
 import useUserOnboardingData from '@/onboarding/hooks/use-user-onboarding-data';
 import pageLayout from '@/onboarding/scss/layout.module.scss';
@@ -42,6 +43,7 @@ type CreateTenantForm = Omit<CreateTenantData, 'tag'> & {
 };
 
 function CreateTenant() {
+  const { t: tUi } = useInterfaceTranslation();
   const methods = useForm<CreateTenantForm>({
     defaultValues: {
       name: 'My project',
@@ -162,7 +164,7 @@ function CreateTenant() {
               <TextInput
                 // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus
-                placeholder="My project"
+                placeholder={tUi('my_project')}
                 disabled={isSubmitting}
                 {...register('name')}
                 error={Boolean(errors.name)}

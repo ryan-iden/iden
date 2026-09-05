@@ -1,19 +1,19 @@
 const api_resources = {
-  page_title: 'API 資源',
-  title: 'API 資源',
-  subtitle: '定義可以從已授權的應用程序中使用的 API。',
-  create: '創建 API 資源',
-  api_name: 'API 名稱',
-  api_name_placeholder: '輸入 API 名稱',
-  api_identifier: 'API 識別碼',
+  page_title: '介面資源',
+  title: '介面資源',
+  subtitle: '定義可以從已授權的應用程序中使用的介面。',
+  create: '創建介面資源',
+  api_name: '介面名稱',
+  api_name_placeholder: '輸入介面名稱',
+  api_identifier: '介面識別碼',
   api_identifier_placeholder: 'https://your-api-identifier',
   api_identifier_tip:
-    '對於 API 資源的唯一標識符。它必須是一個絕對 URI，並沒有 fragment (#) 組件。等價於 OAuth 2.0 中的 <a>resource parameter</a>。',
-  default_api: '預設 API',
+    '介面資源的唯一識別碼。它必須是絕對位址，且不能包含片段（fragment，#）。等價於開放授權（OAuth）2.0 中的<a>資源參數</a>。',
+  default_api: '預設介面',
   default_api_label:
-    '一個租戶只能設定零個或一個預設 API。當指定了預設 API 後，可以在授權請求中省略 `resource` 參數。隨後的令牌交換將使用該 API 作為默認的 Audience，從而產生 JWT。<a>了解更多</a>',
-  api_resource_created: ' API 資源 {{name}} 已成功創建。',
-  invalid_resource_indicator_format: 'API 識別碼必須是有效的絕對 URI。',
+    '每個租戶只能設定零個或一個預設介面。指定預設介面後，可以在授權請求中省略 `resource` 參數。後續權杖交換將預設使用該介面作為受眾（Audience），從而簽發 JSON Web 權杖（JWT）。<a>了解更多</a>',
+  api_resource_created: '介面資源 {{name}} 已成功建立。',
+  invalid_resource_indicator_format: '介面識別碼必須是有效的絕對位址。',
 };
 
 export default Object.freeze(api_resources);

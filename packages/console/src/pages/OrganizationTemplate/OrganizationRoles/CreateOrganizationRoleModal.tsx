@@ -13,6 +13,7 @@ import ModalLayout from '@/ds-components/ModalLayout';
 import RadioGroup, { Radio } from '@/ds-components/RadioGroup';
 import TextInput from '@/ds-components/TextInput';
 import useApi from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import modalStyles from '@/scss/modal.module.scss';
 import { trySubmitSafe } from '@/utils/form';
 
@@ -33,6 +34,7 @@ type Props = {
 };
 
 function CreateOrganizationRoleModal({ isOpen, onClose }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
 
   const {
@@ -92,7 +94,7 @@ function CreateOrganizationRoleModal({ isOpen, onClose }: Props) {
           <TextInput
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
-            placeholder="viewer"
+            placeholder={tUi('role_example')}
             error={Boolean(errors.name)}
             {...register('name', { required: true })}
           />

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import { AccountCenterControlValue, ConnectorPlatform, type AccountCenter } from '@logto/schemas';
 import { waitFor } from '@testing-library/react';
 import { HTTPError, type NormalizedOptions } from 'ky';
@@ -277,7 +278,7 @@ describe('<SocialFlow />', () => {
         },
       });
 
-      expect(getByText('You have already associated this social account.')).toBeTruthy();
+      expect(getByText('interface.social_account_already_linked')).toBeTruthy();
     });
 
     it('creates social verification and redirects to authorization URI', async () => {

@@ -8,11 +8,11 @@ const usage = {
   usage_description_with_limited_quota: '{{usage}}<span> (首 {{basicQuota}} 包含在內)</span>',
   usage_description_without_quota: '{{usage}}<span> (不包含在內)</span>',
   mau: {
-    title: 'MAU',
+    title: '每月活躍使用者',
     tooltip:
-      'MAU 是指在一個計費周期內至少與 Logto 交換過一次 Token 的獨立用戶。專業計劃不限量。<a>了解更多</a>',
+      '每月活躍使用者是指在一個計費周期內至少與Logto交換過一次權杖的獨立用戶。專業計劃不限量。<a>了解更多</a>',
     tooltip_for_enterprise:
-      'MAU 是指在一個計費周期內至少與 Logto 交換過一次 Token 的獨立用戶。企業計劃不限量。',
+      '每月活躍使用者是指在一個計費周期內至少與Logto交換過一次權杖的獨立用戶。企業計劃不限量。',
   },
   organizations: {
     title: '組織',
@@ -27,19 +27,19 @@ const usage = {
     title: '多重身份驗證',
     tooltip: '附加功能，每月固定費用 ${{price, number}}。費用不受使用的驗證因素數量影響。',
     tooltip_for_enterprise:
-      '是否包含取決於你的計劃。如果 MFA 功能不在你最初的合約中，當你啟用時將添加到賬單中。附加功能費用為 ${{price, number}}/月，不受使用的驗證因素數量影響。',
+      '是否包含取決於你的計劃。如果多因素驗證功能不在你最初的合約中，當你啟用時將添加到賬單中。附加功能費用為 ${{price, number}}/月，不受使用的驗證因素數量影響。',
   },
   enterprise_sso: {
     title: '企業單一簽入',
-    tooltip: '附加功能，每個 SSO 連接每月 ${{price, number}}。',
+    tooltip: '附加功能，每個單一登入連接每月 ${{price, number}}。',
     tooltip_for_enterprise:
-      '附加功能，每個 SSO 連接每月 ${{price, number}}。你的合約計劃中包含前 {{basicQuota}} 個 SSO 並可免費使用。',
+      '附加功能，每個單一登入連接每月 ${{price, number}}。你的合約計劃中包含前 {{basicQuota}} 個單一登入並可免費使用。',
   },
   api_resources: {
-    title: 'API 資源',
-    tooltip: '附加功能，每個資源每月 ${{price, number}}。首 3 個 API 資源免費。',
+    title: '介面資源',
+    tooltip: '附加功能，每個資源每月 ${{price, number}}。首 3 個介面資源免費。',
     tooltip_for_enterprise:
-      '你的合約計劃中包含前 {{basicQuota}} 個 API 資源並可免費使用。如果你需要更多，每個 API 資源每月 ${{price, number}}。',
+      '你的合約計劃中包含前 {{basicQuota}} 個介面資源並可免費使用。如果你需要更多，每個介面資源每月 ${{price, number}}。',
   },
   machine_to_machine: {
     title: '機器對機器',
@@ -67,7 +67,7 @@ const usage = {
       '你的合約計劃中包含前 {{basicQuota}} 次令牌並可免費使用。如果你需要更多，每 {{tokenLimit}} 次令牌每月 ${{price, number}}。',
   },
   m2mTokens: {
-    title: 'M2M 令牌',
+    title: '機器對機器令牌',
   },
   hooks: {
     title: '鉤子',
@@ -78,11 +78,11 @@ const usage = {
   security_features: {
     title: '高級安全性',
     tooltip:
-      '附加功能，整個高級安全套裝每月 ${{price, number}}，包括 CAPTCHA、標識符鎖定、電子郵件阻止名單等。',
+      '附加功能，整個高級安全套裝每月 ${{price, number}}，包括人機驗證、標識符鎖定、電子郵件阻止名單等。',
   },
   saml_applications: {
-    title: 'SAML 應用程式',
-    tooltip: '附加功能，每個 SAML 應用程式每月 ${{price, number}}。',
+    title: '安全斷言標記語言（SAML）應用程式',
+    tooltip: '附加功能，每個安全斷言標記語言（SAML）應用程式每月 ${{price, number}}。',
   },
   third_party_applications: {
     title: '第三方應用程式',

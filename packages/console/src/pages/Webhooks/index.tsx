@@ -23,6 +23,7 @@ import Table from '@/ds-components/Table';
 import TablePlaceholder from '@/ds-components/Table/TablePlaceholder';
 import Tag from '@/ds-components/Tag';
 import { type RequestError } from '@/hooks/use-api';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 import useSearchParametersWatcher from '@/hooks/use-search-parameters-watcher';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useTheme from '@/hooks/use-theme';
@@ -39,6 +40,7 @@ const createWebhookPathname = `${webhooksPathname}/create`;
 const buildDetailsPathname = (id: string) => `${webhooksPathname}/${id}`;
 
 function Webhooks() {
+  const getEventTitle = useLogEventTitle();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const { search } = useLocation();
   const { navigate, match } = useTenantPathname();
@@ -111,7 +113,10 @@ function Webhooks() {
             colSpan: 7,
             render: ({ event, events }) => {
               const eventArray = conditional(events.length > 0 && events) ?? [event];
-              return eventArray.join(' / ');
+              return eventArray
+                .map((value) => value && getEventTitle(value))
+                .filter(Boolean)
+                .join(' / ');
             },
           },
           {

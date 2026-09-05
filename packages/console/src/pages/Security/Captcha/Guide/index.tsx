@@ -12,6 +12,7 @@ import DynamicT from '@/ds-components/DynamicT';
 import IconButton from '@/ds-components/IconButton';
 import OverlayScrollbar from '@/ds-components/OverlayScrollbar';
 import useApi from '@/hooks/use-api';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import { splitMarkdownByTitle } from '@/pages/Connectors/utils';
 import modalStyles from '@/scss/modal.module.scss';
@@ -31,6 +32,7 @@ type Props = {
 };
 
 function Guide({ type, onClose }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const captchaMetadata = captchaProviders.find((provider) => provider.type === type);
   const { navigate } = useTenantPathname();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
@@ -109,7 +111,9 @@ function Guide({ type, onClose }: Props) {
         </div>
         <div className={styles.content}>
           <OverlayScrollbar className={styles.readme}>
-            <div className={styles.readmeTitle}>README: {title}</div>
+            <div className={styles.readmeTitle}>
+              {tUi('complete_guide')} {title}
+            </div>
             <Markdown className={styles.readmeContent}>{content}</Markdown>
           </OverlayScrollbar>
           <div className={styles.setup}>

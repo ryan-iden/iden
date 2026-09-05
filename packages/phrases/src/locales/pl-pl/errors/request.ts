@@ -1,4 +1,5 @@
 const request = {
+  message_rate_limited: 'Wysłano zbyt wiele wiadomości do tego odbiorcy. Spróbuj ponownie później.',
   invalid_input: 'Nieprawidłowe dane wejściowe. {{details}}',
   general: 'Wystąpił błąd żądania.',
   range_not_satisfiable: 'Zakres nie do zrealizowania.',

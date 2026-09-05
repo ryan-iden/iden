@@ -1,5 +1,6 @@
 import { condString, joinPath } from '@silverhand/essentials';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { consoleEmbeddedPricingUrl } from '@/consts/env';
 import Card from '@/ds-components/Card';
@@ -28,6 +29,7 @@ type MessageData = {
 };
 
 function ConsoleEmbeddedPricing() {
+  const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const [height, setHeight] = useState<number | undefined>(window.innerHeight);
   const pricingContentRef = useRef<HTMLIFrameElement>(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
@@ -149,7 +151,7 @@ function ConsoleEmbeddedPricing() {
         className={styles.iframe}
         src={pricingContentUrl.toString()}
         sandbox={undefined}
-        title="Console embed pricing table"
+        title={t('subscription.current_plan')}
         height={height}
         style={{ display: iframeLoaded ? 'block' : 'none' }}
       />

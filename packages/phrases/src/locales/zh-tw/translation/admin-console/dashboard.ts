@@ -9,11 +9,11 @@ const dashboard = {
   new_users_7_days: '7 日新增',
   new_users_7_days_tip: '最近 7 日註冊到你應用上的新用戶數',
   daily_active_users: '日活用戶',
-  daily_active_users_tip: '今日在你的應用上交換過 token 的獨立用戶數',
+  daily_active_users_tip: '今日在你的應用上交換過權杖的獨立用戶數',
   weekly_active_users: '周活用戶',
-  weekly_active_users_tip: '最近 7 日在你的應用上交換過 token 的獨立用戶數',
+  weekly_active_users_tip: '最近 7 日在你的應用上交換過權杖的獨立用戶數',
   monthly_active_users: '月活用戶',
-  monthly_active_users_tip: '最近 30 日在你的應用上交換過 token 的獨立用戶數',
+  monthly_active_users_tip: '最近 30 日在你的應用上交換過權杖的獨立用戶數',
 };
 
 export default Object.freeze(dashboard);

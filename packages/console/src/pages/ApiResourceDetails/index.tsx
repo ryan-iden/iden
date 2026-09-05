@@ -26,6 +26,7 @@ import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import type { RequestError } from '@/hooks/use-api';
 import useApi from '@/hooks/use-api';
 import useDocumentationUrl from '@/hooks/use-documentation-url';
+import useSystemLabels from '@/hooks/use-system-labels';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useTheme from '@/hooks/use-theme';
 import { getApiResourceDisplayName } from '@/utils/api-resource';
@@ -42,6 +43,7 @@ const icons = {
 };
 
 function ApiResourceDetails() {
+  const { managementApiName } = useSystemLabels();
   const { pathname } = useLocation();
   const { id, guideId } = useParams();
   const { navigate, match } = useTenantPathname();
@@ -124,7 +126,7 @@ function ApiResourceDetails() {
                 />
               )
             }
-            title={getApiResourceDisplayName(data.name, data.indicator)}
+            title={getApiResourceDisplayName(data.name, data.indicator, managementApiName)}
             primaryTag={data.isDefault && t('api_resources.default_api')}
             identifier={{
               name: 'API Identifier',

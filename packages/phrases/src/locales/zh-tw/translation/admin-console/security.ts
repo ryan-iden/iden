@@ -3,67 +3,69 @@ const security = {
   title: '安全',
   subtitle: '配置進階保護以抵禦複雜攻擊。',
   tabs: {
-    captcha: 'CAPTCHA',
+    captcha: '人機驗證',
     password_policy: '密碼政策',
     blocklist: '封鎖名單',
     general: '一般',
   },
   bot_protection: {
+    custom_ui_captcha_notice:
+      '你正在使用自訂介面。若要在其中啟用人機驗證，需要額外設定。<a>查看設定指南</a>。',
     title: '機器人保護',
-    description: '為註冊、登入和密碼重設啟用 CAPTCHA 以阻擋自動化威脅。',
+    description: '為註冊、登入和密碼重設啟用人機驗證以阻擋自動化威脅。',
     captcha: {
-      title: 'CAPTCHA',
-      placeholder: '選擇一個 CAPTCHA 提供商並設定整合。',
-      add: '新增 CAPTCHA',
+      title: '人機驗證',
+      placeholder: '選擇一個人機驗證提供商並設定整合。',
+      add: '新增人機驗證',
     },
     settings: '設定',
-    enable_captcha: '啟用 CAPTCHA',
-    enable_captcha_description: '啟用註冊、登入和密碼恢復流程的 CAPTCHA 驗證。',
+    enable_captcha: '啟用人機驗證',
+    enable_captcha_description: '啟用註冊、登入和密碼恢復流程的人機驗證驗證。',
   },
   create_captcha: {
-    setup_captcha: '設定 CAPTCHA',
+    setup_captcha: '設定人機驗證',
   },
   captcha_providers: {
     recaptcha_enterprise: {
       name: 'reCAPTCHA Enterprise',
       description:
-        'Google 的企業級 CAPTCHA 解決方案，提供進階威脅偵測和詳細的安全分析，以保護你的網站免受詐騙活動的侵害。',
+        'Google的企業級人機驗證解決方案，提供進階威脅偵測和詳細的安全分析，以保護你的網站免受詐騙活動的侵害。',
     },
     turnstile: {
       name: 'Cloudflare Turnstile',
       description:
-        'Cloudflare 的智慧型 CAPTCHA 替代方案，提供非侵入性的機器人保護，同時確保不需要視覺拼圖的無縫使用者體驗。',
+        'Cloudflare的智慧型人機驗證替代方案，提供非侵入性的機器人保護，同時確保不需要視覺拼圖的無縫使用者體驗。',
     },
   },
   captcha_details: {
     back_to_security: '返回安全',
-    page_title: 'CAPTCHA 詳情',
-    check_readme: '查看 README',
-    options_change_captcha: '變更 CAPTCHA 提供商',
+    page_title: '人機驗證詳情',
+    check_readme: '查看自述文件（README）',
+    options_change_captcha: '變更人機驗證提供商',
     connection: '連線',
-    description: '設定你的 captcha 連線。',
+    description: '設定你的人機驗證連線。',
     site_key: '站台金鑰',
     secret_key: '秘密金鑰',
-    project_id: '專案 ID',
+    project_id: '專案識別碼',
     domain: '網域（可選）',
-    domain_placeholder: 'www.google.com（預設）或 recaptcha.net',
-    recaptcha_key_id: 'reCAPTCHA 金鑰 ID',
-    recaptcha_api_key: '專案的 API 金鑰',
-    deletion_description: '你確定要刪除此 CAPTCHA 提供商嗎？',
-    captcha_deleted: 'CAPTCHA 提供商刪除成功',
-    setup_captcha: '設定 CAPTCHA',
+    domain_placeholder: 'www.google.com（預設）或recaptcha.net',
+    recaptcha_key_id: 'reCAPTCHA金鑰識別碼',
+    recaptcha_api_key: '專案的介面金鑰',
+    deletion_description: '你確定要刪除此人機驗證提供商嗎？',
+    captcha_deleted: '人機驗證提供商刪除成功',
+    setup_captcha: '設定人機驗證',
     mode: '驗證模式',
     mode_invisible: '無感驗證',
     mode_checkbox: '複選框驗證',
     mode_notice:
-      '驗證模式在 Google Cloud Console 的 reCAPTCHA 金鑰設定中定義。更改此處的模式需要匹配的金鑰類型。',
+      '驗證模式在Google Cloud Console的reCAPTCHA金鑰設定中定義。更改此處的模式需要匹配的金鑰類型。',
   },
   password_policy: {
     password_requirements: '密碼需求',
     password_requirements_description: '加強密碼需求以防範憑證填充及弱密碼攻擊。',
     minimum_length: '最小長度',
     minimum_length_description:
-      '美國國家標準與技術研究所 (NIST) 建議網路產品需至少使用 <a>8 個字元</a>。',
+      '美國國家標準與技術研究所(NIST)建議網路產品需至少使用 <a>8 個字元</a>。',
     minimum_length_error: '最小長度必須介於 {{min}} 到 {{max}}（包括）之間。',
     minimum_required_char_types: '最低需要的字元類型',
     minimum_required_char_types_description:
@@ -83,7 +85,7 @@ const security = {
     custom_words_placeholder: '你的服務名稱，公司名稱等。',
     password_expiration: '密碼過期',
     password_expiration_description:
-      '要求用戶在設定的天數後重置密碼。通過 SSO 或通行金鑰登錄的用戶不受影響。',
+      '要求用戶在設定的天數後重置密碼。通過單一登入或通行金鑰登錄的用戶不受影響。',
     enable_password_expiration: '啟用密碼過期',
     enable_password_expiration_description:
       '要求用戶定期重置密碼。對於沒有記錄密碼更改日期的現有用戶，將從此政策啟用之日起進行評估。',
@@ -152,7 +154,7 @@ const security = {
     custom_email_allowlist: {
       title: '允許自訂電子郵件地址',
       description:
-        '新增規則，僅允許特定的電子郵件網域、電子郵件地址或萬用字元模式用於新註冊和新連結的電子郵件。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com 和 googlemail.com 網域會被視為等同，且本地部分中的點號會被忽略，因此 foo.bar@gmail.com 與 foobar@googlemail.com 相符。',
+        '新增規則，僅允許特定的電子郵件網域、電子郵件地址或萬用字元模式用於新註冊和新連結的電子郵件。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com和googlemail.com網域會被視為等同，且本地部分中的點號會被忽略，因此foo.bar@gmail.com與foobar@googlemail.com相符。',
       placeholder: '輸入電子郵件地址、網域或萬用字元模式',
       duplicate_error: '電子郵件地址、網域或萬用字元電子郵件地址模式已新增',
       invalid_format_error:
@@ -172,12 +174,12 @@ const security = {
     email_subaddressing: {
       title: '封鎖電子郵件子地址',
       description:
-        '啟用以拒絕任何使用加號 (+) 和額外字元（例如，user+alias@foo.com）的電子郵件子地址進行註冊嘗試。',
+        '啟用以拒絕任何使用加號(+)和額外字元（例如，user+alias@foo.com）的電子郵件子地址進行註冊嘗試。',
     },
     custom_email_address: {
       title: '封鎖自訂電子郵件地址',
       description:
-        '新增規則，封鎖特定的電子郵件網域、電子郵件地址或萬用字元模式透過 UI 註冊或連結。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com 和 googlemail.com 網域會被視為等同，且本地部分中的點號會被忽略，因此 foo.bar@gmail.com 與 foobar@googlemail.com 相符。',
+        '新增規則，封鎖特定的電子郵件網域、電子郵件地址或萬用字元模式透過介面註冊或連結。例如：bar@example.com、@example.com、foo*@example.com、*@example.com。gmail.com和googlemail.com網域會被視為等同，且本地部分中的點號會被忽略，因此foo.bar@gmail.com與foobar@googlemail.com相符。',
       placeholder: '輸入電子郵件地址、網域或萬用字元模式',
       duplicate_error: '電子郵件地址、域或萬用字元電子郵件地址模式已添加',
       invalid_format_error:

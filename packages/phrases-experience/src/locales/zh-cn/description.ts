@@ -87,7 +87,7 @@ const description = {
   use: '使用',
   single_sign_on_email_form: '输入你的企业电子邮件地址',
   single_sign_on_connectors_list:
-    '你的企业已为电子邮件账户 {{email}} 启用了单点登录。你可以继续使用以下 SSO 提供商进行登录。',
+    '你的企业已为电子邮件账户 {{email}} 启用了单点登录。你可以继续使用以下单点登录提供商进行登录。',
   single_sign_on_enabled: '该帐户已启用单点登录',
   authorize_title: '授权给 {{name}}',
   unregistered_client_notice:
@@ -101,7 +101,7 @@ const description = {
   authorize_agreement: `你将同意授权给 {{name}} <link></link>.`,
   authorize_agreement_with_redirect: `你将同意授权给 {{name}} <link></link>，然后你将被重定向到 {{uri}}。`,
   not_you: '不是你本人吗？',
-  user_id: '用户 ID: {{id}}',
+  user_id: '用户标识: {{id}}',
   redirect_to: '你将被重定向到 {{name}}。',
   auto_agreement: '继续即表示您同意<link></link>。',
   identifier_sign_in_description: '输入您的{{types, list(type: disjunction;)}}以登录。',
@@ -119,8 +119,8 @@ const description = {
   verify_identity: '验证你的身份',
   choose_verification_method: '选择登录方式',
   verification_method: {
-    passkey: 'Passkey',
-    passkey_description: '通过设备或 USB 硬件验证',
+    passkey: '通行密钥',
+    passkey_description: '通过设备或通用串行总线（USB）硬件验证',
     password: '密码',
     password_description: '输入密码',
     email_verification_code: '邮箱验证码',

@@ -2,6 +2,7 @@ import { type SsoConnectorProviderDetail, Theme } from '@logto/schemas';
 import classNames from 'classnames';
 
 import ImageWithErrorFallback from '@/ds-components/ImageWithErrorFallback';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTheme from '@/hooks/use-theme';
 
 import styles from './index.module.scss';
@@ -11,13 +12,14 @@ type Props = {
 };
 
 function SsoConnectorRadio({ data: { logo, logoDark, description, name } }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const theme = useTheme();
   return (
     <div className={styles.ssoConnector}>
       <ImageWithErrorFallback
         containerClassName={styles.container}
         className={styles.logo}
-        alt="logo"
+        alt={tUi('logo')}
         src={theme === Theme.Light ? logo : logoDark}
       />
       <div className={styles.content}>

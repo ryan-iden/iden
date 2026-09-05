@@ -4,6 +4,7 @@ import { decodeJwt } from 'jose';
 import { useCallback, useState, type FormEventHandler } from 'react';
 
 import styles from './App.module.scss';
+import useInterfaceTranslation from './i18n/use-interface-translation';
 import { productBrand } from './product-brand';
 import { getLocalData, setLocalData } from './utils';
 
@@ -16,6 +17,7 @@ const safeDecodeJwt = (token: string) => {
 };
 
 const DevPanel = () => {
+  const { t: tUi } = useInterfaceTranslation();
   const config = getLocalData('config');
   const [showSaved, setShowSaved] = useState(false);
   const { getAccessToken, getIdTokenClaims, fetchUserInfo } = useLogto();
@@ -49,9 +51,11 @@ const DevPanel = () => {
   return (
     <div className={[styles.card, styles.devPanel].join(' ')}>
       <form onSubmit={submitConfig}>
-        <div className={styles.title}>{productBrand.productName} config</div>
+        <div className={styles.title}>
+          {productBrand.productName} {tUi('configuration')}
+        </div>
         <div className={styles.item}>
-          <div className={styles.text}>App ID</div>
+          <div className={styles.text}>{tUi('app_id')}</div>
           <input
             name="appId"
             defaultValue={config.appId}
@@ -60,7 +64,7 @@ const DevPanel = () => {
           />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Sign-in extra params</div>
+          <div className={styles.text}>{tUi('extra_parameters')}</div>
           <input
             name="signInExtraParams"
             defaultValue={config.signInExtraParams}
@@ -69,7 +73,7 @@ const DevPanel = () => {
           />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Prompt</div>
+          <div className={styles.text}>{tUi('prompt')}</div>
           <input
             name="prompt"
             defaultValue={config.prompt}
@@ -78,40 +82,40 @@ const DevPanel = () => {
           />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Scope</div>
+          <div className={styles.text}>{tUi('scope')}</div>
           <input name="scope" defaultValue={config.scope} type="text" placeholder="foo bar" />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Resource (space delimited)</div>
+          <div className={styles.text}>{tUi('resources_space_delimited')}</div>
           <input name="resource" defaultValue={config.resource} type="text" />
         </div>
         <div className={styles.action}>
-          <div className={styles.text}>Sign out to apply changes.</div>
+          <div className={styles.text}>{tUi('sign_out_to_apply')}</div>
           <button type="submit" className={styles.button}>
-            {showSaved ? 'Saved' : 'Save'}
+            {showSaved ? tUi('saved') : tUi('save')}
           </button>
         </div>
       </form>
       <form onSubmit={requestToken}>
-        <div className={styles.title}>Refresh token grant</div>
+        <div className={styles.title}>{tUi('refresh_token_grant')}</div>
         <div className={styles.item}>
-          <div className={styles.text}>Resource</div>
+          <div className={styles.text}>{tUi('resource')}</div>
           <input name="resource" type="text" />
         </div>
         <div className={styles.item}>
-          <div className={styles.text}>Organization ID</div>
+          <div className={styles.text}>{tUi('organization_id')}</div>
           <input name="organizationId" type="text" />
         </div>
         <div className={styles.action}>
-          <div className={styles.text}>See console for the result.</div>
+          <div className={styles.text}>{tUi('console_result')}</div>
           <button type="submit" className={styles.button}>
-            Request token
+            {tUi('request_token')}
           </button>
         </div>
       </form>
       <div>
-        <div className={styles.title}>User info</div>
-        <div className={styles.text}>See console for the result.</div>
+        <div className={styles.title}>{tUi('user_info')}</div>
+        <div className={styles.text}>{tUi('console_result')}</div>
         <p>
           <button
             className={styles.button}
@@ -119,7 +123,7 @@ const DevPanel = () => {
               console.log(await getIdTokenClaims());
             }}
           >
-            Get ID token claims
+            {tUi('get_id_token_claims')}
           </button>
         </p>
         <p>
@@ -129,7 +133,7 @@ const DevPanel = () => {
               console.log(await fetchUserInfo());
             }}
           >
-            Fetch user info
+            {tUi('fetch_user_info')}
           </button>
         </p>
       </div>

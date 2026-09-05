@@ -1,9 +1,9 @@
 const jwt_claims = {
-  title: '自訂 JWT',
-  description: '自訂存取權杖或ID權杖，為你的應用程式提供額外信息。',
+  title: '自訂JavaScript物件表示法（JSON）網路權杖（JWT）',
+  description: '自訂存取權杖或識別碼權杖，為你的應用程式提供額外信息。',
   access_token: {
     card_title: '存取權杖',
-    card_description: '存取權杖是API用於授權請求的憑證，僅包含存取決策所需的聲明。',
+    card_description: '存取權杖是介面用於授權請求的憑證，僅包含存取決策所需的聲明。',
   },
   user_jwt: {
     card_field: '用戶存取權杖',
@@ -13,14 +13,15 @@ const jwt_claims = {
   machine_to_machine_jwt: {
     card_field: '機器對機器存取權杖',
     card_description: '在發行機器對機器權杖期間添加額外數據。',
-    for: '用於 M2M',
+    for: '用於機器對機器',
   },
   id_token: {
-    card_title: 'ID權杖',
-    card_description: 'ID權杖是登入後收到的身份斷言，包含客戶端用於顯示或創建會話的用戶身份聲明。',
-    card_field: '用戶ID權杖',
+    card_title: '識別碼權杖',
+    card_description:
+      '識別碼權杖是登入後收到的身份斷言，包含客戶端用於顯示或創建會話的用戶身份聲明。',
+    card_field: '用戶識別碼權杖',
     card_field_description:
-      "聲明 'sub'、'email'、'phone'、'profile' 和 'address' 始終可用。其他聲明必須先在此處啟用。在所有情況下，你的應用必須在集成時請求匹配的 scope 才能接收它們。",
+      "聲明 'sub'、'email'、'phone'、'profile' 和 'address' 始終可用。其他聲明必須先在此處啟用。在所有情況下，你的應用必須在集成時請求匹配的範圍才能接收它們。",
   },
   code_editor_title: '自訂 {{token}} 聲明',
   custom_jwt_create_button: '添加自訂聲明',
@@ -34,7 +35,8 @@ const jwt_claims = {
   data_source_tab: '數據來源',
   error_handling_tab: '錯誤處理',
   test_tab: '測試上下文',
-  jwt_claims_description: '默認聲明會自動包含在 JWT 中，無法覆蓋。',
+  jwt_claims_description:
+    '默認聲明會自動包含在JavaScript物件表示法（JSON）網路權杖（JWT）中，無法覆蓋。',
   user_data: {
     title: '用戶數據',
     subtitle: '使用 `context.user` 輸入參數提供重要用戶信息。',
@@ -60,7 +62,7 @@ const jwt_claims = {
     subtitle: '使用 `token` 輸入參數查看當前存取權杖有效負載。',
   },
   api_context: {
-    title: 'API 上下文：訪問控制',
+    title: '介面上下文：訪問控制',
     subtitle: '使用 `api.denyAccess` 方法來拒絕權杖請求。',
   },
   error_handling: {
@@ -69,24 +71,26 @@ const jwt_claims = {
     input_field_title: '腳本報錯時的權杖簽發行為',
     block_issuance_switch: '當腳本報錯時阻止簽發權杖',
     default_hint_create:
-      '新建立的自訂 claims 腳本在腳本執行失敗時，預設會阻止簽發權杖。如果 API 已經返回此值，則會優先使用已儲存的值。',
+      '新建立的自訂宣告腳本在腳本執行失敗時，預設會阻止簽發權杖。如果介面已經返回此值，則會優先使用已儲存的值。',
     default_hint_edit:
-      '未包含此設定的現有自訂 claims 腳本會保持原有行為，在你明確儲存某個值之前，此選項預設仍為關閉。',
+      '未包含此設定的現有自訂宣告腳本會保持原有行為，在你明確儲存某個值之前，此選項預設仍為關閉。',
     warning:
-      '啟用後，腳本執行期錯誤會以 `invalid_request` (400) 和本地化的 `error_description` 拒絕權杖請求。呼叫 `api.denyAccess` 仍會返回 `access_denied`。',
+      '啟用後，腳本執行期錯誤會以 `invalid_request` (400)和本地化的 `error_description` 拒絕權杖請求。呼叫 `api.denyAccess` 仍會返回 `access_denied`。',
   },
   fetch_external_data: {
     title: '提取外部數據',
-    subtitle: '將來自外部 API 的數據直接導入聲明。',
-    description: '使用 `fetch` 函數調用你的外部 API 並將數據包含在自訂聲明中。例如：',
+    subtitle: '將來自外部介面的數據直接導入聲明。',
+    description: '使用 `fetch` 函數調用你的外部介面並將數據包含在自訂聲明中。例如：',
   },
   environment_variables: {
     title: '設置環境變數',
     subtitle: '使用環境變數存儲敏感信息。',
     input_field_title: '添加環境變數',
-    sample_code: '在你的自訂 JWT 聲明處理程序中訪問環境變數。例如：',
+    sample_code:
+      '在你的自訂JavaScript物件表示法（JSON）網路權杖（JWT）聲明處理程序中訪問環境變數。例如：',
   },
-  jwt_claims_hint: '將自訂聲明限制在 50KB 以下。默認 JWT 聲明會自動包含在權杖中，不能被覆蓋。',
+  jwt_claims_hint:
+    '將自訂聲明限制在 50KB以下。默認JavaScript物件表示法（JSON）網路權杖（JWT）聲明會自動包含在權杖中，不能被覆蓋。',
   tester: {
     subtitle: '調整模擬權杖和用戶數據以進行測試。',
     run_button: '運行測試',
@@ -95,10 +99,10 @@ const jwt_claims = {
   sandbox_warning: {
     title: '腳本以伺服器權限運行',
     description:
-      '在自託管的 Logto 中，此腳本與 Logto 本身運行在相同環境中：它可以讀取伺服器環境變數並存取你的內網服務。它沒有沙箱隔離。請僅向你信任可存取伺服器的人開放此頁面。',
+      '在自託管的Logto中，此腳本與Logto本身運行在相同環境中：它可以讀取伺服器環境變數並存取你的內網服務。它沒有沙箱隔離。請僅向你信任可存取伺服器的人開放此頁面。',
   },
   form_error: {
-    invalid_json: '無效的 JSON 格式',
+    invalid_json: '無效的JavaScript物件表示法（JSON）格式',
   },
 };
 

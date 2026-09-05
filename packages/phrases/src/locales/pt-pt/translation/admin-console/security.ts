@@ -9,6 +9,8 @@ const security = {
     general: 'Geral',
   },
   bot_protection: {
+    custom_ui_captcha_notice:
+      'Está a utilizar uma interface personalizada. É necessária configuração adicional para ativar CAPTCHA. <a>Ver guia de configuração</a>.',
     title: 'Proteção contra bots',
     description:
       'Ative CAPTCHA para registo, login e recuperação de palavra-passe para bloquear ameaças automatizadas.',

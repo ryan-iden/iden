@@ -3,9 +3,9 @@ const organizations = {
   page_title: '组织',
   title: '组织',
   subtitle:
-    '组织通常在 SaaS 或类似的多租户应用程序中使用，代表您的客户，这些客户可以是团队、组织或整个公司。组织作为 B2B 身份验证和授权的基础元素。',
+    '组织通常在软件即服务（SaaS）或类似的多租户应用程序中使用，代表您的客户，这些客户可以是团队、组织或整个公司。组织作为B2B身份验证和授权的基础元素。',
   organization_template: '组织模板',
-  organization_id: '组织 ID',
+  organization_id: '组织标识',
   members: '成员',
   machine_to_machine: '机器对机器应用',
   branding: '品牌',
@@ -13,7 +13,7 @@ const organizations = {
   setup_organization: '设置您的组织',
   organization_list_placeholder_title: '组织',
   organization_list_placeholder_text:
-    '在 SaaS 或类似的多租户应用程序中，通常作为最佳实践使用组织。它们使您能够开发允许客户创建和管理组织、邀请成员并分配角色的应用程序。',
+    '在软件即服务（SaaS）或类似的多租户应用程序中，通常作为最佳实践使用组织。它们使您能够开发允许客户创建和管理组织、邀请成员并分配角色的应用程序。',
   organization_name_placeholder: '我的组织',
   organization_description_placeholder: '组织的简要描述',
   organization_permission: '组织权限',
@@ -24,7 +24,7 @@ const organizations = {
   organization_role_description:
     '组织角色是可分配给用户的权限组。这些权限必须来自预定义的组织权限。',
   role: '角色',
-  search_placeholder: '按组织名称或 ID 搜索',
+  search_placeholder: '按组织名称或标识搜索',
   search_role_placeholder: '输入以搜索和选择角色',
   empty_placeholder: '🤔 你还没有设置任何 {{entity}}。',
   organization_and_member: '组织和成员',
@@ -34,22 +34,22 @@ const organizations = {
     title: '从指南开始',
     subtitle: '使用我们的指南快速开始组织设置',
     introduction: {
-      title: '让我们了解 Logto 中的组织工作原理',
+      title: '让我们了解Logto中的组织工作原理',
       section_1: {
         title: '组织是一组用户（身份）',
       },
       section_2: {
         title: '组织模板专为多租户应用程序访问控制而设计',
         description:
-          '在多租户 SaaS 应用程序中，多个组织通常共享相同的访问控制模板，包括权限和角色。在 Logto 中，我们称之为“组织模板”。',
+          '在多租户软件即服务（SaaS）应用程序中，多个组织通常共享相同的访问控制模板，包括权限和角色。在Logto中，我们称之为“组织模板”。',
         permission_description: '组织权限是指在组织上下文中访问资源的授权。',
         role_description_deprecated: '组织角色是可分配给成员的组织权限组。',
-        role_description: '组织角色是可以分配给成员的组织权限或 API 权限的分组。',
+        role_description: '组织角色是可以分配给成员的组织权限或接口权限的分组。',
       },
       section_3: {
-        title: '我可以将 API 权限分配给组织角色吗？',
+        title: '我可以将接口权限分配给组织角色吗？',
         description:
-          '是的，您可以将 API 权限分配给组织角色。Logto 提供灵活性，有效管理您组织的角色，允许您在这些角色中包括组织权限和 API 权限。',
+          '是的，您可以将接口权限分配给组织角色。Logto提供灵活性，有效管理您组织的角色，允许您在这些角色中包括组织权限和接口权限。',
       },
       section_4: {
         title: '交互插图以查看所有关系',
@@ -65,9 +65,9 @@ const organizations = {
     role_description: '角色“{{role}}”在不同组织中共享相同的组织模板。',
     john: '约翰',
     john_tip:
-      '约翰隶属于两个组织，以电子邮件“john@email.com”作为唯一标识。他是组织 A 的管理员，也是组织 B 的访客。',
+      '约翰隶属于两个组织，以电子邮件“john@email.com”作为唯一标识。他是组织A的管理员，也是组织B的访客。',
     sarah: '莎拉',
-    sarah_tip: '莎拉隶属于一个组织，以电子邮件“sarah@email.com”作为唯一标识。她是组织 B 的管理员。',
+    sarah_tip: '莎拉隶属于一个组织，以电子邮件“sarah@email.com”作为唯一标识。她是组织B的管理员。',
   },
 };
 

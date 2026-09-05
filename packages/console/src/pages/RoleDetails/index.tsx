@@ -18,6 +18,7 @@ import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import TextLink from '@/ds-components/TextLink';
 import type { RequestError } from '@/hooks/use-api';
 import useApi from '@/hooks/use-api';
+import useSystemLabels from '@/hooks/use-system-labels';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import useTheme from '@/hooks/use-theme';
 import useUserPreferences from '@/hooks/use-user-preferences';
@@ -26,6 +27,7 @@ import styles from './index.module.scss';
 import { type RoleDetailsOutletContext } from './types';
 
 function RoleDetails() {
+  const { getRoleName } = useSystemLabels();
   const { pathname } = useLocation();
   const { id } = useParams();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
@@ -111,7 +113,7 @@ function RoleDetails() {
         <>
           <DetailsPageHeader
             icon={<RoleIcon />}
-            title={data.name}
+            title={getRoleName(data)}
             primaryTag={t(
               isM2mRole ? 'role_details.type_m2m_role_tag' : 'role_details.type_user_role_tag'
             )}

@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 
 import Failed from '@/assets/icons/failed.svg?react';
 import Success from '@/assets/icons/success.svg?react';
-import { logEventTitle } from '@/consts/logs';
 import Tag from '@/ds-components/Tag';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
+import useLogEventTitle from '@/hooks/use-log-event-title';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 
 import styles from './index.module.scss';
@@ -19,7 +20,9 @@ type Props = {
 };
 
 function EventName({ eventKey, payload, isSuccess, to }: Props) {
-  const title = logEventTitle[eventKey] ?? eventKey;
+  const getEventTitle = useLogEventTitle();
+  const { t: tUi } = useInterfaceTranslation();
+  const title = getEventTitle(eventKey);
   const { getTo } = useTenantPathname();
 
   return (
@@ -42,7 +45,7 @@ function EventName({ eventKey, payload, isSuccess, to }: Props) {
       {isImpersonationLog({
         key: eventKey,
         payload,
-      }) && <Tag status="alert">Impersonation</Tag>}
+      }) && <Tag status="alert">{tUi('impersonation')}</Tag>}
     </div>
   );
 }

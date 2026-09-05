@@ -24,6 +24,7 @@ import IconButton from '@/ds-components/IconButton';
 import OverlayScrollbar from '@/ds-components/OverlayScrollbar';
 import useConnectorApi from '@/hooks/use-connector-api';
 import { useConnectorFormConfigParser } from '@/hooks/use-connector-form-config-parser';
+import useInterfaceTranslation from '@/hooks/use-interface-translation';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import modalStyles from '@/scss/modal.module.scss';
 import type { ConnectorFormType } from '@/types/connector';
@@ -43,6 +44,7 @@ type Props = {
 };
 
 function Guide({ connector, onClose }: Props) {
+  const { t: tUi } = useInterfaceTranslation();
   const { createConnector } = useConnectorApi();
   const { navigate } = useTenantPathname();
   const callbackConnectorId = useRef(generateStandardId());
@@ -190,7 +192,9 @@ function Guide({ connector, onClose }: Props) {
         </div>
         <div className={styles.content}>
           <OverlayScrollbar className={styles.readme}>
-            <div className={styles.readmeTitle}>README: {title}</div>
+            <div className={styles.readmeTitle}>
+              {tUi('complete_guide')} {title}
+            </div>
             <Markdown className={styles.readmeContent}>{content}</Markdown>
           </OverlayScrollbar>
           <div className={styles.setup}>

@@ -6,10 +6,10 @@ const guide = {
     Traditional: '传统网页应用',
     SPA: '单页应用',
     Native: '原生应用',
-    MachineToMachine: 'Machine-to-machine',
-    Protected: '非 SDK 集成',
+    MachineToMachine: '机器对机器',
+    Protected: '非开发工具包集成',
     ThirdParty: '第三方应用',
-    SAML: 'SAML 应用',
+    SAML: '安全断言标记语言（SAML）应用',
   },
   filter: {
     title: '筛选框架',
@@ -23,18 +23,18 @@ const guide = {
   request_guide_successfully: '请求已成功提交，谢谢！',
   app: {
     select_framework_or_tutorial: '选择一个框架或教程',
-    guide_modal_title: '从 SDK 和指南开始',
-    modal_subtitle: '使用我们提供的 SDK 和集成教程加速你的应用开发过程。',
+    guide_modal_title: '从开发工具包和指南开始',
+    modal_subtitle: '使用我们提供的开发工具包和集成教程加速你的应用开发过程。',
     select_a_framework: '选择一个框架',
     continue_without_framework: '跳过教程直接创建应用',
-    describe_guide_looking_for_placeholder: '例如：我想将 Logto 集成到我的 Angular 应用程序中。',
+    describe_guide_looking_for_placeholder: '例如：我想将Logto集成到我的Angular应用程序中。',
   },
   api: {
     modal_title: '首先从教程开始',
     modal_subtitle: '使用我们提供的教程来加速你的应用程序开发过程。',
     select_a_tutorial: '选择一个教程',
-    continue_without_tutorial: '跳过教程直接创建 API 资源',
-    describe_guide_looking_for_placeholder: '例如：我想使用 deno 框架为我的 API 鉴权。',
+    continue_without_tutorial: '跳过教程直接创建接口资源',
+    describe_guide_looking_for_placeholder: '例如：我想使用deno框架为我的接口鉴权。',
   },
 };
 

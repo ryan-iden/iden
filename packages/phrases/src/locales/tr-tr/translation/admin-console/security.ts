@@ -9,6 +9,8 @@ const security = {
     general: 'Genel',
   },
   bot_protection: {
+    custom_ui_captcha_notice:
+      'Özel bir arayüz kullanıyorsunuz. CAPTCHA’yı etkinleştirmek için ek yapılandırma gerekiyor. <a>Kurulum kılavuzunu görüntüle</a>.',
     title: 'Bot Koruması',
     description:
       "Otomatik tehditleri engellemek için kayıt, giriş ve şifre kurtarma işlemlerinde CAPTCHA'yı etkinleştirin.",

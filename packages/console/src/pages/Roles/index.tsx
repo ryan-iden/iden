@@ -23,6 +23,7 @@ import TablePlaceholder from '@/ds-components/Table/TablePlaceholder';
 import type { RequestError } from '@/hooks/use-api';
 import useDocumentationUrl from '@/hooks/use-documentation-url';
 import useSearchParametersWatcher from '@/hooks/use-search-parameters-watcher';
+import useSystemLabels from '@/hooks/use-system-labels';
 import useTenantPathname from '@/hooks/use-tenant-pathname';
 import pageLayout from '@/scss/page-layout.module.scss';
 import { isPaidPlan } from '@/utils/subscription';
@@ -38,6 +39,7 @@ const buildDetailsPathname = (id: string) => `${rolesPathname}/${id}`;
 const pageSize = defaultPageSize;
 
 function Roles() {
+  const { getRoleName, getRoleDescription } = useSystemLabels();
   const { t } = useTranslation(undefined, { keyPrefix: 'admin_console' });
   const { search } = useLocation();
   const { navigate, match } = useTenantPathname();
@@ -100,8 +102,12 @@ function Roles() {
             title: t('roles.col_roles'),
             dataIndex: 'roles',
             colSpan: 5,
-            render: ({ id, name }) => (
-              <ItemPreview title={name} to={buildDetailsPathname(id)} icon={<RoleIcon />} />
+            render: (role) => (
+              <ItemPreview
+                title={getRoleName(role)}
+                to={buildDetailsPathname(role.id)}
+                icon={<RoleIcon />}
+              />
             ),
           },
           {
@@ -114,7 +120,7 @@ function Roles() {
             title: t('roles.col_description'),
             dataIndex: 'description',
             colSpan: 6,
-            render: ({ description }) => <Breakable>{description}</Breakable>,
+            render: (role) => <Breakable>{getRoleDescription(role)}</Breakable>,
           },
           {
             title: <span>{t('roles.col_assigned_entities')}</span>,
