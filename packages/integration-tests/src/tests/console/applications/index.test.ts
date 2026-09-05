@@ -299,7 +299,7 @@ describe('applications', () => {
         await expect(page).toClick(
           'table tbody tr td div[class*=eventName]:has(div[class*=title])',
           {
-            text: 'Exchange token by Client Credentials',
+            text: 'Token exchange · Client credentials',
           }
         );
 
