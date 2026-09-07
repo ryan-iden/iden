@@ -48,6 +48,7 @@ describe('public local user assets', () => {
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toContain('image/png');
     expect(response.headers['cache-control']).toBe('public, max-age=604800, immutable');
+    expect(response.headers['cross-origin-resource-policy']).toBe('cross-origin');
     expect(response.headers['x-content-type-options']).toBe('nosniff');
     expect(response.body).toEqual(Buffer.from('image-content'));
   });
