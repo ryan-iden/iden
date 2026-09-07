@@ -22,7 +22,12 @@ const gotPost = jest.fn(() => ({
   json: jest.fn(async () => ({ access_token: 'proxy-token', expires_in: 3600 })),
 }));
 const gotRequest = new Proxy(
-  jest.fn(async () => proxyResponse),
+  jest.fn(
+    async (
+      _url: URL,
+      _options: { readonly headers?: Readonly<Record<string, string | string[]>> }
+    ) => proxyResponse
+  ),
   {
     get: (target, property, receiver) =>
       property === 'post' ? gotPost : Reflect.get(target, property, receiver),
@@ -38,9 +43,11 @@ jest.unstable_mockModule('#src/middleware/koa-auth/index.js', () => ({
   })),
 }));
 
-const { default: initSelfHostedMapiProxy, shouldForwardProxyResponseHeader } = await import(
-  './mapi-proxy.js'
-);
+const {
+  default: initSelfHostedMapiProxy,
+  shouldForwardProxyRequestHeader,
+  shouldForwardProxyResponseHeader,
+} = await import('./mapi-proxy.js');
 
 const originalIsSelfHostedParityEnabled = EnvSet.values.isSelfHostedParityEnabled;
 
@@ -71,6 +78,19 @@ describe('self-hosted Management API proxy response headers', () => {
     expect(shouldForwardProxyResponseHeader('content-type')).toBe(true);
   });
 
+  it.each([
+    'authorization',
+    'forwarded',
+    'host',
+    'x-forwarded-host',
+    'x-forwarded-port',
+    'x-forwarded-proto',
+    'x-logto-internal-token',
+    'x-logto-tenant-id',
+  ])('does not forward the untrusted %s request header', (name) => {
+    expect(shouldForwardProxyRequestHeader(name)).toBe(false);
+  });
+
   it('finishes matched proxy requests without falling through to the SPA', async () => {
     const app = new Koa();
     const tenant = {
@@ -98,5 +118,12 @@ describe('self-hosted Management API proxy response headers', () => {
     expect(response.body).toEqual([]);
     expect(response.headers['content-encoding']).toBeUndefined();
     expect(response.headers['content-length']).toBe('2');
+    expect(gotRequest).toHaveBeenCalledWith(expect.any(URL), expect.any(Object));
+    const requestOptions = gotRequest.mock.calls.at(-1)?.[1];
+    expect(requestOptions?.headers).toMatchObject({
+      authorization: 'Bearer proxy-token',
+      'x-logto-internal-token': EnvSet.values.selfHostedServiceToken,
+      'x-logto-tenant-id': 'default',
+    });
   });
 });

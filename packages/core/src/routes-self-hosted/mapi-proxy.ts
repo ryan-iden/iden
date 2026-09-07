@@ -35,9 +35,22 @@ const excludedResponseHeaders = new Set([
   'content-length',
   'transfer-encoding',
 ]);
+const excludedRequestHeaders = new Set([
+  'authorization',
+  'forwarded',
+  'host',
+  'x-forwarded-host',
+  'x-forwarded-port',
+  'x-forwarded-proto',
+  'x-logto-internal-token',
+  'x-logto-tenant-id',
+]);
 
 export const shouldForwardProxyResponseHeader = (name: string) =>
   !excludedResponseHeaders.has(name.toLowerCase());
+
+export const shouldForwardProxyRequestHeader = (name: string) =>
+  !excludedRequestHeaders.has(name.toLowerCase());
 
 const getProxyAccessToken = async (tenant: TenantContext, tenantId: string) => {
   const cached = tokenCache.get(tenantId);
@@ -95,7 +108,16 @@ export default function initSelfHostedMapiProxy(tenant: TenantContext): Koa {
     const upstreamBase = getTenantEndpoint(tenantId, EnvSet.values);
     const upstreamPath = appendPath(upstreamBase, z.string().parse(ctx.params[0]));
     const upstreamUrl = new URL(`${upstreamPath.pathname}${ctx.URL.search}`, upstreamBase);
-    const headers = { ...ctx.headers, host: undefined, authorization: `Bearer ${accessToken}` };
+    const headers = {
+      ...Object.fromEntries(
+        Object.entries(ctx.headers).filter(
+          ([name, value]) => value !== undefined && shouldForwardProxyRequestHeader(name)
+        )
+      ),
+      authorization: `Bearer ${accessToken}`,
+      'x-logto-internal-token': EnvSet.values.selfHostedServiceToken,
+      'x-logto-tenant-id': tenantId,
+    };
     const response = await got(upstreamUrl, {
       method: methodGuard.parse(ctx.method),
       headers,

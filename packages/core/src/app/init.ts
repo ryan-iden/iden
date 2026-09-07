@@ -14,6 +14,7 @@ import { EnvSet } from '#src/env-set/index.js';
 import { TenantNotFoundError, tenantPool } from '#src/tenants/index.js';
 import { getConsoleLogFromContext } from '#src/utils/console.js';
 import { buildAppInsightsTelemetry } from '#src/utils/request.js';
+import { resolveSelfHostedServiceTenantId } from '#src/utils/self-hosted-service.js';
 import { getTenantId } from '#src/utils/tenant.js';
 
 const logListening = (type: 'core' | 'admin' = 'core') => {
@@ -55,7 +56,15 @@ export default async function initApp(app: Koa): Promise<void> {
       return next();
     }
 
-    const [tenantId, isCustomDomain] = await getTenantId(ctx.URL);
+    const internalTenantId = resolveSelfHostedServiceTenantId({
+      isEnabled: EnvSet.values.isSelfHostedParityEnabled,
+      expectedToken: EnvSet.values.selfHostedServiceToken,
+      token: ctx.headers['x-logto-internal-token'],
+      tenantId: ctx.headers['x-logto-tenant-id'],
+    });
+    const [tenantId, isCustomDomain] = internalTenantId
+      ? [internalTenantId, false]
+      : await getTenantId(ctx.URL);
 
     if (!tenantId) {
       ctx.status = 404;
