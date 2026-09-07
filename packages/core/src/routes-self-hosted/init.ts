@@ -57,6 +57,7 @@ import SystemContext from '#src/tenants/SystemContext.js';
 import type TenantContext from '#src/tenants/TenantContext.js';
 import { acquireTenant, invalidateTenant } from '#src/tenants/pool-access.js';
 import assertThat from '#src/utils/assert-that.js';
+import { isSelfHostedServiceTokenValid } from '#src/utils/self-hosted-service.js';
 import { convertToIdentifiers } from '#src/utils/sql.js';
 import { buildObjectStorage } from '#src/utils/storage/object-storage.js';
 
@@ -64,6 +65,7 @@ import { getEffectivePlatformBranding } from '../routes/platform-branding.js';
 
 import { maskedSecret, preserveEmailSecret, preserveStorageSecret } from './config.js';
 import { selfHostedTenantOrganizationPath } from './route-path.js';
+import { filterSelfHostedUserTenants } from './tenant-list.js';
 import { verifySelfHostedTenantUser } from './tenant-user-auth.js';
 
 const { table: tenantsTable, fields: tenantFields } = convertToIdentifiers({
@@ -129,14 +131,7 @@ const assertScope = (scopes: ReadonlySet<string>, scope: TenantScope) => {
 };
 
 const isInternalServiceRequest = (value: string | string[] | undefined) => {
-  if (typeof value !== 'string') {
-    return false;
-  }
-
-  const expected = EnvSet.values.selfHostedServiceToken;
-  return (
-    value.length === expected.length && timingSafeEqual(Buffer.from(value), Buffer.from(expected))
-  );
+  return isSelfHostedServiceTokenValid(value, EnvSet.values.selfHostedServiceToken);
 };
 
 const isProtectedAppGatewayRequest = (value: string | string[] | undefined) => {
@@ -213,19 +208,20 @@ export default function initSelfHostedControlApi(tenant: TenantContext): Koa {
     }
 
     const pool = await EnvSet.sharedPool;
-    const rows = await pool.any<Record<string, unknown>>(sql`
+    const rows = await pool.any<TenantRow>(sql`
       select ${sql.join(Object.values(tenantFields), sql`, `)}
       from ${tenantsTable}
-      where ${
-        isPlatformAdmin
-          ? sql`${tenantFields.deletedAt} is null`
-          : sql`${tenantFields.id} = any(${sql.array(tenantIds, 'varchar')})
+      where ${tenantFields.id} <> ${adminTenantId}
+        and ${
+          isPlatformAdmin
+            ? sql`${tenantFields.deletedAt} is null`
+            : sql`${tenantFields.id} = any(${sql.array(tenantIds, 'varchar')})
               and ${tenantFields.deletedAt} is null`
-      }
+        }
       order by ${tenantFields.createdAt} desc
     `);
 
-    return rows.map((row) => tenantResponse(row));
+    return filterSelfHostedUserTenants(rows).map((row) => tenantResponse(row));
   };
 
   const getTenantById = async (tenantId: string) => {

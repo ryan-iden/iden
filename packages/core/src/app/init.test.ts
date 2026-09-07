@@ -1,12 +1,13 @@
 import { createServer } from 'node:http';
 
 import { pickDefault } from '@logto/shared/esm';
-import Koa from 'koa';
+import Koa, { type Context } from 'koa';
 import request from 'supertest';
 
 const { jest } = import.meta;
 
 const getTenantId = jest.fn();
+const resolveSelfHostedServiceTenantId = jest.fn();
 const tenantPoolGet = jest.fn();
 const trackException = jest.fn();
 
@@ -29,6 +30,10 @@ jest.unstable_mockModule('#src/utils/tenant.js', () => ({
   getTenantId,
 }));
 
+jest.unstable_mockModule('#src/utils/self-hosted-service.js', () => ({
+  resolveSelfHostedServiceTenantId,
+}));
+
 const initI18n = await pickDefault(import('../i18n/init.js'));
 const initApp = await pickDefault(import('./init.js'));
 
@@ -36,6 +41,10 @@ describe('App Init', () => {
   const listenMock = jest
     .spyOn(Koa.prototype, 'listen')
     .mockImplementation(jest.fn(() => createServer()));
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('app init properly with 404 not found route', async () => {
     const app = new Koa();
@@ -64,5 +73,28 @@ describe('App Init', () => {
     } finally {
       consoleError.mockRestore();
     }
+  });
+
+  it('routes an authenticated internal request to its explicit tenant', async () => {
+    const requestEnd = jest.fn();
+    const run = jest.fn(async (ctx: Context) => {
+      ctx.status = 204;
+    });
+    resolveSelfHostedServiceTenantId.mockReturnValueOnce('tenant-a');
+    tenantPoolGet.mockResolvedValueOnce({ run, requestEnd });
+
+    const app = new Koa();
+    await initApp(app);
+
+    const response = await request(app.callback())
+      .get('/api/configs/cimd')
+      .set('x-logto-internal-token', 'shared-secret')
+      .set('x-logto-tenant-id', 'tenant-a');
+
+    expect(response.status).toBe(204);
+    expect(tenantPoolGet).toHaveBeenCalledWith('tenant-a', undefined);
+    expect(getTenantId).not.toHaveBeenCalled();
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(requestEnd).toHaveBeenCalledTimes(1);
   });
 });
