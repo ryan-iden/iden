@@ -62,6 +62,9 @@ export default function publicUserAssetsRoutes<T extends AnonymousRouter>(
     ctx.length = object.contentLength;
     ctx.body = object.data;
     ctx.set('Cache-Control', 'public, max-age=604800, immutable');
+    // User assets are intentionally public and may be rendered by the admin console or an
+    // application hosted on a different origin from the tenant endpoint.
+    ctx.set('Cross-Origin-Resource-Policy', 'cross-origin');
     ctx.set('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; sandbox");
     ctx.set('X-Content-Type-Options', 'nosniff');
 
