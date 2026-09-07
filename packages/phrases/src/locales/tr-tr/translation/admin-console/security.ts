@@ -38,8 +38,20 @@ const security = {
       description:
         "Cloudflare'in akıllı CAPTCHA alternatifi, görsel bulmaca olmadan kullanıcı dostu bir deneyim sunarken aynı zamanda bot koruması sağlar.",
     },
+    aliyun: {
+      name: 'Alibaba Cloud Captcha 2.0',
+      description:
+        'Web ve H5 uygulamaları için sunucu tarafı doğrulama ve bölgesel uç noktalar sunan Alibaba Cloud risk tabanlı CAPTCHA hizmeti.',
+    },
   },
   captcha_details: {
+    aliyun_region: 'Hizmet bölgesi',
+    aliyun_region_china: 'Çin ana karası (Şanghay uç noktası)',
+    aliyun_region_singapore: 'Uluslararası (Singapur uç noktası)',
+    aliyun_prefix: 'Prefix',
+    aliyun_scene_id: 'Scene ID',
+    aliyun_access_key_id: 'AccessKey ID',
+    aliyun_access_key_secret: 'AccessKey Secret',
     back_to_security: 'Güvenliğe dön',
     page_title: 'CAPTCHA Detayları',
     check_readme: "README'i görüntüle",

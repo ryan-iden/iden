@@ -38,8 +38,20 @@ const security = {
       description:
         'ทางเลือก CAPTCHA อัจฉริยะจาก Cloudflare ที่ป้องกันบอทโดยไม่ก่อให้เกิดอุปสรรคต่อผู้ใช้และไม่มีปริศนาภาพ',
     },
+    aliyun: {
+      name: 'Alibaba Cloud Captcha 2.0',
+      description:
+        'บริการ CAPTCHA แบบอิงความเสี่ยงของ Alibaba Cloud สำหรับแอป Web และ H5 พร้อมการตรวจสอบฝั่งเซิร์ฟเวอร์และปลายทางตามภูมิภาค',
+    },
   },
   captcha_details: {
+    aliyun_region: 'ภูมิภาคบริการ',
+    aliyun_region_china: 'จีนแผ่นดินใหญ่ (ปลายทางเซี่ยงไฮ้)',
+    aliyun_region_singapore: 'ระหว่างประเทศ (ปลายทางสิงคโปร์)',
+    aliyun_prefix: 'Prefix',
+    aliyun_scene_id: 'Scene ID',
+    aliyun_access_key_id: 'AccessKey ID',
+    aliyun_access_key_secret: 'AccessKey Secret',
     back_to_security: 'กลับไปที่การรักษาความปลอดภัย',
     page_title: 'รายละเอียด CAPTCHA',
     check_readme: 'ตรวจสอบ README',

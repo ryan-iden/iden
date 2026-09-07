@@ -84,6 +84,9 @@ const createSecurityHeaderSettings = (tenantId: string): SecurityHeaderSettings 
   const logtoOrigin = 'https://*.logto.io';
   /** Google Sign-In (GSI) origin for Google One Tap. */
   const gsiOrigin = 'https://accounts.google.com/gsi/';
+  /** Alibaba Cloud Captcha loader and dynamically loaded challenge resources. */
+  const aliyunCaptchaCdnOrigin = 'https://*.alicdn.com/';
+  const aliyunCaptchaApiOrigins = ['https://*.aliyuncs.com/', 'https://*.aliyun.com/'];
 
   // Parse the OSS survey endpoint origin for CSP connect-src allowlisting.
   const ossSurveyOrigins = getOssServerOrigins();
@@ -142,6 +145,8 @@ const createSecurityHeaderSettings = (tenantId: string): SecurityHeaderSettings 
     // Google Recaptcha static resources
     'https://www.gstatic.com/recaptcha/',
     'https://www.gstatic.cn/recaptcha/',
+    // Alibaba Cloud Captcha SDK and challenge resources
+    aliyunCaptchaCdnOrigin,
     // Allow "unsafe-eval" for debugging purpose in non-production environment
     ...conditionalArray(!isProduction && "'unsafe-eval'"),
   ];
@@ -155,6 +160,9 @@ const createSecurityHeaderSettings = (tenantId: string): SecurityHeaderSettings 
     'https://recaptcha.net/recaptcha/',
     'https://www.gstatic.com/recaptcha/',
     'https://www.gstatic.cn/recaptcha/',
+    // Alibaba Cloud Captcha challenge resources and verification telemetry
+    aliyunCaptchaCdnOrigin,
+    ...aliyunCaptchaApiOrigins,
     ...developmentOrigins,
   ];
 
@@ -176,6 +184,9 @@ const createSecurityHeaderSettings = (tenantId: string): SecurityHeaderSettings 
           scriptSrc: appendCustomSources(experienceScriptSource, customUiCsp.scriptSrc),
           scriptSrcAttr: ["'unsafe-inline'"],
           connectSrc: appendCustomSources(experienceConnectSource, customUiCsp.connectSrc),
+          // Alibaba Cloud Captcha injects its challenge stylesheet at runtime.
+          styleSrc: ["'self'", "'unsafe-inline'", aliyunCaptchaCdnOrigin],
+          fontSrc: ["'self'", 'data:', aliyunCaptchaCdnOrigin],
           // WARNING (high risk): Need to allow self-hosted terms of use page loaded in an iframe
           frameSrc: ["'self'", 'https:', gsiOrigin],
           // Allow being loaded by console preview iframe

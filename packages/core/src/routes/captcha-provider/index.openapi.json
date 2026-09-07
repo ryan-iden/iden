@@ -2,7 +2,7 @@
   "tags": [
     {
       "name": "Captcha provider",
-      "description": "Setup the captcha provider."
+      "description": "Set up reCAPTCHA Enterprise, Cloudflare Turnstile, or Alibaba Cloud Captcha 2.0."
     }
   ],
   "paths": {
@@ -23,7 +23,7 @@
       "put": {
         "operationId": "UpdateCaptchaProvider",
         "summary": "Update captcha provider",
-        "description": "Update the captcha provider with the provided settings.",
+        "description": "Update the CAPTCHA provider with the provided settings. Alibaba Cloud credentials are stored server-side and are not included in the public sign-in experience configuration.",
         "requestBody": {
           "content": {
             "application/json": {

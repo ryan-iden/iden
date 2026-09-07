@@ -36,8 +36,20 @@ const security = {
       description:
         'Cloudflare的智能验证码替代方案，提供非侵入性的机器人保护，同时确保无视觉难题的无缝用户体验。',
     },
+    aliyun: {
+      name: '阿里云验证码 2.0',
+      description:
+        '阿里云面向 Web 和 H5 应用的智能风控验证码服务，支持服务端二次校验和区域化端点。',
+    },
   },
   captcha_details: {
+    aliyun_region: '服务地域',
+    aliyun_region_china: '中国内地（上海端点）',
+    aliyun_region_singapore: '国际（新加坡端点）',
+    aliyun_prefix: '身份标（Prefix）',
+    aliyun_scene_id: '场景 ID',
+    aliyun_access_key_id: '访问密钥 ID（AccessKey ID）',
+    aliyun_access_key_secret: '访问密钥密码（AccessKey Secret）',
     back_to_security: '返回安全',
     page_title: '验证码详情',
     check_readme: '查看自述文件（README）',

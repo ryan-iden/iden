@@ -38,6 +38,11 @@ const security = {
       description:
         "Cloudflare's smart CAPTCHA alternative that provides non-intrusive bot protection while ensuring a seamless user experience without visual puzzles.",
     },
+    aliyun: {
+      name: 'Alibaba Cloud Captcha 2.0',
+      description:
+        "Alibaba Cloud's risk-based CAPTCHA service for Web and H5 applications, with server-side verification and regional endpoints.",
+    },
   },
   captcha_details: {
     back_to_security: 'Back to security',
@@ -51,6 +56,13 @@ const security = {
     project_id: 'Project ID',
     domain: 'Domain (optional)',
     domain_placeholder: 'www.google.com (default) or recaptcha.net',
+    aliyun_region: 'Service region',
+    aliyun_region_china: 'Chinese mainland (Shanghai endpoint)',
+    aliyun_region_singapore: 'International (Singapore endpoint)',
+    aliyun_prefix: 'Prefix',
+    aliyun_scene_id: 'Scene ID',
+    aliyun_access_key_id: 'AccessKey ID',
+    aliyun_access_key_secret: 'AccessKey Secret',
     recaptcha_key_id: 'reCAPTCHA key ID',
     recaptcha_api_key: 'API key of the project',
     deletion_description: 'Are you sure you want to delete this CAPTCHA provider?',

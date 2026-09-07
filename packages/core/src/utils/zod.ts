@@ -80,6 +80,11 @@ const zodStringCheckToSwaggerFormat = (zodStringCheck: ZodStringCheck) => {
       return;
     }
 
+    case 'trim': {
+      // Trimming normalizes runtime input but has no equivalent OpenAPI string constraint.
+      return;
+    }
+
     default: {
       throw new RequestError('swagger.invalid_zod_type', zodStringCheck);
     }

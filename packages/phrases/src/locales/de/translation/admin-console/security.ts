@@ -38,8 +38,20 @@ const security = {
       description:
         'Cloudflares intelligente CAPTCHA-Alternative, die einen nicht aufdringlichen Bot-Schutz bietet und gleichzeitig eine nahtlose Benutzererfahrung ohne visuelle Rätsel gewährleistet.',
     },
+    aliyun: {
+      name: 'Alibaba Cloud Captcha 2.0',
+      description:
+        'Risikobasierter CAPTCHA-Dienst von Alibaba Cloud für Web- und H5-Anwendungen mit serverseitiger Prüfung und regionalen Endpunkten.',
+    },
   },
   captcha_details: {
+    aliyun_region: 'Dienstregion',
+    aliyun_region_china: 'Festlandchina (Endpunkt Shanghai)',
+    aliyun_region_singapore: 'International (Endpunkt Singapur)',
+    aliyun_prefix: 'Prefix',
+    aliyun_scene_id: 'Scene ID',
+    aliyun_access_key_id: 'AccessKey ID',
+    aliyun_access_key_secret: 'AccessKey Secret',
     back_to_security: 'Zurück zur Sicherheit',
     page_title: 'CAPTCHA-Details',
     check_readme: 'README überprüfen',

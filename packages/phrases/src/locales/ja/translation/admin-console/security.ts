@@ -38,8 +38,20 @@ const security = {
       description:
         'Cloudflare のスマート CAPTCHA 代替案。視覚的パズルを用いず、シームレスなユーザー体験を提供しながらボット保護を実現します。',
     },
+    aliyun: {
+      name: 'Alibaba Cloud Captcha 2.0',
+      description:
+        'Web／H5 アプリ向けの Alibaba Cloud リスクベース CAPTCHA サービスです。サーバー側検証とリージョン別エンドポイントに対応します。',
+    },
   },
   captcha_details: {
+    aliyun_region: 'サービスリージョン',
+    aliyun_region_china: '中国本土（上海エンドポイント）',
+    aliyun_region_singapore: '国際（シンガポールエンドポイント）',
+    aliyun_prefix: 'Prefix',
+    aliyun_scene_id: 'Scene ID',
+    aliyun_access_key_id: 'AccessKey ID',
+    aliyun_access_key_secret: 'AccessKey Secret',
     back_to_security: 'セキュリティへ戻る',
     page_title: 'CAPTCHA の詳細',
     check_readme: 'README をチェック',

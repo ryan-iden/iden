@@ -36,8 +36,20 @@ const security = {
       description:
         'Cloudflare的智能人機驗證替代方案，提供非侵入性的機器人保護，同時確保無視覺難題的無縫用戶體驗。',
     },
+    aliyun: {
+      name: '阿里雲驗證碼 2.0',
+      description:
+        '阿里雲面向 Web 和 H5 應用的智能風控驗證碼服務，支援伺服器端二次驗證和區域端點。',
+    },
   },
   captcha_details: {
+    aliyun_region: '服務地域',
+    aliyun_region_china: '中國內地（上海端點）',
+    aliyun_region_singapore: '國際（新加坡端點）',
+    aliyun_prefix: '身份標（Prefix）',
+    aliyun_scene_id: '場景 ID',
+    aliyun_access_key_id: '存取金鑰 ID（AccessKey ID）',
+    aliyun_access_key_secret: '存取金鑰密碼（AccessKey Secret）',
     back_to_security: '返回安全性',
     page_title: '人機驗證詳情',
     check_readme: '查看自述文件（README）',

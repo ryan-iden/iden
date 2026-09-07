@@ -1,6 +1,7 @@
 import type { LanguageTag } from '@logto/language-kit';
 import { builtInLanguages } from '@logto/phrases-experience';
 import {
+  AliyunCaptchaRegion,
   CaptchaType,
   ForgotPasswordMethod,
   type CreateSignInExperience,
@@ -381,6 +382,31 @@ describe('findCaptchaPublicConfig', () => {
       type: CaptchaType.Turnstile,
       siteKey: 'captcha_site_key',
     });
+  });
+
+  it('returns only browser-safe Alibaba Cloud Captcha configuration', async () => {
+    findCaptchaProvider.mockResolvedValueOnce({
+      ...mockCaptchaProvider,
+      config: {
+        type: CaptchaType.Aliyun,
+        region: AliyunCaptchaRegion.China,
+        prefix: 'captcha-prefix',
+        sceneId: 'captcha-scene',
+        accessKeyId: 'server-only-id',
+        accessKeySecret: 'server-only-secret',
+      },
+    });
+
+    const captchaPublicConfig = await findCaptchaPublicConfig();
+
+    expect(captchaPublicConfig).toEqual({
+      type: CaptchaType.Aliyun,
+      region: AliyunCaptchaRegion.China,
+      prefix: 'captcha-prefix',
+      sceneId: 'captcha-scene',
+    });
+    expect(captchaPublicConfig).not.toHaveProperty('accessKeyId');
+    expect(captchaPublicConfig).not.toHaveProperty('accessKeySecret');
   });
 
   it('should return undefined if captcha provider is not found', async () => {

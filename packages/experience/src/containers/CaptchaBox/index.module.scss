@@ -3,3 +3,18 @@
 .captchaBox {
   margin-bottom: _.unit(2);
 }
+
+.aliyunCaptchaBox {
+  position: relative;
+}
+
+.aliyunCaptchaTrigger {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  opacity: 0%;
+  pointer-events: none;
+}

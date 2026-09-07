@@ -77,6 +77,13 @@ describe('zodTypeToSwagger', () => {
       });
     });
 
+    it('trim normalization', () => {
+      expect(zodTypeToSwagger(string().trim().min(1))).toEqual({
+        type: 'string',
+        minLength: 1,
+      });
+    });
+
     it('regex check', () => {
       expect(zodTypeToSwagger(string().regex(notStartingWithDigitRegex))).toEqual({
         type: 'string',

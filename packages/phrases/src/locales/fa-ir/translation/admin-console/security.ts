@@ -38,8 +38,20 @@ const security = {
       description:
         'جایگزین هوشمند CAPTCHA از Cloudflare که محافظت غیرمزاحم در برابر ربات را با تجربه کاربری روان بدون پازل بصری فراهم می‌کند.',
     },
+    aliyun: {
+      name: 'Alibaba Cloud Captcha 2.0',
+      description:
+        'سرویس کپچای هوشمند Alibaba Cloud برای برنامه‌های وب و H5 با اعتبارسنجی سمت سرور و نقاط پایانی منطقه‌ای.',
+    },
   },
   captcha_details: {
+    aliyun_region: 'منطقه سرویس',
+    aliyun_region_china: 'سرزمین اصلی چین (نقطه پایانی شانگهای)',
+    aliyun_region_singapore: 'بین‌المللی (نقطه پایانی سنگاپور)',
+    aliyun_prefix: 'Prefix',
+    aliyun_scene_id: 'Scene ID',
+    aliyun_access_key_id: 'AccessKey ID',
+    aliyun_access_key_secret: 'AccessKey Secret',
     back_to_security: 'بازگشت به امنیت',
     page_title: 'جزئیات CAPTCHA',
     check_readme: 'مشاهده README',

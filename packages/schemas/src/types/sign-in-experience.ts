@@ -12,7 +12,10 @@ import {
   type SignInExperience,
   SignInExperiences,
 } from '../db-entries/index.js';
-import { CaptchaType, RecaptchaEnterpriseMode } from '../foundations/jsonb-types/index.js';
+import {
+  type CaptchaPublicConfig,
+  captchaPublicConfigGuard,
+} from '../foundations/jsonb-types/index.js';
 import { type ToZodObject } from '../utils/zod.js';
 
 import { type SsoConnectorMetadata, ssoConnectorMetadataGuard } from './sso-connector.js';
@@ -50,12 +53,7 @@ export type FullSignInExperience = Omit<
    * minimal data needed here.
    */
   googleOneTap?: GoogleOneTapConfig & { clientId: string; connectorId: string };
-  captchaConfig?: {
-    type: CaptchaType;
-    siteKey: string;
-    domain?: string;
-    mode?: RecaptchaEnterpriseMode;
-  };
+  captchaConfig?: CaptchaPublicConfig;
   /**
    * Custom profile fields selected for the sign-up (Collect user profile) flow.
    */
@@ -86,14 +84,7 @@ export const fullSignInExperienceGuard = SignInExperiences.guard
     googleOneTap: googleOneTapConfigGuard
       .extend({ clientId: z.string(), connectorId: z.string() })
       .optional(),
-    captchaConfig: z
-      .object({
-        type: z.nativeEnum(CaptchaType),
-        siteKey: z.string(),
-        domain: z.string().optional(),
-        mode: z.nativeEnum(RecaptchaEnterpriseMode).optional(),
-      })
-      .optional(),
+    captchaConfig: captchaPublicConfigGuard.optional(),
     customProfileFields: CustomProfileFields.guard.array(),
     customProfileFieldCatalog: CustomProfileFields.guard.array().optional(),
   }) satisfies ToZodObject<FullSignInExperience>;

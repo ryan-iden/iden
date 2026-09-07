@@ -1,4 +1,9 @@
-import { RecaptchaEnterpriseMode, type CaptchaProvider, type CaptchaType } from '@logto/schemas';
+import {
+  AliyunCaptchaRegion,
+  RecaptchaEnterpriseMode,
+  type CaptchaProvider,
+  type CaptchaType,
+} from '@logto/schemas';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +51,11 @@ function Guide({ type, onClose }: Props) {
       secretKey: '',
       projectId: '',
       mode: RecaptchaEnterpriseMode.Invisible,
+      region: AliyunCaptchaRegion.China,
+      prefix: '',
+      sceneId: '',
+      accessKeyId: '',
+      accessKeySecret: '',
     },
   });
 

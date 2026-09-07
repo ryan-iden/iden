@@ -95,6 +95,25 @@ describe('koaSecurityHeaders() middleware — experience CSP', () => {
     expect(imageSource).toContain('http://127.0.0.1:9000');
   });
 
+  it('allows Alibaba Cloud Captcha resources only in the hosted experience CSP', async () => {
+    const runExperience = koaExperienceSecurityHeaders('default', createQueries());
+    const experienceContext = createMockContext({ method: 'GET', url: '/sign-in' });
+
+    await runExperience(experienceContext, koaNoop);
+
+    expect(getCspDirective(experienceContext, 'script-src')).toContain('https://*.alicdn.com/');
+    expect(getCspDirective(experienceContext, 'connect-src')).toContain('https://*.aliyuncs.com/');
+    expect(getCspDirective(experienceContext, 'style-src')).toContain('https://*.alicdn.com/');
+
+    const runApps = koaSecurityHeaders(['api', 'oidc', '.well-known'], 'default');
+    const consoleContext = createMockContext({ method: 'GET', url: '/console' });
+
+    await runApps(consoleContext, koaNoop);
+
+    expect(getCsp(consoleContext)).not.toContain('alicdn.com');
+    expect(getCsp(consoleContext)).not.toContain('aliyuncs.com');
+  });
+
   it('does not add Custom UI CSP sources when Custom UI assets are not configured', async () => {
     const run = koaExperienceSecurityHeaders(
       'default',
