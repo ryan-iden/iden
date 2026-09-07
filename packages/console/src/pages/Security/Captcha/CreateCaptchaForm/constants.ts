@@ -1,5 +1,6 @@
 import { CaptchaType } from '@logto/schemas';
 
+import aliyunCaptcha from '@/assets/images/aliyun-captcha.svg?react';
 import recaptchaEnterprise from '@/assets/images/recaptcha.svg?react';
 import turnstile from '@/assets/images/turnstile.svg?react';
 
@@ -73,6 +74,35 @@ reCAPTCHA Enterprise is a Google service that protects websites from fraud and a
 ${enableCaptchaReadme}
 `;
 
+const aliyunCaptchaReadme = `
+# Alibaba Cloud Captcha 2.0
+
+Alibaba Cloud Captcha 2.0 provides risk-based bot detection for Web and H5 applications. iden uses the current Web/H5 client SDK and verifies every successful challenge again on the server.
+
+## Prerequisites
+
+- An Alibaba Cloud account with Captcha 2.0 enabled
+- A Web/H5 CAPTCHA scene
+- A RAM user with the minimum permissions required to call the CAPTCHA verification API
+
+## Setup
+
+1. Open the [Alibaba Cloud Captcha 2.0 console](https://yundun.console.aliyun.com/?p=captcha2) and create a Web/H5 scene.
+2. Copy the **Prefix** and **Scene ID** from the integration information.
+3. Create a dedicated RAM user. Do not use the root account AccessKey.
+4. Grant the RAM user permission to verify CAPTCHA requests and create an AccessKey pair.
+5. Select the service region that matches your CAPTCHA instance:
+   - **Chinese mainland** uses the Shanghai API endpoint.
+   - **International** uses the Singapore API endpoint.
+6. Enter the AccessKey ID and AccessKey secret below. These credentials are never included in the public sign-in experience configuration.
+
+[Web/H5 integration guide](https://help.aliyun.com/zh/captcha/captcha2-0/user-guide/new-architecture-for-web-and-h5-client-access)
+
+[Server integration guide](https://help.aliyun.com/zh/captcha/captcha2-0/user-guide/server-access)
+
+${enableCaptchaReadme}
+`;
+
 export const captchaProviders: CaptchaProviderMetadata[] = [
   {
     name: 'security.captcha_providers.recaptcha_enterprise.name',
@@ -127,6 +157,41 @@ export const captchaProviders: CaptchaProviderMetadata[] = [
         field: 'secretKey',
         label: 'security.captcha_details.secret_key',
         placeholder: 'security.captcha_details.secret_key',
+      },
+    ],
+  },
+  {
+    name: 'security.captcha_providers.aliyun.name',
+    type: CaptchaType.Aliyun,
+    logo: aliyunCaptcha,
+    logoDark: aliyunCaptcha,
+    description: 'security.captcha_providers.aliyun.description',
+    readme: aliyunCaptchaReadme,
+    requiredFields: [
+      {
+        field: 'region',
+        label: 'security.captcha_details.aliyun_region',
+        placeholder: 'security.captcha_details.aliyun_region',
+      },
+      {
+        field: 'prefix',
+        label: 'security.captcha_details.aliyun_prefix',
+        placeholder: 'security.captcha_details.aliyun_prefix',
+      },
+      {
+        field: 'sceneId',
+        label: 'security.captcha_details.aliyun_scene_id',
+        placeholder: 'security.captcha_details.aliyun_scene_id',
+      },
+      {
+        field: 'accessKeyId',
+        label: 'security.captcha_details.aliyun_access_key_id',
+        placeholder: 'security.captcha_details.aliyun_access_key_id',
+      },
+      {
+        field: 'accessKeySecret',
+        label: 'security.captcha_details.aliyun_access_key_secret',
+        placeholder: 'security.captcha_details.aliyun_access_key_secret',
       },
     ],
   },

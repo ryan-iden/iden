@@ -1,6 +1,8 @@
 import {
+  AliyunCaptchaRegion,
   CaptchaType,
   RecaptchaEnterpriseMode,
+  type AliyunCaptchaConfig,
   type CaptchaProvider,
   type RecaptchaEnterpriseConfig,
   type TurnstileConfig,
@@ -20,10 +22,70 @@ function isTurnstile(config: CaptchaProvider['config']): config is TurnstileConf
   return config.type === CaptchaType.Turnstile;
 }
 
+function isAliyunCaptcha(config: CaptchaProvider['config']): config is AliyunCaptchaConfig {
+  return config.type === CaptchaType.Aliyun;
+}
+
+const aliyunCaptchaEndpoints = Object.freeze({
+  [AliyunCaptchaRegion.China]: 'captcha.cn-shanghai.aliyuncs.com',
+  [AliyunCaptchaRegion.Singapore]: 'captcha.ap-southeast-1.aliyuncs.com',
+});
+
+export const getAliyunCaptchaEndpoint = (region: AliyunCaptchaRegion) =>
+  aliyunCaptchaEndpoints[region];
+
+type AliyunCaptchaVerificationResult = {
+  readonly success: boolean;
+  readonly requestId?: string;
+  readonly verifyCode?: string;
+  readonly errorCode?: string;
+  readonly errorMessage?: string;
+};
+
+type AliyunCaptchaVerifier = (
+  config: AliyunCaptchaConfig,
+  captchaToken: string
+) => Promise<AliyunCaptchaVerificationResult>;
+
+const verifyAliyunCaptcha: AliyunCaptchaVerifier = async (config, captchaToken) => {
+  const [captchaPackage, openApiPackage] = await Promise.all([
+    import('@alicloud/captcha20230305'),
+    import('@alicloud/openapi-core'),
+  ]);
+  // Alibaba Cloud's CommonJS package exposes its generated client through a nested default export.
+  const CaptchaClient = captchaPackage.default.default;
+  const client = new CaptchaClient(
+    new openApiPackage.$OpenApiUtil.Config({
+      accessKeyId: config.accessKeyId,
+      accessKeySecret: config.accessKeySecret,
+      endpoint: getAliyunCaptchaEndpoint(config.region),
+      protocol: 'https',
+      connectTimeout: 5000,
+      readTimeout: 8000,
+    })
+  );
+  const { body } = await client.verifyIntelligentCaptcha(
+    new captchaPackage.VerifyIntelligentCaptchaRequest({
+      captchaVerifyParam: captchaToken,
+      // Always use the server-side scene ID to prevent a client from substituting another scene.
+      sceneId: config.sceneId,
+    })
+  );
+
+  return {
+    success: body?.success === true && body.result?.verifyResult === true,
+    requestId: body?.requestId,
+    verifyCode: body?.result?.verifyCode,
+    errorCode: body?.code,
+    errorMessage: body?.message,
+  };
+};
+
 export class CaptchaValidator {
   constructor(
     private readonly captchaProvider: CaptchaProvider,
-    private readonly log: LogEntry
+    private readonly log: LogEntry,
+    private readonly aliyunCaptchaVerifier: AliyunCaptchaVerifier = verifyAliyunCaptcha
   ) {}
 
   public async verifyCaptcha(captchaToken: string): Promise<boolean> {
@@ -37,7 +99,34 @@ export class CaptchaValidator {
       return this.verifyTurnstile(config, captchaToken);
     }
 
+    if (isAliyunCaptcha(config)) {
+      return this.verifyAliyun(config, captchaToken);
+    }
+
     throw new Error('Invalid captcha provider');
+  }
+
+  private async verifyAliyun(config: AliyunCaptchaConfig, captchaToken: string) {
+    try {
+      const result = await this.aliyunCaptchaVerifier(config, captchaToken);
+
+      this.log.append({
+        success: result.success,
+        requestId: result.requestId,
+        verifyCode: result.verifyCode,
+        errorCode: result.errorCode,
+        errorMessage: result.errorMessage,
+      });
+
+      return result.success;
+    } catch {
+      this.log.append({
+        success: false,
+        errorMessage: 'Failed to get the result from Alibaba Cloud Captcha',
+      });
+
+      return false;
+    }
   }
 
   private async verifyTurnstile(config: TurnstileConfig, captchaToken: string) {

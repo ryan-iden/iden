@@ -5,7 +5,11 @@ import useSWR from 'swr';
 import { z } from 'zod';
 
 import { FormCardSkeleton } from '@/components/FormCard';
-import { recaptchaEnterpriseBringYourUi, turnstileBringYourUi } from '@/consts/external-links';
+import {
+  aliyunCaptchaBringYourUi,
+  recaptchaEnterpriseBringYourUi,
+  turnstileBringYourUi,
+} from '@/consts/external-links';
 import InlineNotification from '@/ds-components/InlineNotification';
 import TextLink from '@/ds-components/TextLink';
 import { type RequestError } from '@/hooks/use-api';
@@ -31,10 +35,17 @@ function Captcha() {
   const guideType = z.nativeEnum(CaptchaType).safeParse(guideId);
   const navigate = useNavigate();
   const shouldShowCustomUiCaptchaNotice = Boolean(signInExpData?.customUiAssets);
-  const customUiCaptchaGuideLink =
-    data?.config.type === CaptchaType.Turnstile
-      ? turnstileBringYourUi
-      : recaptchaEnterpriseBringYourUi;
+  const customUiCaptchaGuideLink = data
+    ? {
+        [CaptchaType.Aliyun]: aliyunCaptchaBringYourUi,
+        [CaptchaType.Turnstile]: turnstileBringYourUi,
+        [CaptchaType.RecaptchaEnterprise]: recaptchaEnterpriseBringYourUi,
+      }[data.config.type]
+    : recaptchaEnterpriseBringYourUi;
+  const customUiCaptchaGuideUrl =
+    data?.config.type === CaptchaType.Aliyun
+      ? customUiCaptchaGuideLink
+      : getDocumentationUrl(customUiCaptchaGuideLink);
 
   if (guideType.success) {
     return (
@@ -55,12 +66,7 @@ function Captcha() {
           <Trans
             i18nKey="admin_console.security.bot_protection.custom_ui_captcha_notice"
             components={{
-              a: (
-                <TextLink
-                  href={getDocumentationUrl(customUiCaptchaGuideLink)}
-                  targetBlank="noopener"
-                />
-              ),
+              a: <TextLink href={customUiCaptchaGuideUrl} targetBlank="noopener" />,
               code: <code />,
             }}
           />

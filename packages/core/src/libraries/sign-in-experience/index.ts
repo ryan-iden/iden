@@ -10,7 +10,13 @@ import type {
   SignInExperience,
   SsoConnectorMetadata,
 } from '@logto/schemas';
-import { adminTenantId, ConnectorType, ForgotPasswordMethod, TenantTag } from '@logto/schemas';
+import {
+  adminTenantId,
+  CaptchaType,
+  ConnectorType,
+  ForgotPasswordMethod,
+  TenantTag,
+} from '@logto/schemas';
 import { conditional, deduplicate, trySafe, type Nullable } from '@silverhand/essentials';
 import deepmerge from 'deepmerge';
 
@@ -206,15 +212,23 @@ export const createSignInExperienceLibrary = (
       return;
     }
 
-    const { type, siteKey } = provider.config;
+    const { type } = provider.config;
+
+    if (type === CaptchaType.Aliyun) {
+      const { prefix, sceneId, region } = provider.config;
+
+      return { type, prefix, sceneId, region };
+    }
+
+    const { siteKey } = provider.config;
 
     return {
       type,
       siteKey,
-      ...(type === 'RecaptchaEnterprise' &&
+      ...(type === CaptchaType.RecaptchaEnterprise &&
         'domain' in provider.config &&
         provider.config.domain && { domain: provider.config.domain }),
-      ...(type === 'RecaptchaEnterprise' &&
+      ...(type === CaptchaType.RecaptchaEnterprise &&
         'mode' in provider.config &&
         provider.config.mode && { mode: provider.config.mode }),
     };

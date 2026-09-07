@@ -48,5 +48,21 @@ declare global {
         }
       ) => void;
     };
+    AliyunCaptchaConfig?: {
+      region: 'cn' | 'sgp';
+      prefix: string;
+    };
+    initAliyunCaptcha?: (options: {
+      SceneId: string;
+      mode: 'popup';
+      element: string;
+      button: string;
+      language: string;
+      success: (captchaVerifyParam: string) => void;
+      fail?: (result?: unknown) => void;
+      onError: (error: unknown) => void;
+      onClose: (reason: 'userDismiss' | 'verifyComplete') => void;
+      getInstance: (instance: { destroy?: () => void }) => void;
+    }) => void;
   }
 }
