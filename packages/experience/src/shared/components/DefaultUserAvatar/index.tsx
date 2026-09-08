@@ -17,7 +17,8 @@ const DefaultUserAvatar = ({ className, seed }: Props) => {
     <Blobatar
       aria-hidden
       alt=""
-      background="squircle"
+      background={false}
+      data-iden-avatar=""
       className={className}
       draggable={false}
       name={seed}

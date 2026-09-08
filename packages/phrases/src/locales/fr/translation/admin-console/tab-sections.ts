@@ -1,4 +1,9 @@
 const tab_sections = {
+  identity: 'Identités',
+  integrations: 'Connexions',
+  login_security: 'Connexion et sécurité',
+  permissions: 'Autorisations',
+  automation: 'Automatisation',
   platform: 'Plateforme',
   overview: "Vue d'ensemble",
   authentication: 'Authentification',

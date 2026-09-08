@@ -1,0 +1,68 @@
+{
+  "name": "@iden/ui-foundation",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "license": "MPL-2.0",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./react": {
+      "types": "./lib/react.d.ts",
+      "import": "./lib/react.js",
+      "require": "./lib/react.cjs"
+    },
+    "./styles.css": "./styles/styles.css",
+    "./scss/*": "./scss/*.scss",
+    "./assets/*": "./assets/*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepack": "pnpm build",
+    "dev": "tsup --watch",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:ci": "vitest run",
+    "check:budget": "node scripts/check-budget.mjs",
+    "lint": "eslint src --ext .ts --ext .tsx",
+    "stylelint": "stylelint 'scss/**/*.scss' 'styles/**/*.css'",
+    "precommit": "lint-staged"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "^5.2.8",
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.14.2"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "@silverhand/eslint-config-react": "6.0.2",
+    "@types/react": "^18.3.3",
+    "eslint": "^8.56.0",
+    "jsdom": "^26.1.0",
+    "lint-staged": "^15.0.0",
+    "react": "^18.3.1",
+    "stylelint": "^15.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.5.3",
+    "vitest": "^4.1.8"
+  },
+  "eslintConfig": {
+    "extends": "@silverhand/eslint-config-react"
+  },
+  "stylelint": {
+    "extends": "@silverhand/eslint-config-react/.stylelintrc",
+    "rules": { "color-function-notation": "modern" }
+  },
+  "prettier": "@silverhand/eslint-config/.prettierrc"
+}

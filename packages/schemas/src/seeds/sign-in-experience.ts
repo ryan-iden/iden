@@ -1,4 +1,4 @@
-import { generateDarkColor } from '@logto/core-kit';
+import { generateDarkColor, idenBrandProfile } from '@logto/core-kit';
 
 import type { CreateSignInExperience } from '../db-entries/index.js';
 import { SignInMode } from '../db-entries/index.js';
@@ -21,9 +21,11 @@ export const createDefaultSignInExperience = (
     tenantId: forTenantId,
     id: 'default',
     color: {
-      primaryColor: defaultPrimaryColor,
-      isDarkModeEnabled: false,
-      darkPrimaryColor: generateDarkColor(defaultPrimaryColor),
+      primaryColor: isCloud ? defaultPrimaryColor : idenBrandProfile.primaryColor,
+      isDarkModeEnabled: !isCloud,
+      darkPrimaryColor: isCloud
+        ? generateDarkColor(defaultPrimaryColor)
+        : idenBrandProfile.darkPrimaryColor,
     },
     branding: {
       logoUrl: isCloud ? undefined : 'https://logto.io/logo.svg',
@@ -68,6 +70,8 @@ export const createDefaultSignInExperience = (
 export const defaultSignInExperience = createDefaultSignInExperience(defaultTenantId, false);
 
 export type AdminSignInExperienceSeedOptions = {
+  /** Explicit deployment context for new installations; omitted retains Cloud seed compatibility. */
+  isCloud?: boolean;
   /**
    * When true, the seeded admin-tenant `passwordPolicy` explicitly disables the
    * HaveIBeenPwned (HIBP) breach check by setting `rejects.pwned = false`. Intended
@@ -87,7 +91,7 @@ export const createAdminTenantSignInExperience = (
     ...defaultSignInExperience,
     tenantId: adminTenantId,
     color: {
-      ...defaultSignInExperience.color,
+      ...createDefaultSignInExperience(adminTenantId, options.isCloud !== false).color,
       isDarkModeEnabled: true,
     },
     signInMode: SignInMode.Register,

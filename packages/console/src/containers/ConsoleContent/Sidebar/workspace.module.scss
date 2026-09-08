@@ -1,0 +1,120 @@
+.workspace {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  width: 304px;
+  padding-block: 12px;
+  padding-inline: 12px 0;
+}
+
+.rail {
+  width: 88px;
+  flex: none;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 5px;
+  border: 1px solid var(--iden-line);
+  border-radius: 20px;
+  background: var(--iden-glass);
+  box-shadow: var(--iden-shadow);
+  scrollbar-width: thin;
+}
+
+.destination {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 3px;
+  min-height: 72px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  text-decoration: none;
+  text-align: center;
+  color: var(--iden-muted);
+  font: 550 11px/1.4 var(--iden-font);
+  transition:
+    background 160ms,
+    color 160ms,
+    border-color 160ms;
+
+  svg {
+    flex: none;
+  }
+
+  &:hover {
+    background: var(--iden-muted-surface);
+    color: var(--iden-text);
+  }
+
+  &.active {
+    color: var(--iden-accent);
+    background: var(--iden-tint);
+    border-color: color-mix(in srgb, var(--iden-accent) 24%, transparent);
+  }
+}
+
+.context {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px 10px;
+}
+
+.contextHeading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px 24px;
+  font: var(--font-label-2);
+}
+
+.indicator {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--iden-accent);
+}
+
+.items {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 14px 8px;
+  color: var(--iden-muted);
+  font: var(--font-body-3);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.slogan {
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .workspace {
+    width: min(320px, 88vw);
+    padding-inline-start: 8px;
+  }
+
+  .rail {
+    width: 82px;
+  }
+}

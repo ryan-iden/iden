@@ -1,3 +1,4 @@
+import { StateArtwork } from '@iden/ui-foundation/react';
 import { Theme } from '@logto/schemas';
 import type { TFuncKey } from 'i18next';
 import { useContext } from 'react';
@@ -12,6 +13,7 @@ import Button from '@/shared/components/Button';
 import DynamicT from '@/shared/components/DynamicT';
 import NavBar from '@/shared/components/NavBar';
 import PageMeta from '@/shared/components/PageMeta';
+import { isCloudBuild } from '@/shared/utils/product-brand';
 
 import SupportInfo from './SupportInfo';
 import styles from './index.module.scss';
@@ -52,7 +54,15 @@ const ErrorPage = ({
         />
       )}
       <div className={styles.container}>
-        {theme === Theme.Light ? <EmptyState /> : <EmptyStateDark />}
+        {isCloudBuild ? (
+          theme === Theme.Light ? (
+            <EmptyState />
+          ) : (
+            <EmptyStateDark />
+          )
+        ) : (
+          <StateArtwork kind="error" />
+        )}
         <div className={styles.title}>
           <DynamicT forKey={title} />
         </div>

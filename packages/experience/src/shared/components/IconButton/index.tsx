@@ -8,7 +8,13 @@ export type Props = Omit<HTMLProps<HTMLButtonElement>, 'type'>;
 
 const IconButton = ({ children, className, ...rest }: Props, ref: Ref<HTMLButtonElement>) => {
   return (
-    <button ref={ref} type="button" className={classNames(styles.iconButton, className)} {...rest}>
+    <button
+      ref={ref}
+      data-iden-press=""
+      type="button"
+      className={classNames(styles.iconButton, className)}
+      {...rest}
+    >
       {children}
     </button>
   );

@@ -82,6 +82,7 @@ function Button(
   return (
     <button
       ref={buttonRef}
+      data-iden-press=""
       className={classNames(
         styles.button,
         styles[type],

@@ -18,9 +18,11 @@
     "test:ci": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
-    "marked": "^15.0.12"
+    "marked": "^15.0.12",
+    "@iden/ui-foundation": "workspace:*"
   },
   "devDependencies": {
+    "esbuild": "^0.25.0",
     "@logto/phrases-experience": "workspace:^",
     "pagefind": "^1.4.0"
   },

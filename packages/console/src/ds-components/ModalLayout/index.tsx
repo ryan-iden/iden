@@ -1,7 +1,9 @@
+import { useSurfaceMotion } from '@iden/ui-foundation/react';
 import classNames from 'classnames';
-import { type ReactElement, type ReactNode } from 'react';
+import { type ReactElement, type ReactNode, useRef } from 'react';
 
 import Close from '@/assets/icons/close.svg?react';
+import { isIdenBrand } from '@/consts/brand';
 
 import Card from '../Card';
 import type { Props as CardTitleProps } from '../CardTitle';
@@ -31,8 +33,10 @@ function ModalLayout({
   headerIcon,
   ...cardTitleProps
 }: Props) {
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  useSurfaceMotion(surfaceRef, 'modal', isIdenBrand);
   return (
-    <Card className={classNames(styles.container, styles[size])}>
+    <Card ref={surfaceRef} className={classNames(styles.container, styles[size])}>
       <div className={styles.header}>
         <div className={styles.iconAndTitle}>
           {headerIcon}

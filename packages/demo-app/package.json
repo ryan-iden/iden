@@ -61,6 +61,7 @@
   },
   "prettier": "@silverhand/eslint-config/.prettierrc",
   "dependencies": {
-    "lucide-react": "^0.468.0"
+    "lucide-react": "^0.468.0",
+    "@iden/ui-foundation": "workspace:*"
   }
 }

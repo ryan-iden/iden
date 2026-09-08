@@ -81,8 +81,8 @@
 }
 
 .primaryButton {
-  color: #fff;
-  background: #5b5cf6;
+  color: var(--color-type-on-brand);
+  background: var(--color-brand-default);
 
   &:disabled {
     cursor: not-allowed;
@@ -90,7 +90,7 @@
   }
 
   &:hover:not(:disabled) {
-    background: #4c4de6;
+    background: var(--color-brand-hover);
   }
 }
 
@@ -145,7 +145,7 @@
 .detailPanel {
   padding: _.unit(5);
   border-radius: 12px;
-  background: var(--color-bg-body);
+  background: var(--color-bg-layer-1);
 }
 
 .editorPanel label,
@@ -186,8 +186,8 @@
   resize: vertical;
 
   &:focus {
-    border-color: #5b5cf6;
-    box-shadow: 0 0 0 3px rgba(91, 92, 246, 12%);
+    border-color: var(--color-brand-default);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-default) 12%, transparent);
   }
 }
 
@@ -235,7 +235,7 @@
 .permissionCheckbox {
   width: 16px;
   height: 16px;
-  accent-color: #5b5cf6;
+  accent-color: var(--color-brand-default);
   flex: none;
   padding: 0;
   margin: 0;
@@ -244,7 +244,7 @@
 .businessRoleCheckbox {
   width: 16px;
   height: 16px;
-  accent-color: #5b5cf6;
+  accent-color: var(--color-brand-default);
   flex: none;
   padding: 0;
   margin: 0;
@@ -274,7 +274,7 @@
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  background: var(--color-bg-body);
+  background: var(--color-bg-layer-1);
   overflow: clip;
 }
 
@@ -299,13 +299,13 @@
   cursor: pointer;
 
   &:hover {
-    color: #5b5cf6;
-    background: rgba(91, 92, 246, 5%);
+    color: var(--color-brand-default);
+    background: color-mix(in srgb, var(--color-brand-default) 5%, transparent);
   }
 }
 
 .highlightedRow {
-  background: rgba(91, 92, 246, 8%);
+  background: color-mix(in srgb, var(--color-brand-default) 8%, transparent);
 }
 
 .row:last-child,
@@ -339,8 +339,8 @@
 .chips span {
   border-radius: 999px;
   padding: 4px 9px;
-  background: rgba(91, 92, 246, 10%);
-  color: #5b5cf6;
+  background: color-mix(in srgb, var(--color-brand-default) 10%, transparent);
+  color: var(--color-brand-default);
   font: var(--font-label-3);
 }
 
@@ -357,7 +357,7 @@
   border-radius: 50%;
   padding: 0;
   color: inherit;
-  background: rgba(91, 92, 246, 12%);
+  background: color-mix(in srgb, var(--color-brand-default) 12%, transparent);
   cursor: pointer;
 }
 
@@ -420,7 +420,7 @@
 @media (max-width: 768px) {
   .memberSummary {
     flex-wrap: wrap;
-    padding: _.unit(3) 0;
+    padding: _.unit(4);
   }
 
   .memberActions {
@@ -428,7 +428,7 @@
   }
 
   .memberRoleEditor {
-    padding: _.unit(3) 0;
+    padding: _.unit(4);
   }
 }
 
@@ -469,8 +469,8 @@
 }
 
 .activeTab {
-  color: #5b5cf6;
-  border-bottom-color: #5b5cf6;
+  color: var(--color-brand-default);
+  border-bottom-color: var(--color-brand-default);
 }
 
 .tab[disabled],
@@ -514,7 +514,7 @@
   min-height: 150px;
   border-radius: 14px;
   border: 1px solid var(--color-border);
-  background: var(--color-bg-body);
+  background: var(--color-bg-layer-1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -564,8 +564,8 @@
   border-radius: 12px;
   display: grid;
   place-items: center;
-  color: #5b5cf6;
-  background: rgba(91, 92, 246, 10%);
+  color: var(--color-brand-default);
+  background: color-mix(in srgb, var(--color-brand-default) 10%, transparent);
 }
 
 .resourceColumns {
@@ -596,7 +596,7 @@
 .resourceCheckbox {
   width: 16px;
   height: 16px;
-  accent-color: #5b5cf6;
+  accent-color: var(--color-brand-default);
 }
 
 .dangerZone {

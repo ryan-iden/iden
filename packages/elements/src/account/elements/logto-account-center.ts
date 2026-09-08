@@ -7,6 +7,7 @@ import {
   type LogtoAccountContextType,
 } from '../providers/logto-account-provider.js';
 import { LocalizationController } from '../utils/localization.js';
+import { SurfaceController } from '../utils/surface-controller.js';
 
 const tagName = 'logto-account-center';
 
@@ -26,6 +27,7 @@ export class LogtoAccountCenter extends LitElement {
   private readonly accountContext?: LogtoAccountContextType;
 
   private readonly localization: LocalizationController = new LocalizationController(this);
+  private readonly surface = new SurfaceController(this);
 
   render() {
     if (!this.accountContext) {

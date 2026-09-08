@@ -1,11 +1,14 @@
+import { synchronizeAppearance } from '@iden/ui-foundation';
+import { MotionRuntime, StateArtwork, useSurfaceMotion } from '@iden/ui-foundation/react';
 import { type IdTokenClaims, LogtoProvider, type Prompt, useLogto } from '@logto/react';
 import { demoAppApplicationId } from '@logto/schemas';
 import i18next from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 
 import '@/scss/normalized.scss';
+import '@iden/ui-foundation/styles.css';
 
 import styles from './App.module.scss';
 import Callback from './Callback';
@@ -25,9 +28,15 @@ const Main = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'demo_app' });
   const isInCallback = Boolean(params.get('code'));
   const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const surfaceRef = useRef<HTMLDivElement>(null);
   const [congratsIcon, setCongratsIcon] = useState<string>(isDarkMode ? congratsDark : congrats);
   const [showDevPanel, setShowDevPanel] = useState(getLocalData('ui').showDevPanel ?? false);
   const error = params.get('error');
+  useSurfaceMotion(
+    surfaceRef,
+    `${isAuthenticated}-${Boolean(user)}-${Boolean(error)}`,
+    !isCloudBuild
+  );
   const errorDescription = params.get('error_description');
   const redirectUri = window.location.origin + window.location.pathname;
 
@@ -95,7 +104,16 @@ const Main = () => {
     const onThemeChange = (event: MediaQueryListEvent) => {
       const isDarkMode = event.matches;
       setCongratsIcon(isDarkMode ? congratsDark : congrats);
+      if (!isCloudBuild) {
+        synchronizeAppearance(isDarkMode ? 'dark' : 'light');
+      }
     };
+
+    if (!isCloudBuild) {
+      synchronizeAppearance(
+        window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      );
+    }
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onThemeChange);
 
@@ -112,7 +130,8 @@ const Main = () => {
 
   if (error) {
     return (
-      <div className={styles.app}>
+      <div ref={surfaceRef} className={styles.app}>
+        <MotionRuntime isEnabled={!isCloudBuild} />
         <div className={styles.error}>
           <p>
             {tUi('error')} {error}
@@ -120,6 +139,7 @@ const Main = () => {
             {errorDescription}
           </p>
           <button
+            data-iden-press=""
             className={styles.button}
             onClick={() => {
               setLocalData('config', {});
@@ -138,7 +158,8 @@ const Main = () => {
   }
 
   return (
-    <div className={styles.app}>
+    <div ref={surfaceRef} className={styles.app}>
+      <MotionRuntime isEnabled={!isCloudBuild} />
       <Helmet
         title={`${productBrand.productName} · ${i18next.t('admin_console.general.live_preview')}`}
         htmlAttributes={{
@@ -171,7 +192,11 @@ const Main = () => {
             <span>{productBrand.productName}</span>
           </div>
         )}
-        {congratsIcon && <img src={congratsIcon} alt={t('title')} />}
+        {isCloudBuild ? (
+          <img src={congratsIcon} alt={t('title')} />
+        ) : (
+          <StateArtwork kind="success" />
+        )}
         <div className={styles.title}>{t('title')}</div>
         <div className={styles.text}>{t('subtitle')}</div>
         <div className={styles.infoCard}>

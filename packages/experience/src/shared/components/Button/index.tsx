@@ -43,6 +43,7 @@ const Button = ({
 
   return (
     <button
+      data-iden-press=""
       disabled={isDisabled || isLoading}
       className={classNames(
         styles.button,

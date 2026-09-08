@@ -48,6 +48,11 @@ jobs:
       - name: Build workspace packages
         run: pnpm prepack
 
+      - name: Validate shared motion foundation
+        run: |
+          pnpm --filter @iden/ui-foundation test:ci
+          pnpm --filter @iden/ui-foundation check:budget
+
       - name: Build self-hosted frontends
         run: pnpm --filter @logto/console --filter @logto/experience --filter @logto/account --filter @logto/demo-app --filter @logto/device-demo-app build
 

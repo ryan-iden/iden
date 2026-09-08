@@ -63,6 +63,7 @@ function Item({ icon, titleKey, modal, externalLink, path, isActive = false }: P
   return (
     <Link
       to={path ?? getPath(titleKey)}
+      aria-current={isActive ? 'page' : undefined}
       className={classNames(styles.row, isActive && styles.active)}
     >
       {content}

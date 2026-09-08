@@ -29,6 +29,22 @@ describe('createAdminTenantSignInExperience', () => {
 });
 
 describe('createDefaultSignInExperience', () => {
+  it('uses the glacier palette and system-capable dark theme only for new self-hosted tenants', () => {
+    expect(createDefaultSignInExperience('new-tenant', false).color).toEqual({
+      primaryColor: '#007C91',
+      darkPrimaryColor: '#67E8F9',
+      isDarkModeEnabled: true,
+    });
+    expect(createDefaultSignInExperience('cloud-tenant', true).color).toMatchObject({
+      primaryColor: '#6139F6',
+      isDarkModeEnabled: false,
+    });
+    expect(createAdminTenantSignInExperience().color.primaryColor).toBe('#6139F6');
+    expect(createAdminTenantSignInExperience({ isCloud: false }).color.primaryColor).toBe(
+      '#007C91'
+    );
+  });
+
   it('still has a two-parameter signature and seeds an empty passwordPolicy', () => {
     const row = createDefaultSignInExperience('some-tenant-id', false);
     expect(row.passwordPolicy).toEqual({});

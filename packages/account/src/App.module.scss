@@ -156,12 +156,30 @@
   :global(body.desktop) {
     .cardMain {
       border: 1px solid var(--color-line-divider);
-      border-radius: 12px;
-      box-shadow: none;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--iden-shadow);
     }
 
     .withSidebar {
-      gap: 32px;
+      width: 100%;
+      max-width: 1440px;
+      margin-inline: auto;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 48px;
+      padding: 24px 40px 48px;
+
+      .main {
+        width: 100%;
+        min-width: 0;
+        max-width: 1040px;
+      }
+    }
+
+    @media only screen and (max-width: 1060px) {
+      .withSidebar {
+        padding: 24px;
+      }
     }
   }
 }

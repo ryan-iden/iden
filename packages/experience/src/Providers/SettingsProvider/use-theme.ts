@@ -1,7 +1,9 @@
+import { getWorkspaceTheme, observeWorkspaceAppearance } from '@iden/ui-foundation';
 import { Theme } from '@logto/schemas';
 import { useEffect, useContext } from 'react';
 
 import PageContext from '@/Providers/PageContextProvider/PageContext';
+import { isCloudBuild } from '@/shared/utils/product-brand';
 
 const prefersDarkSchemeQuery = '(prefers-color-scheme: dark)';
 
@@ -14,7 +16,9 @@ const getDarkThemeWatchMedia = (): MediaQueryList | undefined => {
 };
 
 export const getThemeBySystemConfiguration = (): Theme =>
-  getDarkThemeWatchMedia()?.matches ? Theme.Dark : Theme.Light;
+  (isCloudBuild ? getDarkThemeWatchMedia()?.matches : getWorkspaceTheme() === 'dark')
+    ? Theme.Dark
+    : Theme.Light;
 
 export default function useTheme() {
   const { isPreview, experienceSettings, setTheme } = useContext(PageContext);
@@ -37,9 +41,11 @@ export default function useTheme() {
     }
 
     darkThemeWatchMedia.addEventListener('change', changeTheme);
+    const unobserve = isCloudBuild ? undefined : observeWorkspaceAppearance(changeTheme);
 
     return () => {
       darkThemeWatchMedia.removeEventListener('change', changeTheme);
+      unobserve?.();
     };
   }, [experienceSettings, isPreview, setTheme]);
 }

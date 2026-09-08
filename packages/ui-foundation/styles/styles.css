@@ -1,0 +1,72 @@
+@import '@fontsource-variable/manrope/index.css';
+
+/* Tokens live on the document; component aliases remain on the body so tenant overrides win. */
+html[data-product-brand='iden'] {
+  --iden-bg: #f4f7f8;
+  --iden-surface: #fff;
+  --iden-raised: #fff;
+  --iden-muted-surface: #eaf0f2;
+  --iden-text: #15242b;
+  --iden-muted: #536973;
+  --iden-line: #d9e3e7;
+  --iden-accent: #007c91;
+  --iden-accent-hover: #00687c;
+  --iden-on-accent: #fff;
+  --iden-tint: #e0f3f5;
+  --iden-glass: rgb(255 255 255 / 86%);
+  --iden-shadow: 0 6px 24px -12px rgb(19 51 63 / 18%), 0 1px 2px rgb(19 51 63 / 4%);
+  --iden-float-shadow: 0 24px 80px -24px rgb(10 37 47 / 26%), 0 0 0 1px var(--iden-line);
+  --iden-font: 'Manrope Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --iden-radius: 16px;
+  --iden-control-radius: 10px;
+  --iden-focus: 0 0 0 3px color-mix(in srgb, var(--iden-accent) 24%, transparent);
+  color-scheme: light;
+}
+
+html[data-product-brand='iden'][data-theme='dark'] {
+  --iden-bg: #101418;
+  --iden-surface: #181e24;
+  --iden-raised: #202931;
+  --iden-muted-surface: #222c34;
+  --iden-text: #e6eff2;
+  --iden-muted: #a0b2bd;
+  --iden-line: #30404b;
+  --iden-accent: #67e8f9;
+  --iden-accent-hover: #a5f3fc;
+  --iden-on-accent: #092a31;
+  --iden-tint: #1b363f;
+  --iden-glass: rgb(24 30 36 / 88%);
+  --iden-shadow: 0 8px 32px -12px rgb(0 0 0 / 30%), inset 0 1px 0 rgb(255 255 255 / 3%);
+  --iden-float-shadow: 0 24px 80px -24px rgb(0 0 0 / 65%), 0 0 0 1px var(--iden-line);
+  color-scheme: dark;
+}
+
+@layer iden-foundation {
+  :where(html[data-product-brand='iden']) body {
+    font-family: var(--iden-font);
+    background: var(--iden-bg);
+    color: var(--iden-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(html[data-product-brand='iden']) :focus-visible {
+    outline: 2px solid var(--iden-accent);
+    outline-offset: 3px;
+  }
+
+  :where(html[data-product-brand='iden']) ::selection {
+    background: var(--iden-tint);
+    color: var(--iden-text);
+  }
+
+  :where(html[data-product-brand='iden']) [data-iden-press] {
+    touch-action: manipulation;
+  }
+
+  :where(html[data-product-brand='iden']) [data-iden-avatar] {
+    background: var(--iden-muted-surface);
+    border: 1px solid var(--iden-line);
+    border-radius: 28%;
+    object-fit: contain;
+  }
+}

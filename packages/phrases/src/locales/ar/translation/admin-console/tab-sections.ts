@@ -1,4 +1,9 @@
 const tab_sections = {
+  identity: 'الهوية',
+  integrations: 'الاتصالات',
+  login_security: 'تسجيل الدخول والأمان',
+  permissions: 'الأذونات',
+  automation: 'الأتمتة',
   platform: 'المنصة',
   overview: 'نظرة عامة',
   authentication: 'المصادقة',

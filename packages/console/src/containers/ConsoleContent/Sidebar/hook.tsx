@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import { isIdenBrand } from '@/consts/brand';
 import useIsActionsEnabled from '@/hooks/use-is-actions-enabled';
 import { usePlatformAccess } from '@/hooks/use-platform-api';
 
@@ -178,7 +179,28 @@ export const useSidebarMenuItems = (): {
     },
   ];
 
-  const enabledSections = allSections.filter((section) => !section.isHidden);
+  const groups: Array<[SidebarSection['title'], Array<SidebarItem['title']>]> = [
+    ['overview', ['get_started', 'dashboard']],
+    ['identity', ['users', 'organizations']],
+    ['integrations', ['applications', 'connectors', 'enterprise_sso']],
+    ['login_security', ['sign_in_experience', 'mfa', 'security']],
+    ['permissions', ['api_resources', 'roles', 'organization_template']],
+    ['automation', ['actions', 'webhooks', 'audit_logs', 'customize_jwt']],
+    ['tenant', ['tenant_settings']],
+    ['platform', ['platform_settings']],
+  ];
+  const availableItems = allSections
+    .filter((section) => !section.isHidden)
+    .flatMap(({ items }) => items)
+    .filter((item) => !item.isHidden);
+  const enabledSections = isIdenBrand
+    ? groups
+        .map(([title, keys]) => ({
+          title,
+          items: keys.flatMap((key) => availableItems.filter((item) => item.title === key)),
+        }))
+        .filter(({ items }) => items.length > 0)
+    : allSections.filter((section) => !section.isHidden);
 
   return { sections: enabledSections, firstItem: findFirstItem(enabledSections) };
 };

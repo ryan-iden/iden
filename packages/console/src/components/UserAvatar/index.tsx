@@ -74,7 +74,8 @@ function UserAvatar({ className, size = 'medium', user, hasTooltip = false }: Pr
   const idenDefaultAvatar = (
     <Blobatar
       alt={tUi('avatar')}
-      background="squircle"
+      background={false}
+      data-iden-avatar=""
       className={avatarClassName}
       draggable={false}
       name={avatarSeed}

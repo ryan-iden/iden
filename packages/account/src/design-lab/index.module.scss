@@ -1,0 +1,46 @@
+.content {
+  gap: 20px;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--iden-line);
+
+  h1 {
+    font: var(--font-headline-1);
+    margin: 0;
+  }
+
+  p {
+    color: var(--iden-muted);
+    margin: 6px 0 0;
+  }
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 18px;
+}
+
+.form {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 44px;
+
+  h1 {
+    font: var(--font-headline-1);
+    margin: 0;
+  }
+
+  p {
+    color: var(--iden-muted);
+    margin: 0;
+  }
+}

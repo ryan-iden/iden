@@ -4,8 +4,10 @@ import color from 'color';
 import { useEffect, useContext } from 'react';
 
 import PageContext from '@/Providers/PageContextProvider/PageContext';
+import { isCloudBuild } from '@/shared/utils/product-brand';
 
 const generateLightColorLibrary = (primaryColor: color) => ({
+  ...(!isCloudBuild && { '--color-type-on-brand': primaryColor.isLight() ? '#101418' : '#FFFFFF' }),
   [`--color-brand-default`]: primaryColor.hex(),
   [`--color-brand-hover`]: absoluteLighten(primaryColor, 10).string(),
   [`--color-brand-pressed`]: absoluteDarken(primaryColor, 10).string(),
@@ -16,6 +18,7 @@ const generateLightColorLibrary = (primaryColor: color) => ({
 });
 
 const generateDarkColorLibrary = (primaryColor: color) => ({
+  ...(!isCloudBuild && { '--color-type-on-brand': primaryColor.isLight() ? '#101418' : '#FFFFFF' }),
   [`--color-brand-default`]: primaryColor.hex(),
   [`--color-brand-hover`]: absoluteLighten(primaryColor, 10).string(),
   [`--color-brand-pressed`]: absoluteDarken(primaryColor, 10).string(),

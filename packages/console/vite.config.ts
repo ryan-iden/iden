@@ -20,6 +20,9 @@ const buildConfig = (mode: string): UserConfig => ({
   envDir: '../../',
   server: {
     port: 5002,
+    proxy: {
+      '/help': { target: 'http://127.0.0.1:5006' },
+    },
     hmr: {
       port: 6002,
     },

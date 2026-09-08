@@ -1,4 +1,5 @@
 @use '@logto/core-kit/scss/console-themes' as themes;
+@use '@iden/ui-foundation/scss/theme' as iden;
 @use '@/scss/underscore' as _;
 
 .light {
@@ -15,8 +16,10 @@
 
 .light.iden {
   @include themes.iden-light;
+  @include iden.console;
 }
 
 .dark.iden {
   @include themes.iden-dark;
+  @include iden.console;
 }
