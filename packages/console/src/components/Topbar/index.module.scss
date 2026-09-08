@@ -54,12 +54,23 @@
 
     .logo {
       min-width: 0;
+      max-width: min(240px, 40vw);
     }
 
     .text,
     .line {
       display: none;
     }
+  }
+}
+
+@media (max-width: 600px) {
+  :global(html[data-product-brand='iden']) .topbar {
+    flex-basis: auto;
+    flex-wrap: wrap;
+    min-height: 76px;
+    padding-block: 12px;
+    row-gap: 8px;
   }
 }
 

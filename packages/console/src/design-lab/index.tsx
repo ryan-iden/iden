@@ -9,9 +9,11 @@ import { MemoryRouter } from 'react-router-dom';
 
 import HelpDrawer from '@/components/HelpDrawer';
 import { IdenProductIcon } from '@/components/IdenProductIcon';
+import { IdenStateIllustration } from '@/components/IdenStateIllustration';
 import { isSelfHostedParityEnabled } from '@/consts/env';
 import ResponsiveNavigation from '@/containers/ConsoleContent/ResponsiveNavigation';
 import WorkspaceNavigation from '@/containers/ConsoleContent/Sidebar/WorkspaceNavigation';
+import workspaceStyles from '@/containers/ConsoleContent/index.module.scss';
 import { AppThemeContext, AppThemeProvider } from '@/contexts/AppThemeProvider';
 import Button from '@/ds-components/Button';
 import Card from '@/ds-components/Card';
@@ -19,6 +21,7 @@ import ModalLayout from '@/ds-components/ModalLayout';
 import Table from '@/ds-components/Table';
 import TextInput from '@/ds-components/TextInput';
 import initI18n from '@/i18n/init';
+import { DynamicAppearanceMode } from '@/types/appearance-mode';
 import '@/scss/normalized.scss';
 import '@iden/ui-foundation/styles.css';
 
@@ -34,12 +37,18 @@ function Specimen() {
   const params = new URLSearchParams(location.search);
   const state = params.get('state');
   useEffect(() => {
-    setAppearanceMode(params.get('theme') === 'dark' ? Theme.Dark : Theme.Light);
+    setAppearanceMode(
+      params.get('appearance') === 'system'
+        ? DynamicAppearanceMode.System
+        : params.get('theme') === 'dark'
+          ? Theme.Dark
+          : Theme.Light
+    );
     // The fixture deliberately pins its initial theme independently of user storage.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Development-only deterministic fixture.
   }, []);
   const rows =
-    state === 'empty'
+    state === 'empty' || state === 'error'
       ? []
       : [
           { id: 'atlas', name: 'Atlas Workspace', kind: 'Traditional web' },
@@ -62,7 +71,7 @@ function Specimen() {
         <ResponsiveNavigation>
           <WorkspaceNavigation />
         </ResponsiveNavigation>
-        <main className={styles.content}>
+        <main className={`${styles.content} ${workspaceStyles.main}`}>
           <header className={styles.heading}>
             <div>
               <h1>{t('tabs.applications')}</h1>
@@ -79,6 +88,7 @@ function Specimen() {
           <Table
             rowIndexKey="id"
             rowGroups={[{ key: 'apps', data: rows }]}
+            placeholder={<IdenStateIllustration name="empty" />}
             filter={
               <TextInput
                 aria-label="Search"

@@ -26,3 +26,7 @@
     margin-top: _.unit(6);
   }
 }
+
+:global(html[data-product-brand='iden']) .placeholder {
+  width: min(600px, 100%);
+}

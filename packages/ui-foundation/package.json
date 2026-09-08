@@ -21,6 +21,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "build:test": "pnpm build",
     "prepack": "pnpm build",
     "dev": "tsup --watch",
     "check": "tsc --noEmit",
@@ -62,7 +63,9 @@
   },
   "stylelint": {
     "extends": "@silverhand/eslint-config-react/.stylelintrc",
-    "rules": { "color-function-notation": "modern" }
+    "rules": {
+      "color-function-notation": "modern"
+    }
   },
   "prettier": "@silverhand/eslint-config/.prettierrc"
 }

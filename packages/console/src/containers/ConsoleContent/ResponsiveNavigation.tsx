@@ -9,13 +9,13 @@ import styles from './index.module.scss';
 
 export default function ResponsiveNavigation({ children }: { readonly children: ReactNode }) {
   const { t: tUi } = useInterfaceTranslation();
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     setIsSidebarOpen(false);
-  }, [pathname]);
+  }, [pathname, key]);
 
   useEffect(() => {
     const sidebar = sidebarRef.current;

@@ -5,7 +5,7 @@ import { logtoConsoleUrl as logtoConsoleUrlString, logtoUrl } from '#src/constan
 import { goToAdminConsole } from '#src/ui-helpers/index.js';
 import { expectNavigation, appendPathname } from '#src/utils.js';
 
-import { expectToSelectPreviewLanguage, waitForFormCard } from './helpers.js';
+import { expectToSelectPreviewLanguage, waitForFormCard, setDarkModeEnabled } from './helpers.js';
 
 await page.setViewport({ width: 1920, height: 1080 });
 
@@ -51,16 +51,7 @@ describe('sign-in experience: sign-in preview', () => {
   });
 
   it('switch between theme modes', async () => {
-    // Enable dark mode
-    await expect(page).toClick(
-      'form div[class$=field] label[class$=switch]:has(input[name="color.isDarkModeEnabled"])'
-    );
-
-    await page.evaluate(() => {
-      return document.querySelector<HTMLInputElement>(
-        'form div[class$=field] input[name="color.isDarkModeEnabled"]'
-      )?.checked;
-    });
+    const wasEnabled = await setDarkModeEnabled(page, true);
 
     // Switch to dark mode
     await expect(page).toClick(
@@ -79,9 +70,7 @@ describe('sign-in experience: sign-in preview', () => {
     );
 
     // Reset
-    await expect(page).toClick(
-      'form div[class$=field] label[class$=switch]:has(input[name="color.isDarkModeEnabled"])'
-    );
+    await setDarkModeEnabled(page, wasEnabled);
   });
 
   it('switch between preview languages', async () => {

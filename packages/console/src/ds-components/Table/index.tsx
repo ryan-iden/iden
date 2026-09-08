@@ -1,9 +1,10 @@
 import { conditional } from '@silverhand/essentials';
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
-import { Fragment } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
+import { Fragment, useId } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 
+import { isIdenBrand } from '@/consts/brand';
 import type { Props as PaginationProps } from '@/ds-components/Pagination';
 import Pagination from '@/ds-components/Pagination';
 
@@ -74,6 +75,20 @@ type Props<
   readonly footer?: ReactNode;
 };
 
+const getScrollRegionProps = (
+  hasData: boolean,
+  hasHeader: boolean,
+  headerId: string
+): HTMLAttributes<HTMLDivElement> =>
+  isIdenBrand && hasData && hasHeader
+    ? {
+        role: 'region',
+        'aria-labelledby': headerId,
+        // Arrow-key scrolling requires a focus target; headers supply the translated label.
+        tabIndex: 0,
+      }
+    : {};
+
 function Table<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -98,6 +113,7 @@ function Table<
   onRetry,
   footer,
 }: Props<TFieldValues, TName>) {
+  const headerId = useId();
   const totalColspan = columns.reduce((result, { colSpan }) => {
     return result + (colSpan ?? 1);
   }, 0);
@@ -107,10 +123,18 @@ function Table<
   const hasError = !isLoading && !hasData && errorMessage;
   const isEmpty = !isLoading && !hasData && !errorMessage;
   const isLoaded = !isLoading && hasData;
+  const scrollRegionProps = getScrollRegionProps(hasData, hasTableHeader, headerId);
 
   return (
     <div className={classNames(styles.container, className)}>
-      <div className={classNames(styles.tableContainer, hasBorder && styles.hasBorder)}>
+      <div
+        {...scrollRegionProps}
+        className={classNames(
+          styles.tableContainer,
+          hasBorder && styles.hasBorder,
+          scrollRegionProps.role && styles.scrollable
+        )}
+      >
         {filter && (
           <div className={styles.filterContainer}>
             <div className={styles.filter}>{filter}</div>
@@ -118,6 +142,7 @@ function Table<
         )}
         {hasTableHeader && (
           <table
+            id={headerId}
             className={classNames(
               styles.headerTable,
               filter && styles.hideTopBorderRadius,

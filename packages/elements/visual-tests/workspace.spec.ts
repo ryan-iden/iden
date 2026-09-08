@@ -12,12 +12,6 @@ const boxOf = async (locator: Locator) => {
   return box;
 };
 
-const sendFrameAppearance = (element: Element, theme: string) => {
-  if (element instanceof HTMLIFrameElement) {
-    element.contentWindow?.postMessage({ type: 'iden:appearance', theme }, window.location.origin);
-  }
-};
-
 const prepare = async (page: Page, theme: 'light' | 'dark', locale: string) => {
   await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
   await page.addInitScript((language) => {
@@ -64,6 +58,14 @@ for (const width of widths) {
       const icon = page.locator('main img').first();
       const iconBox = await boxOf(icon);
       expect(iconBox.width).toBeLessThanOrEqual(48);
+      if (width <= 600) {
+        const tableRegion = page.locator('main [role="region"]').first();
+        await tableRegion.focus();
+        await page.keyboard.press('ArrowRight');
+        await expect
+          .poll(async () => tableRegion.evaluate((element) => Math.abs(element.scrollLeft)))
+          .toBeGreaterThan(0);
+      }
       if (width <= 1100) {
         const toggle = page.locator('button[aria-controls="iden-console-navigation"]');
         await toggle.click();
@@ -72,6 +74,10 @@ for (const width of widths) {
         await capture(page, info, 'console-navigation');
         await page.keyboard.press('Escape');
         await expect(toggle).toBeFocused();
+        await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        // Re-selecting the current primary destination must also dismiss the drawer.
+        await toggle.click();
+        await page.locator('#iden-console-navigation a[aria-current="true"]').click();
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');
       }
       await page.locator('main > header button').click();
@@ -119,16 +125,21 @@ for (const theme of themes) {
     await page.locator('input[type="search"]').fill('authentication');
     await expect(page.locator('.search-results a').first()).toBeVisible();
     await capture(page, info, 'help-search');
-    await page.goto(`http://127.0.0.1:5002/console/design-lab.html?theme=${theme}`);
+    await page.goto(
+      `http://127.0.0.1:5002/console/design-lab.html?theme=${theme}&appearance=system`
+    );
     await page.locator('header > button').first().click();
     const frame = page.frameLocator('iframe[data-iden-help]');
     await expect(frame.locator('article h1')).toBeVisible();
     await expect(frame.locator('html')).toHaveAttribute('data-theme', theme);
     await capture(page, info, 'context-help');
     const otherTheme = theme === 'dark' ? 'light' : 'dark';
-    await page.locator('iframe[data-iden-help]').evaluate(sendFrameAppearance, otherTheme);
+    const frameSource = await page.locator('iframe[data-iden-help]').getAttribute('src');
+    await page.emulateMedia({ colorScheme: otherTheme });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', otherTheme);
     await expect(frame.locator('html')).toHaveAttribute('data-theme', otherTheme);
     await expect(frame.locator('body')).toHaveClass(/embedded/);
+    await expect(page.locator('iframe[data-iden-help]')).toHaveAttribute('src', frameSource ?? '');
   });
 }
 
@@ -148,3 +159,50 @@ test('motion restores layout after rapid pointer interaction', async ({ page }, 
     .toBe('none');
   await capture(page, info, 'motion-settled');
 });
+
+for (const theme of themes) {
+  for (const state of ['empty', 'error']) {
+    test(`mobile data state ${state} ${theme}`, async ({ page }, info) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await prepare(page, theme, 'zh-CN');
+      await page.goto(
+        `http://127.0.0.1:5002/console/design-lab.html?theme=${theme}&state=${state}`
+      );
+      const content = page.locator('main');
+      await expect(content.locator('tbody svg').first()).toBeVisible();
+      expect(
+        await content.evaluate((element) => element.scrollWidth - element.clientWidth)
+      ).toBeLessThanOrEqual(1);
+      await capture(page, info, `data-${state}`);
+    });
+  }
+
+  test(`custom platform logo wins over the identity mark ${theme}`, async ({ page }, info) => {
+    await prepare(page, theme, 'en');
+    await page.route('**/api/platform-branding', async (route) =>
+      route.fulfill({
+        json: {
+          productName: 'Atlas Identity',
+          slogan: 'Atlas',
+          hideOpenSourceNotice: false,
+          logoUrl: '/custom-logo.svg',
+          darkLogoUrl: '/custom-logo-dark.svg',
+        },
+      })
+    );
+    await page.route('**/custom-logo*.svg', async (route) =>
+      route.fulfill({
+        contentType: 'image/svg+xml',
+        body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="#008c91" d="M0 0h64v64H0z"/></svg>',
+      })
+    );
+    await page.goto(
+      `http://127.0.0.1:5004/account/design-lab.html?surface=auth&theme=${theme}&locale=en`
+    );
+    await expect(page.locator('aside svg image')).toHaveAttribute(
+      'href',
+      theme === 'dark' ? '/custom-logo-dark.svg' : '/custom-logo.svg'
+    );
+    await capture(page, info, 'custom-brand-authentication');
+  });
+}

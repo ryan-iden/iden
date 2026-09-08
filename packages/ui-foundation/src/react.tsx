@@ -56,12 +56,11 @@ export const IdentityOrbit = ({
         () => {
           gsap
             .timeline({ defaults: { duration: 0.6, ease: 'power3.out' } })
-            .fromTo(
+            .from(
               '[data-orbit-ring]',
-              { scale: 0.9, opacity: 0 },
               {
-                scale: 1,
-                opacity: 1,
+                scale: 0.9,
+                opacity: 0,
                 transformOrigin: '50% 50%',
                 stagger: 0.035,
                 clearProps: 'all',
@@ -71,7 +70,7 @@ export const IdentityOrbit = ({
             .fromTo(
               '[data-orbit-node]',
               { opacity: 0 },
-              { opacity: 1, stagger: 0.035, clearProps: 'opacity' },
+              { opacity: 1, duration: 0.35, stagger: 0.035, clearProps: 'opacity' },
               0.1
             );
         },
@@ -104,10 +103,14 @@ export const IdentityOrbit = ({
           <image href={logoUrl} x="208" y="208" width="64" height="64" />
         ) : (
           isMarkVisible && (
-            <g transform="translate(208 208)" fill="currentColor" stroke="none">
-              <path d="M8 15h13l11 17-11 17H8l11-17L8 15Zm20 0h13l11 17-11 17H28l11-17-11-17Z" />
-              <path d="M51 8h7v48h-7V8Z" />
-            </g>
+            <svg x="208" y="208" width="64" height="64" viewBox="20 20 124 120" stroke="none">
+              <rect x="27.6" y="59.68" width="25.71" height="73.89" rx="3.57" fill="currentColor" />
+              <rect x="27.6" y="26.43" width="25.71" height="24.08" rx="3.57" fill="currentColor" />
+              <path
+                fill="currentColor"
+                d="M86.11 26.43h-7.86a3.57 3.57 0 0 0-3.57 3.57v16.94a3.57 3.57 0 0 0 3.57 3.57h3.73c17.99 0 32.57 13.2 32.57 29.49s-14.58 29.49-32.57 29.49h-3.73a3.57 3.57 0 0 0-3.57 3.57V130a3.57 3.57 0 0 0 3.57 3.57h8.45c28.49 0 51.79-22.24 53.47-50.31 1.86-30.9-23.1-56.83-54.06-56.83Z"
+              />
+            </svg>
           )
         )}
       </g>

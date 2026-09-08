@@ -45,3 +45,11 @@
     }
   }
 }
+
+:global(html[data-product-brand='iden']) .container .content .contentTop {
+  flex-wrap: wrap;
+
+  > * {
+    min-width: min(100%, 420px);
+  }
+}

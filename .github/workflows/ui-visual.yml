@@ -33,6 +33,8 @@ jobs:
       - run: pnpm prepack
       - name: Motion lifecycle and payload budget
         run: |
+          pnpm --filter @iden/ui-foundation lint
+          pnpm --filter @iden/ui-foundation stylelint
           pnpm --filter @iden/ui-foundation test:ci
           pnpm --filter @iden/ui-foundation check:budget
       - name: Install browser engines

@@ -11,7 +11,8 @@ and public customization hooks stay in their owning packages.
 - Manrope is bundled locally; system fonts provide CJK/RTL coverage without remote font requests.
 - Semantic variables live on `html[data-product-brand="iden"]`; component aliases live on the body.
   Tenant colors remain inline overrides. Cloud does not select these tokens.
-- Custom logos take precedence over default geometric marks, including the authentication orbit.
+- The original iden logo geometry is preserved exactly; only its color and theme treatment change.
+  Custom logos take precedence, including the authentication orbit.
 - The foundation never writes tenant settings. Only new self-hosted database seeds use the new colors.
 - State artwork uses vectors and theme tokens; product icons ship explicit light/dark variants.
 

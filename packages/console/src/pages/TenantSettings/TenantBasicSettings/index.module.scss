@@ -21,3 +21,7 @@
     }
   }
 }
+
+:global(html[data-product-brand='iden']) .container {
+  min-width: 0;
+}
