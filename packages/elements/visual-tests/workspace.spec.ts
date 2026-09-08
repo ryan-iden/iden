@@ -61,6 +61,7 @@ for (const width of widths) {
       if (width <= 600) {
         const tableRegion = page.locator('main [role="region"]').first();
         await tableRegion.focus();
+        await expect(tableRegion).toBeFocused();
         await page.keyboard.press('ArrowRight');
         await expect
           .poll(async () => tableRegion.evaluate((element) => Math.abs(element.scrollLeft)))
