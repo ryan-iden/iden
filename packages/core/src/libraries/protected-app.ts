@@ -115,8 +115,10 @@ const buildProtectedAppData = async ({
     })
   );
 
-  // Skip for integration test, use empty value instead
-  const { domain } = EnvSet.values.isIntegrationTest ? { domain: '' } : await getProviderConfig();
+  // Use a reserved domain in integration tests; a numeric label alone is parsed as an IPv4 host.
+  const { domain } = EnvSet.values.isIntegrationTest
+    ? { domain: 'protected-app.example.test' }
+    : await getProviderConfig();
   const host = `${subDomain}.${domain}`;
 
   return {

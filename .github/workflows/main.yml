@@ -205,12 +205,29 @@ jobs:
         env:
           DB_URL: postgres://postgres:postgres@localhost:5432/alteration
 
+      - name: Capture existing tenant branding before upgrade
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d alteration -Atc \
+            'select tenant_id, id, color, branding, custom_css from sign_in_experiences order by tenant_id, id' \
+            > "$RUNNER_TEMP/branding-before.txt"
+
       - name: Run alteration scripts
         working-directory: ./fresh
         run: pnpm cli db alt deploy next
         env:
           ALTERATION_TEST: true
           DB_URL: postgres://postgres:postgres@localhost:5432/alteration
+
+      - name: Verify existing tenant branding is preserved
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d alteration -Atc \
+            'select tenant_id, id, color, branding, custom_css from sign_in_experiences order by tenant_id, id' \
+            > "$RUNNER_TEMP/branding-after.txt"
+          diff -u "$RUNNER_TEMP/branding-before.txt" "$RUNNER_TEMP/branding-after.txt"
 
       - name: Compare databases
         working-directory: ./fresh

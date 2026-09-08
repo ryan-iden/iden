@@ -176,6 +176,10 @@ describe('smoke testing for console admin account creation and sign-in', () => {
     );
 
     await expect(page).toMatchElement(activeSelector, { text: 'Applications', visible: true });
+    // The primary rail changes context before the secondary navigation exposes Dashboard.
+    await expectNavigation(
+      page.locator('#iden-console-navigation a[href$="/get-started"]').click()
+    );
     await expectNavigation(
       expect(page).toClick([dcls('sidebar'), 'a' + cls('row')].join(' '), {
         text: 'Dashboard',

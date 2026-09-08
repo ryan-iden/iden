@@ -1,5 +1,6 @@
 @use '@/scss/underscore' as _;
 
+
 .button {
   display: flex;
   align-items: center;
@@ -310,3 +311,15 @@
   }
 }
 /* stylelint-enable no-descending-specificity */
+
+:global(html[data-product-brand='iden']) .button {
+  border-radius: var(--iden-control-radius);
+
+  &.medium {
+    min-height: 40px;
+  }
+
+  &.large {
+    min-height: 46px;
+  }
+}

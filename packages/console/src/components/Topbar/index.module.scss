@@ -32,11 +32,45 @@
 /* stylelint-disable no-descending-specificity -- Brand-scoped hover styling intentionally overrides the base topbar action. */
 :global(html[data-product-brand='iden']) {
   .topbar {
-    box-shadow: none;
+    flex-basis: 76px;
+    background: var(--iden-bg);
+    border-bottom-color: transparent;
+    padding-inline: 24px;
+
+    .logo {
+      min-width: 240px;
+    }
   }
 
   .button:hover {
     background: var(--color-hover);
+  }
+}
+
+@media (max-width: 1100px) {
+  :global(html[data-product-brand='iden']) .topbar {
+    padding-inline: 18px;
+    gap: 12px;
+
+    .logo {
+      min-width: 0;
+      max-width: min(240px, 40vw);
+    }
+
+    .text,
+    .line {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  :global(html[data-product-brand='iden']) .topbar {
+    flex-basis: auto;
+    flex-wrap: wrap;
+    min-height: 76px;
+    padding-block: 12px;
+    row-gap: 8px;
   }
 }
 

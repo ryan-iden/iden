@@ -1,3 +1,5 @@
+import { synchronizeAppearance, persistWorkspaceAppearance } from '@iden/ui-foundation';
+import { MotionRuntime } from '@iden/ui-foundation/react';
 import { installSelfHostedHelpNavigation } from '@logto/core-kit';
 import idenAppIcon from '@logto/core-kit/assets/iden-app-icon.svg?url';
 import { Theme } from '@logto/schemas';
@@ -51,6 +53,9 @@ export function AppThemeProvider({ children }: Props) {
   const setAppearanceMode = (mode: AppearanceMode) => {
     setMode(mode);
     localStorage.setItem(storageKeys.appearanceMode, mode);
+    if (isIdenBrand) {
+      persistWorkspaceAppearance(mode);
+    }
   };
 
   useEffect(() => {
@@ -85,6 +90,7 @@ export function AppThemeProvider({ children }: Props) {
     document.body.classList.add(...condArray(styles[theme], isIdenBrand && styles.iden));
     Reflect.set(document.documentElement.dataset, 'productBrand', brandProfile.id);
     if (isIdenBrand) {
+      synchronizeAppearance(theme);
       const uninstallHelpNavigation = installSelfHostedHelpNavigation();
       const favicon = document.querySelector<HTMLLinkElement>('link[rel~="icon"]');
       if (favicon) {
@@ -109,5 +115,10 @@ export function AppThemeProvider({ children }: Props) {
     [theme]
   );
 
-  return <AppThemeContext.Provider value={context}>{children}</AppThemeContext.Provider>;
+  return (
+    <AppThemeContext.Provider value={context}>
+      <MotionRuntime isEnabled={isIdenBrand} />
+      {children}
+    </AppThemeContext.Provider>
+  );
 }

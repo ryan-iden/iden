@@ -1,4 +1,5 @@
 /* eslint-disable max-lines -- Organization modules remain co-located while sharing one loaded organization context. */
+import { productBrand } from '@experience/shared/utils/product-brand';
 import {
   OrganizationManagementPermission,
   OrganizationManagementRoleType,
@@ -156,7 +157,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
   const [requiresVerification, setRequiresVerification] = useState(false);
   const [domain, setDomain] = useState('');
-  const [primaryColor, setPrimaryColor] = useState('#5B5CF6');
+  const [primaryColor, setPrimaryColor] = useState(productBrand.primaryColor);
   const [customCss, setCustomCss] = useState('');
   const [isMfaRequired, setIsMfaRequired] = useState(false);
   const [members, setMembers] = useState<Awaited<ReturnType<typeof listOrganizationMembers>>>();
@@ -200,7 +201,7 @@ const OrganizationDetails = ({ organizationId, section }: Props) => {
       setOrganization(data);
       setName(data.name);
       setDescription(data.description ?? '');
-      setPrimaryColor(data.color.primaryColor ?? '#5B5CF6');
+      setPrimaryColor(data.color.primaryColor ?? productBrand.primaryColor);
       setCustomCss(data.customCss ?? '');
       setIsMfaRequired(data.isMfaRequired);
     }

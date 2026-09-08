@@ -45,7 +45,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
   rm -rf node_modules packages/**/node_modules && NODE_ENV=production pnpm i
 
 ### Clean up ###
-RUN rm -rf .scripts pnpm-*.yaml packages/cloud packages/help-center/vendor packages/help-center/translations packages/help-center/scripts
+RUN rm -rf .scripts pnpm-*.yaml packages/cloud packages/help-center/vendor packages/help-center/translations packages/help-center/scripts packages/help-center/src packages/console/src/design-lab packages/account/src/design-lab packages/elements/visual-tests packages/ui-foundation/src && \
+  rm -f packages/console/design-lab.html packages/account/design-lab.html
 
 ###### [STAGE] Seal ######
 FROM node:22-alpine AS app

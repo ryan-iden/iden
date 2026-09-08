@@ -1,4 +1,9 @@
 const tab_sections = {
+  identity: '身分與組織',
+  integrations: '應用與串接',
+  login_security: '登入與安全',
+  permissions: '權限與資源',
+  automation: '自動化與稽核',
   platform: '平台',
   overview: '概觀',
   authentication: '身份驗證',

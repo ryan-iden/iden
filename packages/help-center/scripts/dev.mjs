@@ -12,6 +12,8 @@ const contentTypes = {
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".wasm": "application/wasm",
+  ".woff2": "font/woff2",
+  ".woff": "font/woff",
 };
 
 const server = createServer(async (request, response) => {
@@ -39,7 +41,12 @@ const server = createServer(async (request, response) => {
   } catch {
     response.statusCode = 404;
     response.setHeader("Content-Type", "text/html; charset=utf-8");
-    response.end(await readFile(path.join(paths.dist, "404.html")));
+    // A concurrent local rebuild may briefly remove dist. Keep the development server alive.
+    response.end(
+      await readFile(path.join(paths.dist, "404.html")).catch(
+        () => "Not found",
+      ),
+    );
   }
 });
 

@@ -10,6 +10,7 @@
   }
 }
 
+
 .hideTextContainerContent {
   input {
     -webkit-text-security: disc;
@@ -136,4 +137,9 @@
     color: var(--color-error);
     text-decoration: underline;
   }
+}
+
+:global(html[data-product-brand='iden']) .container {
+  min-height: 40px;
+  border-radius: var(--iden-control-radius);
 }

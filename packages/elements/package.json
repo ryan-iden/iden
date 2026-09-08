@@ -51,7 +51,8 @@
     "@silverhand/essentials": "^2.9.1",
     "ky": "^1.2.3",
     "libphonenumber-js": "^1.11.12",
-    "lit": "^3.1.4"
+    "lit": "^3.1.4",
+    "@iden/ui-foundation": "workspace:*"
   },
   "devDependencies": {
     "@lit/localize-tools": "^0.8.0",

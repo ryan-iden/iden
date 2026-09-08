@@ -18,6 +18,7 @@ function IconButton(
   return (
     <button
       ref={reference}
+      data-iden-press=""
       type="button"
       className={classNames(styles.button, styles[size], className)}
       {...rest}

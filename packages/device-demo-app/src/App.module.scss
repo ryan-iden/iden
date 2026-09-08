@@ -1,6 +1,13 @@
 @use '@/scss/underscore' as _;
+@use '@iden/ui-foundation/scss/theme' as iden;
 @use '@logto/core-kit/scss/fonts';
 @use '@logto/core-kit/scss/console-themes' as themes;
+
+:global(html[data-product-brand='iden']) body {
+  @include iden.console;
+  font-family: var(--iden-font);
+}
+
 
 .app {
   min-height: 100vh;
@@ -377,6 +384,7 @@
 
   :global(html[data-product-brand='iden']) body {
     @include themes.iden-light;
+    @include iden.console;
   }
 }
 
@@ -387,6 +395,7 @@
 
   :global(html[data-product-brand='iden']) body {
     @include themes.iden-dark;
+    @include iden.console;
   }
 
   .app {
@@ -410,5 +419,32 @@
 
   .successCard .infoCard {
     background: rgba(255, 255, 255, 8%);
+  }
+}
+
+:global(html[data-product-brand='iden']) .app {
+  background: var(--iden-bg);
+  min-height: 100dvh;
+
+  .container,
+  .successCard,
+  .errorContainer {
+    padding: 32px;
+    border: 1px solid var(--iden-line);
+    border-radius: 24px;
+    background: var(--iden-surface);
+    box-shadow: var(--iden-shadow);
+    gap: 32px;
+  }
+
+  .devPanel {
+    width: min(480px, calc(100vw - 24px));
+    z-index: 2;
+    border: 1px solid var(--iden-line);
+  }
+
+  .congratsIcon {
+    width: 240px;
+    height: 150px;
   }
 }

@@ -35,6 +35,22 @@ const vectorProductIcons = [
 ];
 
 describe('iden art assets', () => {
+  it.each([...rasterProductIcons, ...vectorProductIcons])(
+    '%s uses paired glacier vectors in the new foundation',
+    (name) => {
+      const directory = path.resolve(currentDirectory, '../../../../ui-foundation/assets');
+      const light = readFileSync(path.join(directory, `${name}.svg`), 'utf8');
+      const dark = readFileSync(path.join(directory, `${name}-dark.svg`), 'utf8');
+      expect(light).toContain('viewBox="0 0 80 80"');
+      expect(dark).toContain('viewBox="0 0 80 80"');
+      expect(light).toContain('#007C91');
+      expect(dark).toContain('#67E8F9');
+      expect(dark).not.toContain('#FFFFFF');
+      expect(light).not.toMatch(/#(?:5b5cf6|6139f6)/i);
+      expect(dark).not.toMatch(/#(?:5b5cf6|6139f6)/i);
+    }
+  );
+
   it.each(rasterProductIcons)('%s has a distinct dark raster asset', (name) => {
     const light = readFileSync(path.join(productIconsDirectory, `${name}.png`));
     const dark = readFileSync(path.join(productIconsDirectory, `${name}-dark.png`));

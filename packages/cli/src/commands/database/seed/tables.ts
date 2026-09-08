@@ -214,7 +214,10 @@ export const seedTables = async (
       insertInto(createDefaultSignInExperience(defaultTenantId, isCloud), SignInExperiences.table)
     ),
     connection.query(
-      insertInto(createAdminTenantSignInExperience(options), SignInExperiences.table)
+      insertInto(
+        createAdminTenantSignInExperience({ ...options, isCloud }),
+        SignInExperiences.table
+      )
     ),
     connection.query(insertInto(createDefaultAdminConsoleApplication(), Applications.table)),
     connection.query(insertInto(createDefaultAccountCenter(defaultTenantId), AccountCenters.table)),

@@ -11,6 +11,30 @@ const omitArray = (arrayOfObjects, ...keys) =>
 const schemas = ['cloud', 'public'];
 const schemasArray = `(${schemas.map((schema) => `'${schema}'`).join(', ')})`;
 
+// New installations intentionally use a new palette without migrating saved tenant preferences.
+// Compare only these exact seed defaults as equivalent. CI separately checks that upgrading the
+// existing database preserves its branding byte-for-byte; custom colors must never be normalized.
+export const normalizeSeededSignInExperience = (row) => {
+  if (
+    row.id !== 'default' ||
+    !['default', 'admin'].includes(row.tenant_id) ||
+    !row.color ||
+    Object.keys(row.color).length !== 3 ||
+    row.color.primaryColor !== '#007C91' ||
+    row.color.darkPrimaryColor !== '#67E8F9' ||
+    row.color.isDarkModeEnabled !== true
+  ) return row;
+
+  return {
+    ...row,
+    color: {
+      primaryColor: '#6139F6',
+      darkPrimaryColor: '#8768F8',
+      isDarkModeEnabled: row.tenant_id === 'admin',
+    },
+  };
+};
+
 const tryCompare = (a, b) => {
   try {
     assert.deepStrictEqual(a, b);
@@ -266,7 +290,7 @@ const queryDatabaseData = async (database, manifests) => {
       }
 
       const data = omitArray(
-        rows,
+        table_name === 'sign_in_experiences' ? rows.map(normalizeSeededSignInExperience) : rows,
         'id',
         'resource_id',
         'role_id',

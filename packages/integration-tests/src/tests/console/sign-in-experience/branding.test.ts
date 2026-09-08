@@ -1,10 +1,16 @@
+import { getSignInExperience, updateSignInExperience } from '#src/api/sign-in-experience.js';
 import { logtoConsoleUrl as logtoConsoleUrlString } from '#src/constants.js';
 import { goToAdminConsole } from '#src/ui-helpers/index.js';
 import { expectNavigation, appendPathname, waitFor } from '#src/utils.js';
 
-import { waitForFormCard, expectToSelectColor, expectToSaveSignInExperience } from './helpers.js';
+import {
+  waitForFormCard,
+  expectToSelectColor,
+  expectToSaveSignInExperience,
+  setDarkModeEnabled,
+} from './helpers.js';
 
-const defaultPrimaryColor = '#6139F6';
+const { color: originalColor, customCss: originalCustomCss } = await getSignInExperience();
 const testPrimaryColor = '#5B4D8E';
 
 await page.setViewport({ width: 1920, height: 1080 });
@@ -14,6 +20,10 @@ describe('sign-in experience: branding', () => {
 
   beforeAll(async () => {
     await goToAdminConsole();
+  });
+
+  afterAll(async () => {
+    await updateSignInExperience({ color: originalColor, customCss: originalCustomCss });
   });
 
   it('navigate to sign-in experience page', async () => {
@@ -49,10 +59,7 @@ describe('sign-in experience: branding', () => {
   });
 
   it('update branding config', async () => {
-    // Enabled dark mode
-    await expect(page).toClick(
-      'form div[class$=field] label[class$=switch]:has(input[name="color.isDarkModeEnabled"])'
-    );
+    await setDarkModeEnabled(page, true);
 
     // Update brand color
     await expectToSelectColor(page, {
@@ -76,7 +83,7 @@ describe('sign-in experience: branding', () => {
     // Reset branding config
     await expectToSelectColor(page, {
       field: 'Brand color',
-      color: defaultPrimaryColor,
+      color: originalColor.primaryColor,
     });
 
     // Recalculate dark brand color
@@ -90,11 +97,10 @@ describe('sign-in experience: branding', () => {
 
     await expectToSaveSignInExperience(page);
 
-    // Disable dark mode
-    await expect(page).toClick(
-      'form div[class$=field] label[class$=switch]:has(input[name="color.isDarkModeEnabled"])'
-    );
-
+    // Exercise both switch states and restore the tenant's original preference.
+    await setDarkModeEnabled(page, !originalColor.isDarkModeEnabled);
+    await expectToSaveSignInExperience(page);
+    await setDarkModeEnabled(page, originalColor.isDarkModeEnabled);
     await expectToSaveSignInExperience(page);
   });
 });

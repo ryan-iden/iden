@@ -5,8 +5,8 @@ import useTheme from '@/hooks/use-theme';
 
 import { IdenProductIcon } from '.';
 
-jest.mock('@/assets/images/iden-product-icons/management-api.png', () => 'management-light');
-jest.mock('@/assets/images/iden-product-icons/management-api-dark.png', () => 'management-dark');
+jest.mock('@iden/ui-foundation/assets/management-api.svg?url', () => 'management-light');
+jest.mock('@iden/ui-foundation/assets/management-api-dark.svg?url', () => 'management-dark');
 jest.mock('@/hooks/use-theme', () => ({
   __esModule: true,
   default: jest.fn(),

@@ -41,6 +41,23 @@
   flex-shrink: 0;
 }
 
+:global(html[data-product-brand='iden']) .sidebar {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100dvh - 120px);
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--iden-line);
+  border-radius: 20px;
+  background: var(--iden-glass);
+  backdrop-filter: blur(16px);
+
+  .item {
+    padding: 14px 12px;
+    border-radius: 12px;
+  }
+}
+
 :global(body.desktop) {
   @media only screen and (max-width: 1060px) {
     .sidebar {

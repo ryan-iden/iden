@@ -1,5 +1,6 @@
 @use '@/scss/underscore' as _;
 
+
 .select {
   display: flex;
   align-items: center;
@@ -194,4 +195,9 @@
   font: var(--font-body-2);
   color: var(--color-error);
   margin-top: _.unit(1);
+}
+
+:global(html[data-product-brand='iden']) .select {
+  border-radius: var(--iden-control-radius);
+  min-height: 40px;
 }

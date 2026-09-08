@@ -1,10 +1,12 @@
 /* eslint-disable max-lines -- The account shell intentionally keeps its complete route map in one place. */
 import LogtoSignature from '@experience/shared/components/LogtoSignature';
+import { isCloudBuild } from '@experience/shared/utils/product-brand';
+import { MotionRuntime, useSurfaceMotion } from '@iden/ui-foundation/react';
 import { ReservedScope, UserScope } from '@logto/core-kit';
 import { LogtoProvider, useLogto } from '@logto/react';
 import { accountCenterApplicationId, SignInIdentifier } from '@logto/schemas';
 import classNames from 'classnames';
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useRef } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import AppBoundary from '@ac/Providers/AppBoundary';
@@ -76,6 +78,7 @@ import { isAccountFullPageRoute } from './utils/account-full-page-route';
 import { getAccountTabSettings } from './utils/account-tabs';
 import '@experience/shared/scss/normalized.scss';
 import './scss/normalized.scss';
+import '@iden/ui-foundation/styles.css';
 
 handleAccountCenterRoute();
 
@@ -232,6 +235,8 @@ const Layout = () => {
   const { accountCenterSettings, experienceSettings, theme, platform } = useContext(PageContext);
   const hideLogtoBranding = experienceSettings?.hideLogtoBranding === true;
   const { pathname } = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
+  useSurfaceMotion(mainRef, pathname, !isCloudBuild);
   const accountNavItems = useMemo(
     () => getAccountTabSettings({ accountCenterSettings, experienceSettings }).navItems,
     [accountCenterSettings, experienceSettings]
@@ -241,11 +246,12 @@ const Layout = () => {
     accountNavItems.map(({ to }) => to)
   );
   const showsMultiPageNav = isFullPage && accountNavItems.length > 1;
-  const showsMobileTabNav = platform === 'mobile' && showsMultiPageNav;
+  const showsMobileTabNav = (platform === 'mobile' || !isCloudBuild) && showsMultiPageNav;
   const showsSidebar = platform !== 'mobile' && showsMultiPageNav;
 
   return (
     <div className={classNames(styles.app, layoutClassNames.app)}>
+      <MotionRuntime isEnabled={!isCloudBuild} />
       <div
         className={classNames(
           styles.layout,
@@ -273,6 +279,7 @@ const Layout = () => {
             }}
           >
             <main
+              ref={mainRef}
               className={classNames(
                 styles.main,
                 !isFullPage && styles.cardMain,

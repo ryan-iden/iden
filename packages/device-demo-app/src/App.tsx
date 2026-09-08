@@ -1,19 +1,23 @@
+import { MotionRuntime } from '@iden/ui-foundation/react';
 import { deviceDemoAppApplicationId } from '@logto/schemas';
 import { decodeJwt } from 'jose';
 import { toDataURL } from 'qrcode';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import '@/scss/normalized.scss';
+import '@iden/ui-foundation/styles.css';
 
 import styles from './App.module.scss';
 import DevPanel, { getDevConfig } from './DevPanel';
-import Footer, { useIsDarkMode } from './Footer';
+import Footer from './Footer';
 import ProductIcon from './ProductIcon';
-import congratsDark from './assets/congrats-dark.svg';
-import congrats from './assets/congrats.svg';
+import RetryPanel from './RetryPanel';
+import SuccessArtwork from './SuccessArtwork';
 import useInterfaceTranslation from './i18n/use-interface-translation';
+import { isCloudBuild } from './product-brand';
 import type { AppState, DeviceAuthResponse, TokenResponse, UserInfo } from './types';
 import { getStringClaim, parseJsonResponse } from './types';
+import { useSurfaceTheme } from './use-surface-theme';
 
 const defaultScope = 'openid offline_access profile email';
 
@@ -30,7 +34,7 @@ const App = () => {
   const [showDevPanel, setShowDevPanel] = useState(false);
   const pollingRef = useRef<ReturnType<typeof setInterval>>();
   const expiryTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  const isDarkMode = useIsDarkMode();
+  const { isDarkMode, surfaceRef } = useSurfaceTheme(state);
   const params = new URL(window.location.href).searchParams;
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- We need to fall back for empty string
   const clientId = params.get('app_id') || deviceDemoAppApplicationId;
@@ -189,7 +193,8 @@ const App = () => {
 
   if (state === 'loading') {
     return (
-      <div className={styles.app}>
+      <div ref={surfaceRef} className={styles.app}>
+        <MotionRuntime isEnabled={!isCloudBuild} />
         <div className={styles.loading}>{tUi('device_initializing')}</div>
         <Footer isDarkMode={isDarkMode} />
       </div>
@@ -198,7 +203,8 @@ const App = () => {
 
   if (state === 'success' && user) {
     return (
-      <div className={styles.app}>
+      <div ref={surfaceRef} className={styles.app}>
+        <MotionRuntime isEnabled={!isCloudBuild} />
         {showDevPanel && (
           <DevPanel
             clientId={clientId}
@@ -208,7 +214,7 @@ const App = () => {
           />
         )}
         <div className={styles.successCard}>
-          <img className={styles.congratsIcon} src={isDarkMode ? congratsDark : congrats} alt="" />
+          <SuccessArtwork isDarkMode={isDarkMode} />
           <div className={styles.successTitle}>{tUi('device_success')}</div>
           <div className={styles.successSubtitle}>{tUi('sign_in_information')}</div>
           <div className={styles.infoCard}>
@@ -227,6 +233,7 @@ const App = () => {
             </div>
           </div>
           <button
+            data-iden-press=""
             type="button"
             className={styles.button}
             onClick={() => {
@@ -236,6 +243,7 @@ const App = () => {
             {tUi('sign_out_demo')}
           </button>
           <button
+            data-iden-press=""
             type="button"
             className={styles.openDevPanel}
             onClick={() => {
@@ -252,31 +260,17 @@ const App = () => {
 
   if (state === 'error' || state === 'expired') {
     return (
-      <div className={styles.app}>
-        <div className={styles.errorContainer}>
-          <div className={styles.errorTitle}>
-            {state === 'expired' ? tUi('device_expired') : tUi('generic_error')}
-          </div>
-          <div className={styles.errorMessage}>
-            {state === 'expired' ? tUi('device_expired_description') : error}
-          </div>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={() => {
-              void initiateDeviceFlow();
-            }}
-          >
-            {tUi('try_again')}
-          </button>
-        </div>
+      <div ref={surfaceRef} className={styles.app}>
+        <MotionRuntime isEnabled={!isCloudBuild} />
+        <RetryPanel isExpired={state === 'expired'} error={error} onRetry={initiateDeviceFlow} />
         <Footer isDarkMode={isDarkMode} />
       </div>
     );
   }
 
   return (
-    <div className={styles.app}>
+    <div ref={surfaceRef} className={styles.app}>
+      <MotionRuntime isEnabled={!isCloudBuild} />
       <div className={styles.container}>
         <div className={styles.header}>
           <ProductIcon className={styles.icon} />

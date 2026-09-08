@@ -1,5 +1,6 @@
 @use './colors' as colors;
 @use './fonts' as fonts;
+@use '@iden/ui-foundation/scss/theme' as iden;
 
 body {
   @include colors.static;
@@ -25,10 +26,12 @@ html[data-theme='dark'] body {
 
 html[data-product-brand='iden'][data-theme='light'] body {
   @include colors.iden-light;
+  @include iden.experience;
 }
 
 html[data-product-brand='iden'][data-theme='dark'] body {
   @include colors.iden-dark;
+  @include iden.experience;
 }
 
 html[data-theme] body:not(.desktop) {

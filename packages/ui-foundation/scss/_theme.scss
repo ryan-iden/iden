@@ -1,0 +1,117 @@
+// Component aliases allow existing APIs and custom CSS to retain their meaning.
+@mixin console {
+  --color-primary: var(--iden-accent);
+  --color-primary-hover: var(--iden-accent-hover);
+  --color-primary-pressed: var(--iden-accent-hover);
+  --color-on-primary: var(--iden-on-accent);
+  --color-primary-container: var(--iden-tint);
+  --color-on-primary-container: var(--iden-accent);
+  --color-primary-30: var(--iden-accent-hover);
+  --color-primary-40: var(--iden-accent);
+  --color-primary-50: var(--iden-accent);
+  --color-primary-60: var(--iden-accent);
+  --color-primary-70: var(--iden-accent);
+  --color-primary-80: var(--iden-line);
+  --color-primary-90: var(--iden-tint);
+  --color-primary-95: var(--iden-tint);
+  --color-primary-99: var(--iden-surface);
+  --color-text: var(--iden-text);
+  --color-text-secondary: var(--iden-muted);
+  --color-text-link: var(--iden-accent);
+  --color-neutral-variant-30: var(--iden-text);
+  --color-neutral-variant-50: var(--iden-muted);
+  --color-neutral-variant-80: var(--iden-line);
+  --color-neutral-variant-90: var(--iden-line);
+  --color-neutral-variant-95: var(--iden-muted-surface);
+  --color-background: var(--iden-bg);
+  --color-base: var(--iden-bg);
+  --color-surface: var(--iden-surface);
+  --color-surface-1: var(--iden-bg);
+  --color-surface-2: var(--iden-surface);
+  --color-surface-3: var(--iden-raised);
+  --color-surface-4: var(--iden-muted-surface);
+  --color-surface-5: var(--iden-tint);
+  --color-layer-1: var(--iden-surface);
+  --color-layer-2: var(--iden-muted-surface);
+  --color-layer-light: var(--iden-raised);
+  --color-float: var(--iden-raised);
+  --color-border: var(--iden-line);
+  --color-divider: var(--iden-line);
+  --color-icon-background: var(--iden-muted-surface);
+  --color-specific-icon-bg: var(--iden-tint);
+  --color-hover-variant: var(--iden-tint);
+  --color-pressed-variant: var(--iden-tint);
+  --color-focused-variant: color-mix(in srgb, var(--iden-accent) 22%, transparent);
+  --color-overlay-primary-subtle: color-mix(in srgb, var(--iden-accent) 4%, transparent);
+  --color-overlay-primary-hover: color-mix(in srgb, var(--iden-accent) 8%, transparent);
+  --color-overlay-primary-pressed: color-mix(in srgb, var(--iden-accent) 12%, transparent);
+  --color-function-n-overlay-primary-focused:
+    color-mix(
+      in srgb,
+      var(--iden-accent) 20%,
+      transparent
+    );
+  --color-env-tag-development: var(--iden-tint);
+  --color-button-icon: var(--iden-on-accent);
+  --color-code-bg: #101418;
+  --color-code-bg-float: #202931;
+  --shadow-1: var(--iden-shadow);
+  --shadow-2: var(--iden-float-shadow);
+  --shadow-3: var(--iden-float-shadow);
+  @include typography;
+}
+
+@mixin experience {
+  --color-brand-30: var(--color-brand-pressed);
+  --color-brand-40: var(--color-brand-default);
+  --color-brand-50: var(--color-brand-default);
+  --color-brand-60: var(--color-brand-hover);
+  --color-brand-70: var(--color-brand-hover);
+  --color-surface: var(--iden-bg);
+  --color-surface-2: var(--iden-surface);
+  --color-surface-3: var(--iden-raised);
+  --color-surface-4: var(--iden-muted-surface);
+  --color-brand-default: var(--iden-accent);
+  --color-brand-hover: var(--iden-accent-hover);
+  --color-brand-pressed: var(--iden-accent-hover);
+  --color-brand-loading: var(--iden-accent);
+  --color-type-primary: var(--iden-text);
+  --color-type-secondary: var(--iden-muted);
+  --color-type-link: var(--color-brand-default);
+  --color-type-on-brand: var(--iden-on-accent);
+  --color-bg-body-base: var(--iden-bg);
+  --color-bg-body: var(--iden-bg);
+  --color-bg-layer-1: var(--iden-surface);
+  --color-bg-layer-2: var(--iden-muted-surface);
+  --color-bg-float-base: var(--iden-bg);
+  --color-bg-float: var(--iden-surface);
+  --color-bg-float-overlay: var(--iden-raised);
+  --color-bg-body-overlay: var(--iden-surface);
+  --color-line-border: var(--iden-line);
+  --color-line-divider: var(--iden-line);
+  --color-border: var(--iden-line);
+  --color-overlay-brand-hover: color-mix(in srgb, var(--color-brand-default) 8%, transparent);
+  --color-hover-variant: color-mix(in srgb, var(--color-brand-default) 8%, transparent);
+  --color-focused-variant: color-mix(in srgb, var(--color-brand-default) 12%, transparent);
+  --color-overlay-brand-pressed: color-mix(in srgb, var(--color-brand-default) 12%, transparent);
+  --color-overlay-brand-focused: color-mix(in srgb, var(--color-brand-default) 20%, transparent);
+  --color-shadow-1: var(--iden-shadow);
+  --color-shadow-2: var(--iden-float-shadow);
+  --color-shadow-2-reversed: var(--iden-float-shadow);
+  @include typography;
+}
+
+@mixin typography {
+  --font-family: var(--iden-font);
+  --font-headline-1: 650 32px/1.25 var(--iden-font);
+  --font-headline-2: 650 26px/1.3 var(--iden-font);
+  --font-title-1: 650 22px/1.4 var(--iden-font);
+  --font-title-2: 600 18px/1.45 var(--iden-font);
+  --font-title-3: 600 16px/1.5 var(--iden-font);
+  --font-label-1: 600 16px/1.5 var(--iden-font);
+  --font-label-2: 600 14px/1.5 var(--iden-font);
+  --font-label-3: 550 12px/1.5 var(--iden-font);
+  --font-body-1: 450 16px/1.65 var(--iden-font);
+  --font-body-2: 450 14px/1.65 var(--iden-font);
+  --font-body-3: 450 12px/1.6 var(--iden-font);
+}

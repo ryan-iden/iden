@@ -49,6 +49,15 @@
   min-width: 85px;
 }
 
+:global(html[data-product-brand='iden']) .button {
+  min-height: 46px;
+  border-radius: var(--iden-control-radius);
+
+  &.primary:not(:disabled) {
+    color: var(--color-type-on-brand);
+  }
+}
+
 .primary {
   border: none;
   background: var(--color-brand-default);

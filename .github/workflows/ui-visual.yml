@@ -1,0 +1,50 @@
+name: UI visual and motion
+
+on:
+  pull_request:
+    branches: [ryan-wong-coder-personal]
+  push:
+    branches: [ryan-wong-coder-personal]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-visual-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      SELF_HOSTED_PARITY_ENABLED: "true"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ^22.14.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prepack
+      - name: Motion lifecycle and payload budget
+        run: |
+          pnpm --filter @iden/ui-foundation lint
+          pnpm --filter @iden/ui-foundation stylelint
+          pnpm --filter @iden/ui-foundation test:ci
+          pnpm --filter @iden/ui-foundation check:budget
+      - name: Install browser engines
+        run: pnpm --filter @logto/elements exec playwright install --with-deps chromium firefox webkit
+      - name: Responsive, theme and interaction matrix
+        run: pnpm --filter @logto/elements exec playwright test --config=visual.config.ts
+      - name: Preserve screenshots, differences, recordings and traces
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-visual-${{ github.sha }}
+          path: .artifacts/ui-visual
+          retention-days: 14

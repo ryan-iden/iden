@@ -1,4 +1,5 @@
-import { css, html, LitElement } from 'lit';
+import { elementFoundationCss } from '@iden/ui-foundation';
+import { css, html, LitElement, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import { LocalizationController } from '../utils/localization.js';
@@ -22,60 +23,109 @@ const tagName = 'logto-profile-item';
 export class LogtoProfileItem extends LitElement {
   static tagName = tagName;
 
-  static styles = css`
-    :host {
-      display: flex;
-      align-items: center;
-      background-color: var(--logto-profile-item-container-color, var(--logto-color-background));
-      border-radius: var(--logto-profile-item-container-shape, var(--logto-shape-corner-lg));
-      border: 1px solid var(--logto-profile-item-border-color, var(--logto-color-divider));
-      padding-inline-start: var(
-        --logto-profile-item-container-leading-space,
-        var(--logto-spacing-xl)
-      );
-      padding-inline-end: var(
-        --logto-profile-item-container-trailing-space,
-        var(--logto-spacing-xl)
-      );
-      height: var(--logto-profile-item-height, 64px);
-    }
+  static styles = [
+    unsafeCSS(elementFoundationCss),
+    css`
+      :host {
+        display: flex;
+        align-items: center;
+        background-color: var(
+          --logto-profile-item-container-color,
+          var(--logto-color-background, var(--iden-element-bg))
+        );
+        border-radius: var(
+          --logto-profile-item-container-shape,
+          var(--logto-shape-corner-lg, 16px)
+        );
+        border: 1px solid
+          var(
+            --logto-profile-item-border-color,
+            var(--logto-color-divider, var(--iden-element-line))
+          );
+        padding-inline-start: var(
+          --logto-profile-item-container-leading-space,
+          var(--logto-spacing-xl, 20px)
+        );
+        padding-inline-end: var(
+          --logto-profile-item-container-trailing-space,
+          var(--logto-spacing-xl, 20px)
+        );
+        min-height: var(--logto-profile-item-height, 72px);
+        gap: var(--logto-spacing-md, 12px);
+        padding-block: 16px;
+        flex-wrap: wrap;
+      }
 
-    .label {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: var(--logto-profile-item-label-gap, var(--logto-spacing-sm));
-    }
+      .label {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: var(--logto-profile-item-label-gap, var(--logto-spacing-sm, 8px));
+      }
 
-    ::slotted([slot='label-icon']) {
-      color: var(--logto-profile-item-label-icon-color, var(--logto-color-typeface-secondary));
+      ::slotted([slot='label-icon']) {
+        color: var(
+          --logto-profile-item-label-icon-color,
+          var(--logto-color-typeface-secondary, var(--iden-element-muted))
+        );
 
-      --logto-icon-size: var(--logto-profile-item-label-icon-size, 24px);
-    }
+        --logto-icon-size: var(--logto-profile-item-label-icon-size, 24px);
+      }
 
-    ::slotted([slot='label-text']) {
-      font: var(--logto-profile-item-label-font, var(--logto-font-label-md));
-      color: var(--logto-profile-item-label-color, var(--logto-color-typeface-primary));
-    }
+      ::slotted([slot='label-text']) {
+        font: var(
+          --logto-profile-item-label-font,
+          var(--logto-font-label-md, 600 14px/1.5 var(--iden-element-font))
+        );
+        color: var(
+          --logto-profile-item-label-color,
+          var(--logto-color-typeface-primary, var(--iden-element-text))
+        );
+      }
 
-    ::slotted([slot='content']),
-    slot[name='content'] {
-      display: flex;
-      flex: 2;
-      font: var(--logto-profile-item-value-font, var(--logto-font-body-md));
-      color: var(--logto-profile-item--color, var(--logto-color-typeface-primary));
-    }
+      ::slotted([slot='content']),
+      slot[name='content'] {
+        display: flex;
+        flex: 2;
+        font: var(
+          --logto-profile-item-value-font,
+          var(--logto-font-body-md, 450 14px/1.65 var(--iden-element-font))
+        );
+        color: var(
+          --logto-profile-item--color,
+          var(--logto-color-typeface-primary, var(--iden-element-text))
+        );
+      }
 
-    .no-value {
-      font: var(--logto-profile-item-no-value-font, var(--logto-font-body-md));
-      color: var(--logto-profile-item-no-value-color, var(--logto-color-typeface-secondary));
-    }
+      .no-value {
+        font: var(
+          --logto-profile-item-no-value-font,
+          var(--logto-font-body-md, 450 14px/1.65 var(--iden-element-font))
+        );
+        color: var(
+          --logto-profile-item-no-value-color,
+          var(--logto-color-typeface-secondary, var(--iden-element-muted))
+        );
+      }
 
-    ::slotted([slot='actions']) {
-      display: flex;
-      flex: 1;
-    }
-  `;
+      ::slotted([slot='actions']) {
+        display: flex;
+        flex: 1;
+      }
+      @media (max-width: 540px) {
+        :host {
+          align-items: flex-start;
+        }
+        .label {
+          flex-basis: 100%;
+        }
+        ::slotted([slot='content']) {
+          min-width: 0;
+          overflow-wrap: anywhere;
+        }
+      }
+    `,
+  ];
 
   private readonly localization: LocalizationController = new LocalizationController(this);
 

@@ -4,7 +4,7 @@
   display: none;
 }
 
-:global(body.mobile) {
+@mixin navigation {
   .tabNav {
     display: flex;
     align-items: flex-end;
@@ -12,6 +12,8 @@
     padding: 0 _.unit(5);
     border-bottom: 1px solid var(--color-line-divider);
     background: var(--color-bg-float-base);
+    overflow-x: auto;
+    flex-shrink: 0;
   }
 
   .tab {
@@ -40,5 +42,15 @@
         background: var(--color-type-link);
       }
     }
+  }
+}
+
+:global(body.mobile) {
+  @include navigation;
+}
+
+:global(html[data-product-brand='iden']) :global(body.desktop) {
+  @media (max-width: 1060px) {
+    @include navigation;
   }
 }

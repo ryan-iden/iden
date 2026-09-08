@@ -1,9 +1,10 @@
 import { conditional } from '@silverhand/essentials';
 import classNames from 'classnames';
-import type { ReactNode } from 'react';
-import { Fragment } from 'react';
+import type { HTMLAttributes, KeyboardEventHandler, ReactNode } from 'react';
+import { Fragment, useId } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 
+import { isIdenBrand } from '@/consts/brand';
 import type { Props as PaginationProps } from '@/ds-components/Pagination';
 import Pagination from '@/ds-components/Pagination';
 
@@ -74,6 +75,40 @@ type Props<
   readonly footer?: ReactNode;
 };
 
+const handleScrollRegionKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
+  const { currentTarget, target, key, altKey, ctrlKey, metaKey, shiftKey } = event;
+  if (
+    target !== currentTarget ||
+    altKey ||
+    ctrlKey ||
+    metaKey ||
+    shiftKey ||
+    (key !== 'ArrowLeft' && key !== 'ArrowRight') ||
+    currentTarget.scrollWidth <= currentTarget.clientWidth
+  ) {
+    return;
+  }
+  // Safari does not consistently scroll a focused generic region with arrow keys.
+  // Own only unmodified horizontal keys on the region itself, never keys inside form controls.
+  event.preventDefault();
+  currentTarget.scrollBy({ left: key === 'ArrowRight' ? 64 : -64, behavior: 'auto' });
+};
+
+const getScrollRegionProps = (
+  hasData: boolean,
+  hasHeader: boolean,
+  headerId: string
+): HTMLAttributes<HTMLDivElement> =>
+  isIdenBrand && hasData && hasHeader
+    ? {
+        role: 'region',
+        'aria-labelledby': headerId,
+        // Arrow-key scrolling requires a focus target; headers supply the translated label.
+        tabIndex: 0,
+        onKeyDown: handleScrollRegionKeyDown,
+      }
+    : {};
+
 function Table<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -98,6 +133,7 @@ function Table<
   onRetry,
   footer,
 }: Props<TFieldValues, TName>) {
+  const headerId = useId();
   const totalColspan = columns.reduce((result, { colSpan }) => {
     return result + (colSpan ?? 1);
   }, 0);
@@ -107,10 +143,18 @@ function Table<
   const hasError = !isLoading && !hasData && errorMessage;
   const isEmpty = !isLoading && !hasData && !errorMessage;
   const isLoaded = !isLoading && hasData;
+  const scrollRegionProps = getScrollRegionProps(hasData, hasTableHeader, headerId);
 
   return (
     <div className={classNames(styles.container, className)}>
-      <div className={classNames(styles.tableContainer, hasBorder && styles.hasBorder)}>
+      <div
+        {...scrollRegionProps}
+        className={classNames(
+          styles.tableContainer,
+          hasBorder && styles.hasBorder,
+          scrollRegionProps.role && styles.scrollable
+        )}
+      >
         {filter && (
           <div className={styles.filterContainer}>
             <div className={styles.filter}>{filter}</div>
@@ -118,6 +162,7 @@ function Table<
         )}
         {hasTableHeader && (
           <table
+            id={headerId}
             className={classNames(
               styles.headerTable,
               filter && styles.hideTopBorderRadius,

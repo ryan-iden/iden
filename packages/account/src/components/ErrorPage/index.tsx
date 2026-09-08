@@ -3,6 +3,8 @@ import EmptyState from '@experience/assets/icons/empty-state.svg';
 import Button from '@experience/shared/components/Button';
 import DynamicT from '@experience/shared/components/DynamicT';
 import PageMeta from '@experience/shared/components/PageMeta';
+import { isCloudBuild } from '@experience/shared/utils/product-brand';
+import { StateArtwork } from '@iden/ui-foundation/react';
 import { Theme } from '@logto/schemas';
 import type { TFuncKey } from 'i18next';
 import type { AnchorHTMLAttributes } from 'react';
@@ -94,7 +96,11 @@ const ErrorPage = ({
     <div className={styles.errorPage}>
       <PageMeta titleKey={titleKey} />
       <div className={styles.illustration}>
-        <img src={resolvedIllustration} alt="" role="presentation" />
+        {!isCloudBuild && !illustration ? (
+          <StateArtwork kind="error" />
+        ) : (
+          <img src={resolvedIllustration} alt="" role="presentation" />
+        )}
       </div>
       <div className={styles.title}>
         <DynamicT forKey={titleKey} />

@@ -7,6 +7,22 @@ import {
 } from '#src/ui-helpers/index.js';
 import { selectDropdownMenuItem } from '#src/ui-helpers/select-dropdown-menu-item.js';
 
+export const setDarkModeEnabled = async (page: Page, enabled: boolean) => {
+  const input = 'form input[name="color.isDarkModeEnabled"]';
+  const previous = await page.$eval(input, (element) => element.checked);
+  if (previous !== enabled) {
+    await expect(page).toClick('form label:has(input[name="color.isDarkModeEnabled"])');
+  }
+  await page.waitForFunction(
+    (selector, expected) =>
+      document.querySelector<HTMLInputElement>(selector)?.checked === expected,
+    {},
+    input,
+    enabled
+  );
+  return previous;
+};
+
 export const waitForFormCard = async (page: Page, title: string) => {
   await expect(page).toMatchElement('div[class$=tabContent] div[class$=card] div[class$=title]', {
     text: title,

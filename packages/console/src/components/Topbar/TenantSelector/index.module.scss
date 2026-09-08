@@ -102,3 +102,29 @@ $dropdown-item-height: 40px;
     color: var(--color-neutral-50);
   }
 }
+
+:global(html[data-product-brand='iden']) {
+  .currentTenantCard {
+    min-width: 0;
+    max-width: min(500px, 40vw);
+  }
+
+  .dropdown {
+    min-width: min(320px, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+  }
+
+  @media (max-width: 600px) {
+    .currentTenantCard {
+      order: 10;
+      width: 100%;
+      max-width: none;
+      margin-inline-start: 0;
+      padding-inline-start: 0;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ import {
   ApplicationType,
   DomainStatus,
   SearchJointMode,
+  oidcClientMetadataGuard,
   type Application,
   type ApplicationSecret,
   type Domain,
@@ -342,6 +343,21 @@ describe('syncAllAppConfigsToRemote()', () => {
 
 describe('buildProtectedAppData()', () => {
   const origin = 'https://example.com';
+
+  it('should generate valid integration test redirect URIs for numeric subdomains', async () => {
+    const originalIsIntegrationTest = EnvSet.values.isIntegrationTest;
+    Reflect.set(EnvSet.values, 'isIntegrationTest', true);
+    try {
+      const { oidcClientMetadata, protectedAppMetadata } = await buildProtectedAppData({
+        subDomain: '1234567890123456',
+        origin,
+      });
+      expect(protectedAppMetadata?.host).toBe('1234567890123456.protected-app.example.test');
+      expect(oidcClientMetadataGuard.safeParse(oidcClientMetadata).success).toBe(true);
+    } finally {
+      Reflect.set(EnvSet.values, 'isIntegrationTest', originalIsIntegrationTest);
+    }
+  });
 
   it('should throw if subdomain is invalid', async () => {
     await expect(buildProtectedAppData({ subDomain: 'a-', origin })).rejects.toThrowError(
