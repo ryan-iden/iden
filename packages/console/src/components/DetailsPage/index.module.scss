@@ -11,6 +11,14 @@
   }
 }
 
+.backRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: _.unit(4);
+}
+
 .backLink {
   margin: _.unit(1) 0 0 _.unit(1);
   user-select: none;

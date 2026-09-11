@@ -145,6 +145,7 @@ function Applications({ tab }: Props) {
       <PageMeta titleKey="applications.title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="applications.title"
           subtitle={
             <>

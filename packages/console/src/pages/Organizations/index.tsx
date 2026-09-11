@@ -2,6 +2,7 @@ import { cond } from '@silverhand/essentials';
 import { useCallback, useContext, useState } from 'react';
 
 import Plus from '@/assets/icons/plus.svg?react';
+import IdentityScopeSwitcher from '@/components/IdentityScopeSwitcher';
 import PageMeta from '@/components/PageMeta';
 import { organizationsFeatureLink } from '@/consts';
 import { isCloud } from '@/consts/env';
@@ -59,12 +60,14 @@ function Organizations() {
       <PageMeta titleKey="organizations.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           paywall={cond(!isPaidTenant && latestProPlanId)}
           hasAddOnTag={isPaidPlan(planId, isEnterprisePlan)}
           title="organizations.title"
           subtitle="organizations.subtitle"
           learnMoreLink={{ href: organizationsFeatureLink }}
         />
+        <IdentityScopeSwitcher className={pageLayout.headlineSwitch} />
         {!isOrganizationsDisabled && (
           <Button
             icon={<Plus />}

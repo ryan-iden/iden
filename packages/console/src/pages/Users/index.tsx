@@ -11,6 +11,7 @@ import ApplicationName from '@/components/ApplicationName';
 import ClientIdentifier from '@/components/ClientIdentifier';
 import { LocaleDate } from '@/components/DateTime';
 import EmptyDataPlaceholder from '@/components/EmptyDataPlaceholder';
+import IdentityScopeSwitcher from '@/components/IdentityScopeSwitcher';
 import ItemPreview from '@/components/ItemPreview';
 import PageMeta from '@/components/PageMeta';
 import UserAvatar from '@/components/UserAvatar';
@@ -63,10 +64,12 @@ function Users() {
       <PageMeta titleKey="users.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="users.title"
           subtitle="users.subtitle"
           learnMoreLink={{ href: userManagement }}
         />
+        <IdentityScopeSwitcher className={pageLayout.headlineSwitch} />
         <Button
           icon={<Plus />}
           type="primary"

@@ -14,6 +14,7 @@ import File from '@/assets/icons/file.svg?react';
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
 import Drawer from '@/components/Drawer';
+import IdentityScopeSwitcher from '@/components/IdentityScopeSwitcher';
 import OrganizationIcon from '@/components/OrganizationIcon';
 import PageMeta from '@/components/PageMeta';
 import { isSelfHostedParityEnabled } from '@/consts/env';
@@ -79,6 +80,7 @@ function OrganizationDetails() {
       className={styles.page}
       isLoading={isLoading}
       error={error}
+      topAction={<IdentityScopeSwitcher />}
     >
       <PageMeta titleKey="organization_details.page_title" />
       {id &&

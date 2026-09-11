@@ -34,7 +34,7 @@ function Actions() {
     <div className={pageLayout.container}>
       <PageMeta titleKey="actions.page_title" />
       <div className={pageLayout.headline}>
-        <CardTitle title="actions.title" subtitle="actions.subtitle" />
+        <CardTitle isDescriptionAsTooltip title="actions.title" subtitle="actions.subtitle" />
       </div>
       <div className={styles.content}>
         {isLoading && <Skeleton />}

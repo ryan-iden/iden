@@ -64,6 +64,7 @@ function EnterpriseSso() {
       <PageMeta titleKey="enterprise_sso.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           paywall={conditional(!isPaidTenant && latestProPlanId)}
           title="enterprise_sso.title"
           subtitle="enterprise_sso.subtitle"

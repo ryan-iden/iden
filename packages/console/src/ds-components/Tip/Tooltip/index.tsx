@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import usePosition from '@/hooks/use-position';
@@ -26,6 +26,7 @@ type Props = {
   readonly anchorClassName?: string;
   readonly children?: ReactNode;
   readonly content?: ReactNode;
+  readonly isInteractive?: boolean;
 };
 
 function Tooltip({
@@ -37,6 +38,7 @@ function Tooltip({
   anchorClassName,
   children,
   content,
+  isInteractive = false,
 }: Props) {
   const [tooltipDom, setTooltipDom] = useState<HTMLDivElement>();
   const anchorRef = useRef<HTMLDivElement>(null);
@@ -54,6 +56,27 @@ function Tooltip({
   });
 
   const [isVisible, setIsVisible] = useState(false);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const showTooltip = useCallback(() => {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+    }
+    setIsVisible(true);
+  }, []);
+
+  const hideTooltip = useCallback(() => {
+    if (!isInteractive) {
+      setIsVisible(false);
+      return;
+    }
+
+    // Keep the delayed dismissal outside React state so pointer transitions do not re-render.
+    // eslint-disable-next-line @silverhand/fp/no-mutation -- The ref stores a cancellable hover-dismiss timer.
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 120);
+  }, [isInteractive]);
 
   useEffect(() => {
     if (!isVisible) {
@@ -81,27 +104,27 @@ function Tooltip({
     }
 
     const dom = anchorRef.current;
-
-    const enterHandler = () => {
-      setIsVisible(true);
-    };
-
-    const leaveHandler = () => {
-      setIsVisible(false);
-    };
-
-    dom.addEventListener('mouseenter', enterHandler);
-    dom.addEventListener('mouseleave', leaveHandler);
-    dom.addEventListener('focusin', enterHandler);
-    dom.addEventListener('focusout', leaveHandler);
+    dom.addEventListener('mouseenter', showTooltip);
+    dom.addEventListener('mouseleave', hideTooltip);
+    dom.addEventListener('focusin', showTooltip);
+    dom.addEventListener('focusout', hideTooltip);
 
     return () => {
-      dom.removeEventListener('mouseenter', enterHandler);
-      dom.removeEventListener('mouseleave', leaveHandler);
-      dom.removeEventListener('focusin', enterHandler);
-      dom.removeEventListener('focusout', leaveHandler);
+      dom.removeEventListener('mouseenter', showTooltip);
+      dom.removeEventListener('mouseleave', hideTooltip);
+      dom.removeEventListener('focusin', showTooltip);
+      dom.removeEventListener('focusout', hideTooltip);
     };
-  }, [anchorRef, isKeepOpen]);
+  }, [anchorRef, hideTooltip, isKeepOpen, showTooltip]);
+
+  useEffect(
+    () => () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (!isVisible) {
@@ -142,6 +165,10 @@ function Tooltip({
             placement={placement}
             horizontalAlignment={positionState.horizontalAlign}
             isSuccessful={isSuccessful}
+            onMouseEnter={isInteractive ? showTooltip : undefined}
+            onMouseLeave={isInteractive ? hideTooltip : undefined}
+            onFocus={isInteractive ? showTooltip : undefined}
+            onBlur={isInteractive ? hideTooltip : undefined}
           >
             {content}
           </TipBubble>,

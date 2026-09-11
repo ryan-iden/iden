@@ -10,6 +10,7 @@ function AuditLogs() {
       <PageMeta titleKey="logs.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="logs.title"
           subtitle="logs.subtitle"
           learnMoreLink={{ href: auditLogs }}

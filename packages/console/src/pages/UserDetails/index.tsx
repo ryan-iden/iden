@@ -11,6 +11,7 @@ import Forbidden from '@/assets/icons/forbidden.svg?react';
 import Shield from '@/assets/icons/shield.svg?react';
 import DetailsPage from '@/components/DetailsPage';
 import DetailsPageHeader from '@/components/DetailsPage/DetailsPageHeader';
+import IdentityScopeSwitcher from '@/components/IdentityScopeSwitcher';
 import PageMeta from '@/components/PageMeta';
 import UserAvatar from '@/components/UserAvatar';
 import { UserDetailsTabs } from '@/consts/page-tabs';
@@ -99,6 +100,7 @@ function UserDetails() {
       isLoading={isLoading}
       error={error}
       className={classNames(isPageHasTable && styles.resourceLayout)}
+      topAction={<IdentityScopeSwitcher />}
       onRetry={mutate}
     >
       <PageMeta titleKey="user_details.page_title" />

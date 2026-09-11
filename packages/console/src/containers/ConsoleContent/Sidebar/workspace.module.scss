@@ -7,6 +7,10 @@
   padding-inline: 12px 0;
 }
 
+.identityWorkspace {
+  width: 112px;
+}
+
 .rail {
   width: 88px;
   flex: none;
@@ -112,6 +116,10 @@
   .workspace {
     width: min(320px, 88vw);
     padding-inline-start: 8px;
+  }
+
+  .identityWorkspace {
+    width: 104px;
   }
 
   .rail {
