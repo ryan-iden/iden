@@ -1,13 +1,13 @@
 import { CaptchaType, RecaptchaEnterpriseMode, Theme } from '@logto/schemas';
+import { noop } from '@silverhand/essentials';
 import { useMemo, useContext, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import useToast from '@/hooks/use-toast';
 
 import PageContext from '../PageContextProvider/PageContext';
 
 import CaptchaContext, { type CaptchaContextType } from './CaptchaContext';
-import { aliyunCaptchaTriggerId, scriptId } from './constant';
+import { createAliyunCaptcha } from './aliyun-captcha';
+import { scriptId } from './constant';
 import { getAliyunCaptchaLanguage, getScript } from './utils';
 
 type Props = {
@@ -17,33 +17,18 @@ type Props = {
 const CaptchaContextProvider = ({ children }: Props) => {
   const { experienceSettings, theme } = useContext(PageContext);
   const widgetRef = useRef<HTMLDivElement>(null);
-  const aliyunCaptchaInitializationRef = useRef<Promise<void>>();
-  const aliyunCaptchaInstanceRef = useRef<{ destroy?: () => void }>();
-  const aliyunCaptchaAttemptRef = useRef<{
-    resolve: (token: string) => void;
-    reject: (error: Error) => void;
-    timeout: ReturnType<typeof setTimeout>;
-  }>();
-  const { setToast } = useToast();
-  const { t, i18n } = useTranslation();
+  const aliyunCaptchaRef = useRef<ReturnType<typeof createAliyunCaptcha>>();
+  const { i18n } = useTranslation();
 
   const captchaPolicy = experienceSettings?.captchaPolicy;
   const captchaConfig = experienceSettings?.captchaConfig;
-
   const isCaptchaRequired = Boolean(captchaPolicy?.enabled);
+  const aliyunLanguage = getAliyunCaptchaLanguage(i18n.resolvedLanguage || i18n.language || 'en');
 
   const initCaptcha = useCallback(() => {
-    if (!isCaptchaRequired || !captchaConfig) {
+    // Alibaba Cloud initialization is owned by its mounted CaptchaBox, whose DOM must exist first.
+    if (!isCaptchaRequired || !captchaConfig || captchaConfig.type === CaptchaType.Aliyun) {
       return;
-    }
-
-    if (captchaConfig.type === CaptchaType.Aliyun) {
-      // Alibaba Cloud's loader reads this global value while initializing.
-      // eslint-disable-next-line @silverhand/fp/no-mutation -- required by the vendor SDK contract
-      window.AliyunCaptchaConfig = {
-        region: captchaConfig.region,
-        prefix: captchaConfig.prefix,
-      };
     }
 
     if (document.querySelector(`#${scriptId}`)) {
@@ -51,112 +36,49 @@ const CaptchaContextProvider = ({ children }: Props) => {
     }
 
     const script = document.createElement('script');
-    /* eslint-disable @silverhand/fp/no-mutation */
+    /* eslint-disable @silverhand/fp/no-mutation -- configure the vendor script before inserting it */
     script.src = getScript(captchaConfig);
     script.id = scriptId;
     script.async = true;
     /* eslint-enable @silverhand/fp/no-mutation */
-
     document.body.append(script);
   }, [isCaptchaRequired, captchaConfig]);
 
-  const rejectAliyunCaptchaAttempt = useCallback((error: Error) => {
-    const attempt = aliyunCaptchaAttemptRef.current;
+  const mountAliyunCaptcha = useCallback<NonNullable<CaptchaContextType['mountAliyunCaptcha']>>(
+    (element, trigger) => {
+      if (!isCaptchaRequired || captchaConfig?.type !== CaptchaType.Aliyun) {
+        return noop;
+      }
 
-    if (!attempt) {
-      return;
-    }
-
-    clearTimeout(attempt.timeout);
-    // eslint-disable-next-line @silverhand/fp/no-mutation -- this ref tracks the active vendor callback
-    aliyunCaptchaAttemptRef.current = undefined;
-    attempt.reject(error);
-  }, []);
-
-  const initializeAliyunCaptcha = useCallback(async () => {
-    if (!captchaConfig || captchaConfig.type !== CaptchaType.Aliyun) {
-      throw new Error('Alibaba Cloud Captcha config is not found');
-    }
-
-    if (aliyunCaptchaInitializationRef.current) {
-      return aliyunCaptchaInitializationRef.current;
-    }
-
-    const initialization = new Promise<void>((resolve, reject) => {
-      const initialize = () => {
-        if (!window.initAliyunCaptcha) {
-          reject(new Error('Alibaba Cloud Captcha SDK is unavailable'));
-          return;
+      aliyunCaptchaRef.current?.destroy();
+      const captcha = createAliyunCaptcha({
+        config: captchaConfig,
+        language: aliyunLanguage,
+        element,
+        trigger,
+      });
+      // eslint-disable-next-line @silverhand/fp/no-mutation -- retain the controller for the currently mounted host
+      aliyunCaptchaRef.current = captcha;
+      // Warm up device signals and resources while the form is visible. Submission retries failures.
+      const initialize = async () => {
+        try {
+          await captcha.initialize();
+        } catch {
+          // A failed warm-up is retried, with a localized error if needed, on form submission.
         }
-
-        window.initAliyunCaptcha({
-          SceneId: captchaConfig.sceneId,
-          mode: 'popup',
-          element: '#aliyun-captcha-element',
-          button: `#${aliyunCaptchaTriggerId}`,
-          language: getAliyunCaptchaLanguage(i18n.resolvedLanguage),
-          success: (captchaVerifyParam) => {
-            const attempt = aliyunCaptchaAttemptRef.current;
-
-            if (!attempt) {
-              return;
-            }
-
-            clearTimeout(attempt.timeout);
-            // eslint-disable-next-line @silverhand/fp/no-mutation -- this ref tracks the active vendor callback
-            aliyunCaptchaAttemptRef.current = undefined;
-            attempt.resolve(captchaVerifyParam);
-          },
-          onError: () => {
-            rejectAliyunCaptchaAttempt(new Error('Alibaba Cloud Captcha failed to load'));
-          },
-          onClose: (reason) => {
-            if (reason === 'userDismiss') {
-              rejectAliyunCaptchaAttempt(new Error('Alibaba Cloud Captcha was closed'));
-            }
-          },
-          getInstance: (instance) => {
-            // eslint-disable-next-line @silverhand/fp/no-mutation -- retain the vendor instance for cleanup
-            aliyunCaptchaInstanceRef.current = instance;
-            resolve();
-          },
-        });
       };
+      void initialize();
 
-      const script = document.querySelector<HTMLScriptElement>(`#${scriptId}`);
-
-      if (window.initAliyunCaptcha) {
-        initialize();
-        return;
-      }
-
-      if (!script) {
-        reject(new Error('Alibaba Cloud Captcha script is not found'));
-        return;
-      }
-
-      script.addEventListener('load', initialize, { once: true });
-      script.addEventListener(
-        'error',
-        () => {
-          reject(new Error('Alibaba Cloud Captcha script failed to load'));
-        },
-        { once: true }
-      );
-    });
-
-    // eslint-disable-next-line @silverhand/fp/no-mutation -- cache one initialization per mounted provider
-    aliyunCaptchaInitializationRef.current = initialization;
-
-    try {
-      await initialization;
-    } catch (error: unknown) {
-      // Permit a later retry after a transient script or initialization failure.
-      // eslint-disable-next-line @silverhand/fp/no-mutation -- reset a rejected initialization cache
-      aliyunCaptchaInitializationRef.current = undefined;
-      throw error;
-    }
-  }, [captchaConfig, i18n.resolvedLanguage, rejectAliyunCaptchaAttempt]);
+      return () => {
+        if (aliyunCaptchaRef.current === captcha) {
+          // eslint-disable-next-line @silverhand/fp/no-mutation -- detach the route's controller before rejecting pending work
+          aliyunCaptchaRef.current = undefined;
+        }
+        captcha.destroy();
+      };
+    },
+    [isCaptchaRequired, captchaConfig, aliyunLanguage]
+  );
 
   const executeCaptcha = useCallback(async () => {
     if (!isCaptchaRequired || !captchaConfig) {
@@ -164,35 +86,10 @@ const CaptchaContextProvider = ({ children }: Props) => {
     }
 
     if (captchaConfig.type === CaptchaType.Aliyun) {
-      try {
-        await initializeAliyunCaptcha();
-      } catch (error: unknown) {
-        setToast(t('error.captcha_verification_failed'));
-        throw error;
+      if (!aliyunCaptchaRef.current) {
+        throw new Error('Alibaba Cloud Captcha host is not mounted');
       }
-
-      return new Promise<string>((resolve, reject) => {
-        const trigger = document.querySelector<HTMLButtonElement>(`#${aliyunCaptchaTriggerId}`);
-
-        if (!trigger) {
-          reject(new Error('Alibaba Cloud Captcha trigger is not found'));
-          return;
-        }
-
-        if (aliyunCaptchaAttemptRef.current) {
-          reject(new Error('Alibaba Cloud Captcha verification is already in progress'));
-          return;
-        }
-
-        const timeout = setTimeout(() => {
-          setToast(t('error.captcha_verification_failed'));
-          rejectAliyunCaptchaAttempt(new Error('Alibaba Cloud Captcha verification timed out'));
-        }, 120_000);
-
-        // eslint-disable-next-line @silverhand/fp/no-mutation -- bridge the vendor callback to this promise
-        aliyunCaptchaAttemptRef.current = { resolve, reject, timeout };
-        trigger.click();
-      });
+      return aliyunCaptchaRef.current.execute();
     }
 
     if (captchaConfig.type === CaptchaType.Turnstile) {
@@ -202,10 +99,8 @@ const CaptchaContextProvider = ({ children }: Props) => {
           return;
         }
 
-        // Clear the dom element first
-        // eslint-disable-next-line @silverhand/fp/no-mutation
+        // eslint-disable-next-line @silverhand/fp/no-mutation -- the vendor render API requires an empty host
         widgetRef.current.innerHTML = '';
-
         window.turnstile.render(widgetRef.current, {
           sitekey: captchaConfig.siteKey,
           theme: theme === Theme.Light ? 'light' : 'dark',
@@ -213,7 +108,6 @@ const CaptchaContextProvider = ({ children }: Props) => {
             resolve(token);
           },
           'error-callback': (errorCode) => {
-            setToast(t('error.captcha_verification_failed'));
             reject(new Error(`Turnstile error: ${errorCode}`));
           },
           size: 'flexible',
@@ -225,7 +119,6 @@ const CaptchaContextProvider = ({ children }: Props) => {
       return;
     }
 
-    // Handle checkbox mode for reCAPTCHA Enterprise
     if (captchaConfig.mode === RecaptchaEnterpriseMode.Checkbox) {
       return new Promise<string | undefined>((resolve, reject) => {
         if (!window.grecaptcha || !widgetRef.current) {
@@ -233,10 +126,8 @@ const CaptchaContextProvider = ({ children }: Props) => {
           return;
         }
 
-        // Clear the dom element first
-        // eslint-disable-next-line @silverhand/fp/no-mutation
+        // eslint-disable-next-line @silverhand/fp/no-mutation -- the vendor render API requires an empty host
         widgetRef.current.innerHTML = '';
-
         window.grecaptcha.enterprise.render(widgetRef.current, {
           sitekey: captchaConfig.siteKey,
           theme: theme === Theme.Light ? 'light' : 'dark',
@@ -244,69 +135,22 @@ const CaptchaContextProvider = ({ children }: Props) => {
             resolve(token);
           },
           'error-callback': (errorCode) => {
-            setToast(t('error.captcha_verification_failed'));
             reject(new Error(`reCAPTCHA error: ${errorCode}`));
           },
         });
       });
     }
 
-    // Default invisible mode
-    return window.grecaptcha.enterprise.execute(captchaConfig.siteKey, {
-      action: 'interaction',
-    });
-  }, [
-    isCaptchaRequired,
-    captchaConfig,
-    initializeAliyunCaptcha,
-    rejectAliyunCaptchaAttempt,
-    theme,
-    setToast,
-    t,
-  ]);
+    return window.grecaptcha.enterprise.execute(captchaConfig.siteKey, { action: 'interaction' });
+  }, [isCaptchaRequired, captchaConfig, theme]);
 
   useEffect(() => {
     initCaptcha();
   }, [initCaptcha]);
 
-  useEffect(() => {
-    if (isCaptchaRequired && captchaConfig?.type === CaptchaType.Aliyun) {
-      // Initialize as soon as possible so device signals and challenge resources are ready before
-      // the user submits, as recommended by Alibaba Cloud's Web/H5 integration guide.
-      const initialize = async () => {
-        try {
-          await initializeAliyunCaptcha();
-        } catch {
-          // A transient initialization failure is retried when the user submits the form.
-        }
-      };
-
-      void initialize();
-    }
-  }, [captchaConfig, initializeAliyunCaptcha, isCaptchaRequired]);
-
-  useEffect(
-    () => () => {
-      const attempt = aliyunCaptchaAttemptRef.current;
-
-      if (attempt) {
-        clearTimeout(attempt.timeout);
-        attempt.reject(new Error('Alibaba Cloud Captcha was unmounted'));
-      }
-
-      aliyunCaptchaInstanceRef.current?.destroy?.();
-    },
-    []
-  );
-
   const captchaContext = useMemo<CaptchaContextType>(
-    () => ({
-      isCaptchaRequired,
-      executeCaptcha,
-      captchaConfig,
-      widgetRef,
-    }),
-    [isCaptchaRequired, executeCaptcha, captchaConfig, widgetRef]
+    () => ({ isCaptchaRequired, executeCaptcha, captchaConfig, widgetRef, mountAliyunCaptcha }),
+    [isCaptchaRequired, executeCaptcha, captchaConfig, mountAliyunCaptcha]
   );
 
   return <CaptchaContext.Provider value={captchaContext}>{children}</CaptchaContext.Provider>;

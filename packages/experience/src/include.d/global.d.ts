@@ -62,7 +62,7 @@ declare global {
       fail?: (result?: unknown) => void;
       onError: (error: unknown) => void;
       onClose: (reason: 'userDismiss' | 'verifyComplete') => void;
-      getInstance: (instance: { destroy?: () => void }) => void;
-    }) => void;
+      getInstance: (instance: { destroy?: () => void; hide?: () => void }) => void;
+    }) => void | Promise<unknown>;
   }
 }

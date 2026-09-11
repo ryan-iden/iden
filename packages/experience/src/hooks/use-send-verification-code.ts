@@ -5,10 +5,10 @@ import { conditional } from '@silverhand/essentials';
 import { useCallback, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CaptchaContext from '@/Providers/CaptchaContextProvider/CaptchaContext';
 import UserInteractionContext from '@/Providers/UserInteractionContextProvider/UserInteractionContext';
 import { sendVerificationCodeApi } from '@/apis/utils';
 import useApi from '@/hooks/use-api';
+import useCaptchaVerification from '@/hooks/use-captcha-verification';
 import useErrorHandler, { type ErrorHandlers } from '@/hooks/use-error-handler';
 import useNavigateWithPreservedSearchParams from '@/hooks/use-navigate-with-preserved-search-params';
 import useToast from '@/hooks/use-toast';
@@ -27,7 +27,7 @@ type Payload = {
 const useSendVerificationCode = (flow: UserFlow, replaceCurrentPage?: boolean) => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const navigate = useNavigateWithPreservedSearchParams();
-  const { executeCaptcha } = useContext(CaptchaContext);
+  const verifyCaptcha = useCaptchaVerification();
 
   const handleError = useErrorHandler();
   const { setToast } = useToast();
@@ -45,7 +45,13 @@ const useSendVerificationCode = (flow: UserFlow, replaceCurrentPage?: boolean) =
       interactionEvent?: ContinueFlowInteractionEvent,
       errorHandlers?: ErrorHandlers
     ) => {
-      const captchaToken = await executeCaptcha();
+      // Profile completion uses the existing interaction; only a new interaction needs CAPTCHA.
+      const captcha =
+        flow === UserFlow.Continue ? { captchaToken: undefined } : await verifyCaptcha();
+
+      if (!captcha) {
+        return;
+      }
 
       const [error, result] = await asyncSendVerificationCode(
         flow,
@@ -54,7 +60,7 @@ const useSendVerificationCode = (flow: UserFlow, replaceCurrentPage?: boolean) =
           value,
         },
         interactionEvent,
-        captchaToken
+        captcha.captchaToken
       );
 
       if (error) {
@@ -111,7 +117,7 @@ const useSendVerificationCode = (flow: UserFlow, replaceCurrentPage?: boolean) =
       navigate,
       replaceCurrentPage,
       setVerificationId,
-      executeCaptcha,
+      verifyCaptcha,
       setToast,
       t,
     ]

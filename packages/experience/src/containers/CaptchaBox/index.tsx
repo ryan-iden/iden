@@ -1,5 +1,5 @@
 import { CaptchaType, RecaptchaEnterpriseMode } from '@logto/schemas';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 import CaptchaContext from '@/Providers/CaptchaContextProvider/CaptchaContext';
 import {
@@ -10,7 +10,16 @@ import {
 import styles from './index.module.scss';
 
 const CaptchaBox = () => {
-  const { captchaConfig, widgetRef, isCaptchaRequired } = useContext(CaptchaContext);
+  const { captchaConfig, widgetRef, isCaptchaRequired, mountAliyunCaptcha } =
+    useContext(CaptchaContext);
+  const aliyunElementRef = useRef<HTMLDivElement>(null);
+  const aliyunTriggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (aliyunElementRef.current && aliyunTriggerRef.current) {
+      return mountAliyunCaptcha?.(aliyunElementRef.current, aliyunTriggerRef.current);
+    }
+  }, [captchaConfig, isCaptchaRequired, mountAliyunCaptcha]);
 
   // Check if widget rendering is needed
   // Turnstile and Alibaba Cloud Captcha need a widget host. reCAPTCHA Enterprise needs it only in checkbox mode.
@@ -28,8 +37,9 @@ const CaptchaBox = () => {
   if (captchaConfig.type === CaptchaType.Aliyun) {
     return (
       <div className={styles.aliyunCaptchaBox}>
-        <div ref={widgetRef} id={aliyunCaptchaElementId} />
+        <div ref={aliyunElementRef} id={aliyunCaptchaElementId} />
         <button
+          ref={aliyunTriggerRef}
           aria-hidden
           className={styles.aliyunCaptchaTrigger}
           id={aliyunCaptchaTriggerId}

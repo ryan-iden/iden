@@ -7,10 +7,10 @@ import { conditional } from '@silverhand/essentials';
 import { useCallback, useMemo, useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CaptchaContext from '@/Providers/CaptchaContextProvider/CaptchaContext';
 import UserInteractionContext from '@/Providers/UserInteractionContextProvider/UserInteractionContext';
 import { signInWithPasswordIdentifier } from '@/apis/experience';
 import useApi from '@/hooks/use-api';
+import useCaptchaVerification from '@/hooks/use-captcha-verification';
 import useCheckSingleSignOn from '@/hooks/use-check-single-sign-on';
 import type { ErrorHandlers } from '@/hooks/use-error-handler';
 import useErrorHandler from '@/hooks/use-error-handler';
@@ -25,7 +25,7 @@ const usePasswordSignIn = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const { onSubmit: checkSingleSignOn } = useCheckSingleSignOn();
   const redirectTo = useGlobalRedirectTo();
-  const { executeCaptcha } = useContext(CaptchaContext);
+  const verifyCaptcha = useCaptchaVerification();
 
   const { t } = useTranslation();
   const { show } = useConfirmModal();
@@ -80,7 +80,11 @@ const usePasswordSignIn = () => {
   const onSubmit = useCallback(
     async (payload: PasswordVerificationPayload) => {
       const { identifier } = payload;
-      const captchaToken = await executeCaptcha();
+      const captcha = await verifyCaptcha();
+
+      if (!captcha) {
+        return;
+      }
 
       // Check if the email is registered with any SSO connectors. If the email is registered with any SSO connectors, we should not proceed to the next step
       if (identifier.type === SignInIdentifier.Email) {
@@ -91,7 +95,7 @@ const usePasswordSignIn = () => {
         }
       }
 
-      const [error, result] = await asyncSignIn(payload, captchaToken);
+      const [error, result] = await asyncSignIn(payload, captcha.captchaToken);
 
       if (error) {
         await handleError(error, errorHandlers);
@@ -103,7 +107,7 @@ const usePasswordSignIn = () => {
         await redirectTo(result.redirectTo);
       }
     },
-    [asyncSignIn, checkSingleSignOn, errorHandlers, executeCaptcha, handleError, redirectTo]
+    [asyncSignIn, checkSingleSignOn, errorHandlers, verifyCaptcha, handleError, redirectTo]
   );
 
   return {
