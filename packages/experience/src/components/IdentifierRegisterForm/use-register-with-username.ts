@@ -1,9 +1,9 @@
 import { InteractionEvent } from '@logto/schemas';
-import { useState, useCallback, useMemo, useContext } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
-import CaptchaContext from '@/Providers/CaptchaContextProvider/CaptchaContext';
 import { identifyAndSubmitInteraction, registerWithUsername } from '@/apis/experience';
 import useApi from '@/hooks/use-api';
+import useCaptchaVerification from '@/hooks/use-captcha-verification';
 import type { ErrorHandlers } from '@/hooks/use-error-handler';
 import useErrorHandler from '@/hooks/use-error-handler';
 import useGlobalRedirectTo from '@/hooks/use-global-redirect-to';
@@ -14,7 +14,7 @@ import useSubmitInteractionErrorHandler from '@/hooks/use-submit-interaction-err
 const useRegisterWithUsername = () => {
   const navigate = useNavigateWithPreservedSearchParams();
   const redirectTo = useGlobalRedirectTo();
-  const { executeCaptcha } = useContext(CaptchaContext);
+  const verifyCaptcha = useCaptchaVerification();
 
   const [errorMessage, setErrorMessage] = useState<string>();
 
@@ -56,8 +56,13 @@ const useRegisterWithUsername = () => {
 
   const onSubmit = useCallback(
     async (username: string) => {
-      const captchaToken = await executeCaptcha();
-      const [error] = await asyncRegister(username, captchaToken);
+      const captcha = await verifyCaptcha();
+
+      if (!captcha) {
+        return;
+      }
+
+      const [error] = await asyncRegister(username, captcha.captchaToken);
 
       if (error) {
         await handleError(error, usernameErrorHandlers);
@@ -82,7 +87,7 @@ const useRegisterWithUsername = () => {
       handleError,
       usernameErrorHandlers,
       navigate,
-      executeCaptcha,
+      verifyCaptcha,
     ]
   );
 

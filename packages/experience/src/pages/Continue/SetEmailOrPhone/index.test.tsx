@@ -1,8 +1,15 @@
-import { InteractionEvent, MissingProfile, SignInIdentifier } from '@logto/schemas';
+import {
+  AliyunCaptchaRegion,
+  CaptchaType,
+  InteractionEvent,
+  MissingProfile,
+  SignInIdentifier,
+} from '@logto/schemas';
 import { assert } from '@silverhand/essentials';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
+import CaptchaContext from '@/Providers/CaptchaContextProvider/CaptchaContext';
 import renderWithPageContext from '@/__mocks__/RenderWithPageContext';
 import SettingsProvider from '@/__mocks__/RenderWithPageContext/SettingsProvider';
 import { sendVerificationCodeApi } from '@/apis/utils';
@@ -12,6 +19,9 @@ import { getDefaultCountryCallingCode } from '@/utils/country-code';
 import SetEmailOrPhone, { type VerificationCodeProfileType, pageContent } from '.';
 
 const mockedNavigate = jest.fn();
+const executeCaptcha = jest.fn(async () => {
+  throw new Error('Alibaba Cloud Captcha trigger is not found');
+});
 
 // PhoneNum CountryCode detection
 jest.mock('i18next', () => ({
@@ -44,10 +54,24 @@ describe('continue with email or phone', () => {
   const renderPage = (missingProfile: VerificationCodeProfileType) =>
     renderWithPageContext(
       <SettingsProvider>
-        <SetEmailOrPhone
-          missingProfile={missingProfile}
-          interactionEvent={InteractionEvent.Register}
-        />
+        <CaptchaContext.Provider
+          value={{
+            isCaptchaRequired: true,
+            captchaConfig: {
+              type: CaptchaType.Aliyun,
+              region: AliyunCaptchaRegion.China,
+              prefix: 'prefix',
+              sceneId: 'scene',
+            },
+            executeCaptcha,
+            widgetRef: undefined,
+          }}
+        >
+          <SetEmailOrPhone
+            missingProfile={missingProfile}
+            interactionEvent={InteractionEvent.Register}
+          />
+        </CaptchaContext.Provider>
       </SettingsProvider>
     );
 
@@ -80,7 +104,7 @@ describe('continue with email or phone', () => {
     [MissingProfile.emailOrPhone, SignInIdentifier.Email, email],
     [MissingProfile.emailOrPhone, SignInIdentifier.Phone, phone],
   ] satisfies Array<[VerificationCodeProfileType, VerificationCodeIdentifier, string]>)(
-    'should send verification code properly',
+    'completes %s with %s without repeating Alibaba Cloud CAPTCHA',
     async (type, identifier, input) => {
       const { getByText, container } = renderPage(type);
 
@@ -109,6 +133,8 @@ describe('continue with email or phone', () => {
           undefined
         );
       });
+
+      expect(executeCaptcha).not.toHaveBeenCalled();
     }
   );
 });
