@@ -10,15 +10,33 @@
     display: flex;
     align-items: center;
     gap: _.unit(2);
+    min-width: 0;
+  }
+
+  .titleText {
+    min-width: 0;
   }
 
   .titleEllipsis {
-    @include _.text-ellipsis;
+    .titleText {
+      @include _.text-ellipsis;
+    }
   }
 
   .subtitle {
     margin-top: _.unit(1);
     color: var(--color-text-secondary);
+  }
+
+  .infoButton {
+    flex: none;
+  }
+
+  .tooltipContent {
+    display: flex;
+    flex-direction: column;
+    gap: _.unit(1);
+    max-width: 360px;
   }
 
   &.large {

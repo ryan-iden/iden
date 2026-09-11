@@ -72,6 +72,7 @@ function ApiResources() {
       <PageMeta titleKey="api_resources.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="api_resources.title"
           subtitle="api_resources.subtitle"
           learnMoreLink={{ href: apiResourcesDocumentationLink }}

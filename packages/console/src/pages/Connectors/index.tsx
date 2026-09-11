@@ -109,6 +109,7 @@ function Connectors() {
       <PageMeta titleKey="connectors.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="connectors.title"
           subtitle="connectors.subtitle"
           learnMoreLink={{ href: connectorsDocumentLink }}

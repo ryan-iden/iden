@@ -26,10 +26,11 @@ export default function WorkspaceNavigation() {
     sections.find(({ items }) =>
       items.some(({ path, title }) => match('/' + (path ?? getPath(title))))
     ) ?? sections[0];
+  const isIdentitySection = selected?.title === 'identity';
   useSurfaceMotion(contentRef, selected?.title ?? pathname, true);
 
   return (
-    <div className={styles.workspace}>
+    <div className={classNames(styles.workspace, isIdentitySection && styles.identityWorkspace)}>
       <nav className={styles.rail} aria-label={tUi('open_navigation')}>
         {sections.map(({ title, items }) => {
           const first = items.find(({ isHidden }) => !isHidden);
@@ -50,34 +51,36 @@ export default function WorkspaceNavigation() {
           );
         })}
       </nav>
-      <div className={styles.context}>
-        <div className={styles.contextHeading}>
-          <span className={styles.indicator} aria-hidden="true" />
-          {selected && t(selected.title)}
+      {!isIdentitySection && (
+        <div className={styles.context}>
+          <div className={styles.contextHeading}>
+            <span className={styles.indicator} aria-hidden="true" />
+            {selected && t(selected.title)}
+          </div>
+          <nav ref={contentRef} className={styles.items} aria-label={selected && t(selected.title)}>
+            {selected?.items.map(
+              ({ title, Icon, isHidden, modal, externalLink, path }) =>
+                !isHidden && (
+                  <Item
+                    key={title}
+                    titleKey={title}
+                    icon={<Icon />}
+                    path={path}
+                    isActive={match('/' + (path ?? getPath(title)))}
+                    modal={modal}
+                    externalLink={externalLink}
+                  />
+                )
+            )}
+          </nav>
+          <footer className={styles.footer}>
+            <span className={styles.slogan}>{brandProfile.slogan}</span>
+            {!brandProfile.hideOpenSourceNotice && (
+              <a href={`${documentationSiteUrl}/about`}>{tUi('about')}</a>
+            )}
+          </footer>
         </div>
-        <nav ref={contentRef} className={styles.items} aria-label={selected && t(selected.title)}>
-          {selected?.items.map(
-            ({ title, Icon, isHidden, modal, externalLink, path }) =>
-              !isHidden && (
-                <Item
-                  key={title}
-                  titleKey={title}
-                  icon={<Icon />}
-                  path={path}
-                  isActive={match('/' + (path ?? getPath(title)))}
-                  modal={modal}
-                  externalLink={externalLink}
-                />
-              )
-          )}
-        </nav>
-        <footer className={styles.footer}>
-          <span className={styles.slogan}>{brandProfile.slogan}</span>
-          {!brandProfile.hideOpenSourceNotice && (
-            <a href={`${documentationSiteUrl}/about`}>{tUi('about')}</a>
-          )}
-        </footer>
-      </div>
+      )}
     </div>
   );
 }

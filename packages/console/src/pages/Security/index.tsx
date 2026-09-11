@@ -26,6 +26,7 @@ function Security({ tab }: Props) {
       <PageMeta titleKey="security.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="security.title"
           subtitle="security.subtitle"
           learnMoreLink={{ href: security }}

@@ -52,6 +52,7 @@ function OrganizationTemplate() {
       <PageMeta titleKey="organization_template.title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="organization_template.title"
           subtitle="organization_template.subtitle"
           learnMoreLink={{ href: organizationTemplateLink }}

@@ -23,6 +23,7 @@ type Props = {
   readonly onRetry?: () => void;
   readonly children: ReactNode;
   readonly className?: string;
+  readonly topAction?: ReactNode;
 };
 
 function DetailsPage({
@@ -33,20 +34,24 @@ function DetailsPage({
   onRetry,
   children,
   className,
+  topAction,
 }: Props) {
   return (
     <div className={classNames(styles.container, className)}>
-      <TextLink
-        to={backLink}
-        icon={
-          <FlipOnRtl>
-            <Back />
-          </FlipOnRtl>
-        }
-        className={styles.backLink}
-      >
-        {typeof backLinkTitle === 'string' ? <DynamicT forKey={backLinkTitle} /> : backLinkTitle}
-      </TextLink>
+      <div className={styles.backRow}>
+        <TextLink
+          to={backLink}
+          icon={
+            <FlipOnRtl>
+              <Back />
+            </FlipOnRtl>
+          }
+          className={styles.backLink}
+        >
+          {typeof backLinkTitle === 'string' ? <DynamicT forKey={backLinkTitle} /> : backLinkTitle}
+        </TextLink>
+        {topAction}
+      </div>
       {isLoading ? (
         <Skeleton />
       ) : error ? (

@@ -76,6 +76,7 @@ function Roles() {
       <PageMeta titleKey="roles.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="roles.title"
           subtitle="roles.subtitle"
           learnMoreLink={{ href: rbac }}

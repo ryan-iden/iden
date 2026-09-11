@@ -66,6 +66,7 @@ function Webhooks() {
       <PageMeta titleKey="webhooks.page_title" />
       <div className={pageLayout.headline}>
         <CardTitle
+          isDescriptionAsTooltip
           title="webhooks.title"
           subtitle="webhooks.subtitle"
           learnMoreLink={{ href: webhooksDocumentationLink }}

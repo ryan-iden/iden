@@ -15,8 +15,23 @@
   gap: _.unit(6);
 }
 
+.headlineSwitch {
+  margin-inline-start: auto;
+  flex: none;
+}
+
 .table {
   flex: 1;
   margin-top: _.unit(4);
   overflow: hidden;
+}
+
+@media (max-width: 700px) {
+  .headline {
+    align-items: flex-start;
+  }
+
+  .headlineSwitch {
+    margin-inline-start: 0;
+  }
 }

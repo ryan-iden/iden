@@ -1,4 +1,6 @@
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 import { conditional, conditionalString } from '@silverhand/essentials';
 import { type Page } from 'puppeteer';
@@ -175,13 +177,15 @@ export const uploadMetadataXml = async (page: Page) => {
     throw new Error('File input element is not found.');
   }
 
-  const metadataFilePath = './metadata.xml';
+  const metadataDirectoryPath = fs.mkdtempSync(path.join(os.tmpdir(), 'logto-sso-metadata-'));
+  const metadataFilePath = path.join(metadataDirectoryPath, 'metadata.xml');
   fs.writeFileSync(metadataFilePath, metadataXml);
 
   await fileInputElement.uploadFile(metadataFilePath);
 
-  // Delete the mock file
-  fs.unlinkSync(metadataFilePath);
+  process.once('exit', () => {
+    fs.rmSync(metadataDirectoryPath, { recursive: true, force: true });
+  });
 };
 
 export const findModalFooterButton = async (isButtonDisabled = false) => {
