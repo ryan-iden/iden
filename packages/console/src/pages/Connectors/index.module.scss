@@ -9,6 +9,14 @@
     width: 360px;
   }
 
+  .actions {
+    text-align: end;
+  }
+
+  .viewConfig {
+    display: inline-flex;
+  }
+
   .empty {
     text-align: center;
     font-size: var(--font-body-2);

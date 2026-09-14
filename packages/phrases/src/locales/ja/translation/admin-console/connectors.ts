@@ -8,6 +8,7 @@ const connectors = {
   tab_email_sms: 'メールと SMS のコネクタ',
   tab_social: 'ソーシャルコネクタ',
   connector_name: 'コネクタ名',
+  view_config: '設定を表示',
   demo_tip:
     'このデモコネクタの許容される最大メッセージ数は 100 件に限定されており、本番環境での展開は推奨されません。',
   social_demo_tip:

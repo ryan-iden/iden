@@ -8,6 +8,7 @@ const connectors = {
   tab_email_sms: 'Łączniki e-mail i SMS',
   tab_social: 'Łączniki społecznościowe',
   connector_name: 'Nazwa łącznika',
+  view_config: 'Wyświetl konfigurację',
   demo_tip:
     'Maksymalna liczba wiadomości dozwolona dla tego Łącznika demonstracyjnego wynosi 100 i nie jest zalecana do wdrożenia w środowisku produkcyjnym.',
   social_demo_tip:
