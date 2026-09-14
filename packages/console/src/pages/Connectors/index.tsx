@@ -20,7 +20,7 @@ import {
   socialConnectors as socialConnectorsDocumentLink,
 } from '@/consts';
 import { ConnectorsTabs } from '@/consts/page-tabs';
-import Button from '@/ds-components/Button';
+import Button, { LinkButton } from '@/ds-components/Button';
 import CardTitle from '@/ds-components/CardTitle';
 import TabNav, { TabNavItem } from '@/ds-components/TabNav';
 import Table from '@/ds-components/Table';
@@ -148,17 +148,36 @@ function Connectors() {
           {
             title: t('connectors.connector_type'),
             dataIndex: 'type',
-            colSpan: 9,
+            colSpan: isSocial ? 9 : 6,
             render: (connectorGroup) => <ConnectorTypeColumn connectorGroup={connectorGroup} />,
           },
           {
             title: null,
-            dataIndex: 'delete',
-            colSpan: 1,
-            render: (connectorGroup) =>
-              connectorGroup.isDemo ? (
-                <ConnectorDeleteButton connectorGroup={connectorGroup} />
-              ) : null,
+            dataIndex: 'action',
+            colSpan: isSocial ? 1 : 4,
+            className: styles.actions,
+            render: (connectorGroup) => {
+              if (connectorGroup.isDemo) {
+                return <ConnectorDeleteButton connectorGroup={connectorGroup} />;
+              }
+
+              const connector = connectorGroup.connectors[0];
+
+              if (!connector || connector.type === ConnectorType.Social) {
+                return null;
+              }
+
+              return (
+                <LinkButton
+                  className={styles.viewConfig}
+                  title="connectors.view_config"
+                  href={`${passwordlessPathname}/${connector.id}`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                />
+              );
+            },
           },
         ]}
         isRowClickable={({ connectors }) => Boolean(connectors[0]) && !connectors[0]?.isDemo}

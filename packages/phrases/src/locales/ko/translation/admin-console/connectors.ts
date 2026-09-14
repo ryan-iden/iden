@@ -9,6 +9,7 @@ const connectors = {
   tab_email_sms: '이메일/SMS 연동',
   tab_social: '소셜 연동',
   connector_name: '연동 이름',
+  view_config: '설정 보기',
   demo_tip:
     '이 데모 연동에 허용되는 최대 메시지 수는 100개로 제한되며 실제 운영 환경에서의 배포에는 권장되지 않아요.',
   social_demo_tip:

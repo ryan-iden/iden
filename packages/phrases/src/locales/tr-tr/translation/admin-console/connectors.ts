@@ -9,6 +9,7 @@ const connectors = {
   tab_email_sms: 'E-posta ve SMS bağlayıcıları',
   tab_social: 'Sosyal bağlayıcılar',
   connector_name: 'Bağlayıcı adı',
+  view_config: 'Yapılandırmayı görüntüle',
   demo_tip:
     'Bu demo bağlayıcı için izin verilen maksimum mesaj sayısı 100 ile sınırlıdır ve üretim ortamında dağıtılması önerilmez.',
   social_demo_tip:

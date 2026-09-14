@@ -9,6 +9,7 @@ const connectors = {
   tab_email_sms: 'Conectores de correo electrónico y SMS',
   tab_social: 'Conectores sociales',
   connector_name: 'Nombre del conector',
+  view_config: 'Ver configuración',
   demo_tip:
     'El número máximo de mensajes permitidos para este conector de demostración está limitado a 100 y no se recomienda para implementación en un entorno de producción.',
   social_demo_tip:
